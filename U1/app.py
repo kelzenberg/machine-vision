@@ -52,7 +52,9 @@ def onMouse(event: int, x: int, y: int, flags: int, userdata=None):
 showImage(grayImage)
 cv2.setMouseCallback(mainWindowName, onMouse)
 
-print('[DEBUG](main) Press Q to exit...')
-keyCode = cv2.waitKeyEx(0)
-print('[DEBUG](main) Closing all windows.', keyCode)
+print('[DEBUG](main) Press ESC to exit...')
+while cv2.waitKey(0) != 27:
+    pass
+
+print('[DEBUG](main) Closing all windows.')
 cv2.destroyAllWindows()
