@@ -1,18 +1,27 @@
 """U1 app"""
-import os
 import cv2
 
-print("Path:", os.path.abspath(os.getcwd()))
+imgWindowName = "main"
 
 
-def loadShowImage():
-    img = cv2.imread('./Lena.bmp', cv2.IMREAD_GRAYSCALE)
-    print('Image loaded')
-    cv2.namedWindow('main')
-    cv2.imshow('main', img)
-    print('Waiting for user input...')
-    cv2.waitKey(0)
-    print('Closing all windows')
-    cv2.destroyAllWindows()
+def showImage(path: str = './Lena.bmp'):
+    img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+    print('Image loaded.')
+    cv2.namedWindow(imgWindowName)
+    print('Show image...')
+    cv2.imshow(imgWindowName, img)
 
-loadShowImage()
+
+def onMouse(event: int, x: int, y: int, flags: int, userdata):
+    if event == 1:
+        print('onMouse @click:', x, y, flags, userdata)
+        return
+
+
+showImage()
+cv2.setMouseCallback(imgWindowName, onMouse)
+
+print('Press Q to exit...')
+keyCode = cv2.waitKeyEx(0)
+print('Closing all windows.', keyCode)
+cv2.destroyAllWindows()
