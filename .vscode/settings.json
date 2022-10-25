@@ -1,0 +1,4 @@
+{
+  "python.defaultInterpreterPath": "../envdir/bin/python",
+  "python.linting.pylintPath": "../envdir/lib/python3.10//site-packages/pylint",
+}
