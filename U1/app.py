@@ -6,7 +6,7 @@ grayImage = cv2.cvtColor(mainImage, cv2.COLOR_RGB2GRAY)
 print('[DEBUG](main) Image loaded.')
 
 mainWindowName = 'main'
-cv2.namedWindow(mainWindowName)
+cv2.namedWindow(mainWindowName, cv2.WINDOW_KEEPRATIO)
 cv2.moveWindow(mainWindowName, 100, 100)
 
 rectPoints = [None, None]
