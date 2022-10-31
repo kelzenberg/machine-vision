@@ -50,8 +50,16 @@ def onMouse(event: int, x: int, y: int, flags: int, userdata=None):
         return
 
 
-showImage(grayImage)
+def zoomOnChange(value):
+    print('[DEBUG](zoomOnChange) New value:', value)
+    pass
+
+
 cv2.setMouseCallback(mainWindowName, onMouse)
+cv2.createTrackbar('Zoom:', mainWindowName, 0, 3, zoomOnChange)
+# Trackbar creates errors on CV2 v4.6.x release -> fix is in v5.x, see https://github.com/opencv/opencv/issues/22561#issuecomment-1257164504
+
+showImage(grayImage)
 
 print('[DEBUG](main) Press ESC to exit...')
 while cv2.waitKey(0) != 27:
