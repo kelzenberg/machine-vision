@@ -6,11 +6,12 @@ grayImage = cv2.cvtColor(mainImage, cv2.COLOR_RGB2GRAY)
 print('[DEBUG](main) Image loaded.')
 
 mainWindowName = 'main'
+zoomWindowName = 'zoom'
 cv2.namedWindow(mainWindowName, cv2.WINDOW_KEEPRATIO)
 cv2.moveWindow(mainWindowName, 100, 100)
 
 rectPoints = [None, None]
-color = (0, 0, 255)  # Red in BGR
+redColor = (0, 0, 255)  # Red in BGR
 
 
 def showImage(image, windowName=mainWindowName):
@@ -27,12 +28,23 @@ def setRectanglePoints(x: int, y: int, slot: int):
         return
 
 
-def drawRectOnImage(image):
-    point1 = rectPoints[0]
-    point2 = rectPoints[1]
+def validatePoints(points):
+    [pointA, pointB] = points
+    x1 = pointA[0] if pointA[0] < pointB[0] else pointB[0]
+    x2 = pointB[0] if pointB[0] > pointA[0] else pointA[0]
+    y1 = pointA[1] if pointA[1] < pointB[1] else pointB[1]
+    y2 = pointB[1] if pointB[1] > pointA[1] else pointA[1]
+    return [(x1, y1), (x2, y2)]
 
-    if point1 != None and point2 != None:
-        return cv2.rectangle(image, point1, point2, color, 2)
+
+def createZoomWindow(points):
+    cv2.namedWindow(zoomWindowName, cv2.WINDOW_AUTOSIZE)
+    cv2.moveWindow(zoomWindowName, 666, 100)
+    [pointA, pointB] = points
+    [x1, y1] = pointA
+    [x2, y2] = pointB
+    croppedImage = mainImage[y1:y2, x1:x2]
+    cv2.imshow(zoomWindowName, croppedImage)
 
 
 def onMouse(event: int, x: int, y: int, flags: int, userdata=None):
@@ -45,8 +57,13 @@ def onMouse(event: int, x: int, y: int, flags: int, userdata=None):
         print('[DEBUG](onMouse) @Left-Click-UP:', x, y, flags)
         setRectanglePoints(x, y, slot=1)
 
-        BGRGrayImage = cv2.cvtColor(grayImage, cv2.COLOR_GRAY2BGR)
-        showImage(drawRectOnImage(BGRGrayImage))
+        if rectPoints[0] != None and rectPoints[1] != None:
+            [fromPoint, toPoint] = validatePoints(rectPoints)
+            BGRGrayImage = cv2.cvtColor(grayImage, cv2.COLOR_GRAY2BGR)
+            showImage(cv2.rectangle(BGRGrayImage,
+                      fromPoint, toPoint, redColor, 2))
+
+            createZoomWindow([fromPoint, toPoint])
         return
 
 
