@@ -7,6 +7,7 @@ print('[DEBUG](main) Image loaded.')
 
 mainWindowName = 'main'
 cv2.namedWindow(mainWindowName)
+cv2.moveWindow(mainWindowName, 100, 100)
 
 rectPoints = [None, None]
 color = (0, 0, 255)  # Red in BGR
