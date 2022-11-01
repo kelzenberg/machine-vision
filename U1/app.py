@@ -12,6 +12,7 @@ cv2.moveWindow(mainWindowName, 100, 100)
 
 rectPoints = [None, None]
 redColor = (0, 0, 255)  # Red in BGR
+zoomValue = 0
 
 
 def showImage(image, windowName=mainWindowName):
@@ -70,12 +71,14 @@ def onMouse(event: int, x: int, y: int, flags: int, userdata=None):
 
 
 def zoomOnChange(value):
-    print('[DEBUG](zoomOnChange) New value:', value)
-    pass
+    global zoomValue
+    if zoomValue != value:
+        print(f'[DEBUG](zoomOnChange) Zoom from {zoomValue} to {value}')
+        zoomValue = value
 
 
 cv2.setMouseCallback(mainWindowName, onMouse)
-cv2.createTrackbar('Zoom:', mainWindowName, 0, 3, zoomOnChange)
+cv2.createTrackbar('Zoom:', mainWindowName, zoomValue, 3, zoomOnChange)
 # Trackbar creates errors on CV2 v4.6.x release -> fix is in v5.x, see https://github.com/opencv/opencv/issues/22561#issuecomment-1257164504
 
 showImage(grayImage)
