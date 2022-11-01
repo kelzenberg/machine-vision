@@ -2,7 +2,8 @@
 import cv2
 
 mainImage = cv2.imread('./Lena.bmp')
-grayImage = cv2.cvtColor(mainImage, cv2.COLOR_RGB2GRAY)
+grayImage = cv2.cvtColor(cv2.cvtColor(
+    mainImage, cv2.COLOR_RGB2GRAY), cv2.COLOR_GRAY2BGR)
 print('[DEBUG](main) Image loaded.')
 
 mainWindowName = 'main'
@@ -63,8 +64,7 @@ def onMouse(event: int, x: int, y: int, flags: int, userdata=None):
             [fromPoint, toPoint] = validatePoints(rectPoints)
 
             if toPoint[0]-fromPoint[0] > 0 and toPoint[1]-fromPoint[1] > 0:
-                BGRGrayImage = cv2.cvtColor(grayImage, cv2.COLOR_GRAY2BGR)
-                showImage(cv2.rectangle(BGRGrayImage,
+                showImage(cv2.rectangle(grayImage.copy(),
                                         fromPoint, toPoint, redColor, 2))
                 createZoomWindow([fromPoint, toPoint])
         return
