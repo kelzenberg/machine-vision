@@ -38,12 +38,13 @@ def validatePoints(points):
 
 
 def createZoomWindow(points):
-    cv2.namedWindow(zoomWindowName, cv2.WINDOW_AUTOSIZE)
-    cv2.moveWindow(zoomWindowName, 666, 100)
     [pointA, pointB] = points
     [x1, y1] = pointA
     [x2, y2] = pointB
     croppedImage = mainImage[y1:y2, x1:x2]
+
+    cv2.namedWindow(zoomWindowName, cv2.WINDOW_AUTOSIZE)
+    cv2.moveWindow(zoomWindowName, 666, 100)
     cv2.imshow(zoomWindowName, croppedImage)
 
 
@@ -59,11 +60,12 @@ def onMouse(event: int, x: int, y: int, flags: int, userdata=None):
 
         if rectPoints[0] != None and rectPoints[1] != None:
             [fromPoint, toPoint] = validatePoints(rectPoints)
-            BGRGrayImage = cv2.cvtColor(grayImage, cv2.COLOR_GRAY2BGR)
-            showImage(cv2.rectangle(BGRGrayImage,
-                      fromPoint, toPoint, redColor, 2))
 
-            createZoomWindow([fromPoint, toPoint])
+            if toPoint[0]-fromPoint[0] > 0 and toPoint[1]-fromPoint[1] > 0:
+                BGRGrayImage = cv2.cvtColor(grayImage, cv2.COLOR_GRAY2BGR)
+                showImage(cv2.rectangle(BGRGrayImage,
+                                        fromPoint, toPoint, redColor, 2))
+                createZoomWindow([fromPoint, toPoint])
         return
 
 
