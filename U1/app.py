@@ -59,9 +59,23 @@ def updateZoomWindow(points):
     print(f'[DEBUG](updateZoomWindow) with Points {points}')
     [(x1, y1), (x2, y2)] = points
     croppedImage = mainImage[y1:y2, x1:x2]
+
     zoomedImage = cv2.resize(
         croppedImage, None, fx=zoomValue + 1, fy=zoomValue + 1, interpolation=cv2.INTER_CUBIC)
-    showImage(zoomedImage, zoomWindowName)
+
+    displayedImage = None
+
+    match lutValue:
+        case 13:
+            invertedImage = cv2.bitwise_not(zoomedImage)
+            convertedImage = cv2.cvtColor(cv2.cvtColor(
+                invertedImage, cv2.COLOR_RGB2GRAY), cv2.COLOR_GRAY2BGR)
+            displayedImage = cv2.putText(
+                convertedImage, f'Zoom: {zoomValue + 1}', (10, 20), cv2.FONT_HERSHEY_COMPLEX, 0.5, redColor, 1, cv2.LINE_AA)
+        case _:
+            displayedImage = zoomedImage
+
+    showImage(displayedImage, zoomWindowName)
 
 
 def onMouse(event: int, x: int, y: int, flags: int, userdata=None):
@@ -110,6 +124,11 @@ def onChangeLUT(value):
 
     print(f'[DEBUG](onChangeLUT) @LUT-Changed: {lutValue} to {value}')
     lutValue = value
+
+    if sortedRectPoints[0] == None or sortedRectPoints[1] == None:
+        return
+
+    updateZoomWindow(sortedRectPoints)
 
 
 cv2.setMouseCallback(mainWindowName, onMouse)
