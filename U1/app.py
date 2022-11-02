@@ -16,6 +16,7 @@ rectPoints = [None, None]
 sortedRectPoints = [None, None]
 redColor = (0, 0, 255)  # Red in BGR
 zoomValue = 0
+lutValue = 0
 
 
 def showImage(image, windowName):
@@ -91,13 +92,20 @@ def onMouse(event: int, x: int, y: int, flags: int, userdata=None):
 def onChangeZoom(value):
     global zoomValue
     if zoomValue != value:
-        print(f'[DEBUG](zoomOnChange) @Zoom-Changed: {zoomValue} to {value}')
+        print(f'[DEBUG](onChangeZoom) @Zoom-Changed: {zoomValue} to {value}')
         zoomValue = value
         updateZoomWindow(sortedRectPoints)
+
+def onChangeLUT(value):
+    global lutValue
+    if lutValue != value:
+        print(f'[DEBUG](onChangeLUT) @LUT-Changed: {lutValue} to {value}')
+        lutValue = value
 
 
 cv2.setMouseCallback(mainWindowName, onMouse)
 cv2.createTrackbar('Zoom:', mainWindowName, zoomValue, 3, onChangeZoom)
+cv2.createTrackbar('LUT:', mainWindowName, lutValue, 13, onChangeLUT)
 # Trackbar creates errors on CV2 v4.6.x release -> fix is in v5.x, see https://github.com/opencv/opencv/issues/22561#issuecomment-1257164504
 
 showImage(grayImage, mainWindowName)
