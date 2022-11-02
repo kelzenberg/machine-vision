@@ -94,7 +94,10 @@ def onChangeZoom(value):
     if zoomValue != value:
         print(f'[DEBUG](onChangeZoom) @Zoom-Changed: {zoomValue} to {value}')
         zoomValue = value
+        if sortedRectPoints[0] == None or sortedRectPoints[1] == None:
+            return
         updateZoomWindow(sortedRectPoints)
+
 
 def onChangeLUT(value):
     global lutValue
