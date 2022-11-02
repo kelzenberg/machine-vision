@@ -13,6 +13,7 @@ cv2.moveWindow(mainWindowName, 100, 100)
 cv2.setWindowProperty(mainWindowName, cv2.WND_PROP_TOPMOST, 1)
 
 rectPoints = [None, None]
+sortedRectPoints = [None, None]
 redColor = (0, 0, 255)  # Red in BGR
 zoomValue = 0
 
@@ -40,6 +41,13 @@ def sortRectanglePoints(points):
     return [(x1, y1), (x2, y2)]
 
 
+def drawRectangle(points):
+    print(f'[DEBUG](drawRectangle) with Points {points}')
+    [fromPoint, toPoint] = points
+    showImage(cv2.rectangle(grayImage.copy(),
+                            fromPoint, toPoint, redColor, 2), mainWindowName)
+
+
 def initZoomWindow():
     cv2.destroyWindow(zoomWindowName)
     cv2.namedWindow(zoomWindowName, cv2.WINDOW_AUTOSIZE)
@@ -47,15 +55,12 @@ def initZoomWindow():
 
 
 def updateZoomWindow(points):
+    print(f'[DEBUG](updateZoomWindow) with Points {points}')
     [(x1, y1), (x2, y2)] = points
     croppedImage = mainImage[y1:y2, x1:x2]
-    showImage(croppedImage, zoomWindowName)
-
-
-def drawRectangle(points):
-    [fromPoint, toPoint] = points
-    showImage(cv2.rectangle(grayImage.copy(),
-                            fromPoint, toPoint, redColor, 2), mainWindowName)
+    zoomedImage = cv2.resize(
+        croppedImage, None, fx=zoomValue + 1, fy=zoomValue + 1, interpolation=cv2.INTER_CUBIC)
+    showImage(zoomedImage, zoomWindowName)
 
 
 def onMouse(event: int, x: int, y: int, flags: int, userdata=None):
@@ -72,25 +77,27 @@ def onMouse(event: int, x: int, y: int, flags: int, userdata=None):
         if rectPoints[0] == None or rectPoints[1] == None:
             return
 
-        points = sortRectanglePoints(rectPoints)
+        global sortedRectPoints
+        sortedRectPoints = sortRectanglePoints(rectPoints)
 
-        if points[1][0]-points[0][0] <= 0 or points[1][1]-points[0][1] <= 0:
+        if sortedRectPoints[1][0]-sortedRectPoints[0][0] <= 0 or sortedRectPoints[1][1]-sortedRectPoints[0][1] <= 0:
             return
 
-        drawRectangle(points)
-        updateZoomWindow(points)
+        drawRectangle(sortedRectPoints)
+        updateZoomWindow(sortedRectPoints)
         return
 
 
-def zoomOnChange(value):
+def onChangeZoom(value):
     global zoomValue
     if zoomValue != value:
-        print(f'[DEBUG](zoomOnChange) Zoom from {zoomValue} to {value}')
+        print(f'[DEBUG](zoomOnChange) @Zoom-Changed: {zoomValue} to {value}')
         zoomValue = value
+        updateZoomWindow(sortedRectPoints)
 
 
 cv2.setMouseCallback(mainWindowName, onMouse)
-cv2.createTrackbar('Zoom:', mainWindowName, zoomValue, 3, zoomOnChange)
+cv2.createTrackbar('Zoom:', mainWindowName, zoomValue, 3, onChangeZoom)
 # Trackbar creates errors on CV2 v4.6.x release -> fix is in v5.x, see https://github.com/opencv/opencv/issues/22561#issuecomment-1257164504
 
 showImage(grayImage, mainWindowName)
