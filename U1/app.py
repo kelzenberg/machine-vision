@@ -87,6 +87,7 @@ def initZoomLUTWindow():
     cv2.destroyWindow(zoomWindowName)
     cv2.namedWindow(zoomWindowName, cv2.WINDOW_AUTOSIZE)
     cv2.moveWindow(zoomWindowName, 666, 100)
+    cv2.setWindowProperty(zoomWindowName, cv2.WND_PROP_TOPMOST, 1)
 
 
 def updateZoomLUTWindow(points):
