@@ -91,19 +91,25 @@ def onMouse(event: int, x: int, y: int, flags: int, userdata=None):
 
 def onChangeZoom(value):
     global zoomValue
-    if zoomValue != value:
-        print(f'[DEBUG](onChangeZoom) @Zoom-Changed: {zoomValue} to {value}')
-        zoomValue = value
-        if sortedRectPoints[0] == None or sortedRectPoints[1] == None:
-            return
-        updateZoomWindow(sortedRectPoints)
+    if zoomValue == value:
+        return
+
+    print(f'[DEBUG](onChangeZoom) @Zoom-Changed: {zoomValue} to {value}')
+    zoomValue = value
+
+    if sortedRectPoints[0] == None or sortedRectPoints[1] == None:
+        return
+
+    updateZoomWindow(sortedRectPoints)
 
 
 def onChangeLUT(value):
     global lutValue
-    if lutValue != value:
-        print(f'[DEBUG](onChangeLUT) @LUT-Changed: {lutValue} to {value}')
-        lutValue = value
+    if lutValue == value:
+        return
+
+    print(f'[DEBUG](onChangeLUT) @LUT-Changed: {lutValue} to {value}')
+    lutValue = value
 
 
 cv2.setMouseCallback(mainWindowName, onMouse)
