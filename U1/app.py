@@ -10,6 +10,7 @@ mainWindowName = 'main'
 zoomWindowName = 'zoom'
 cv2.namedWindow(mainWindowName, cv2.WINDOW_KEEPRATIO)
 cv2.moveWindow(mainWindowName, 100, 100)
+cv2.setWindowProperty(mainWindowName, cv2.WND_PROP_TOPMOST, 1)
 
 rectPoints = [None, None]
 redColor = (0, 0, 255)  # Red in BGR
@@ -79,19 +80,6 @@ def onMouse(event: int, x: int, y: int, flags: int, userdata=None):
         drawRectangle(points)
         updateZoomWindow(points)
         return
-
-    # if event == 4:  # left-mouse-up
-    #     print('[DEBUG](onMouse) @Left-Click-UP:', x, y, flags)
-    #     setRectanglePoints(x, y, slot=1)
-
-    #     if rectPoints[0] != None and rectPoints[1] != None:
-    #         [fromPoint, toPoint] = sortRectanglePoints(rectPoints)
-
-    #         if toPoint[0]-fromPoint[0] > 0 and toPoint[1]-fromPoint[1] > 0:
-    #             showImage(cv2.rectangle(grayImage.copy(),
-    #                                     fromPoint, toPoint, redColor, 2))
-    #             updateZoomWindow([fromPoint, toPoint])
-    #     return
 
 
 def zoomOnChange(value):
