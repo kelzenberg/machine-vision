@@ -16,7 +16,7 @@ redColor = (0, 0, 255)  # Red in BGR
 zoomValue = 0
 
 
-def showImage(image, windowName=mainWindowName):
+def showImage(image, windowName):
     print('[DEBUG](showImage) Show image in window:', windowName)
     cv2.imshow(windowName, image)
 
@@ -30,7 +30,7 @@ def setRectanglePoints(x: int, y: int, slot: int):
         return
 
 
-def validatePoints(points):
+def sortRectanglePoints(points):
     [pointA, pointB] = points
     x1 = pointA[0] if pointA[0] < pointB[0] else pointB[0]
     x2 = pointB[0] if pointB[0] > pointA[0] else pointA[0]
@@ -39,35 +39,59 @@ def validatePoints(points):
     return [(x1, y1), (x2, y2)]
 
 
-def createZoomWindow(points):
-    [pointA, pointB] = points
-    [x1, y1] = pointA
-    [x2, y2] = pointB
-    croppedImage = mainImage[y1:y2, x1:x2]
-
+def initZoomWindow():
+    cv2.destroyWindow(zoomWindowName)
     cv2.namedWindow(zoomWindowName, cv2.WINDOW_AUTOSIZE)
     cv2.moveWindow(zoomWindowName, 666, 100)
-    cv2.imshow(zoomWindowName, croppedImage)
+
+
+def updateZoomWindow(points):
+    [(x1, y1), (x2, y2)] = points
+    croppedImage = mainImage[y1:y2, x1:x2]
+    showImage(croppedImage, zoomWindowName)
+
+
+def drawRectangle(points):
+    [fromPoint, toPoint] = points
+    showImage(cv2.rectangle(grayImage.copy(),
+                            fromPoint, toPoint, redColor, 2), mainWindowName)
 
 
 def onMouse(event: int, x: int, y: int, flags: int, userdata=None):
     if event == 1:  # left-mouse-down
         print('[DEBUG](onMouse) @Left-Click-DOWN:', x, y, flags)
         setRectanglePoints(x, y, slot=0)
+        initZoomWindow()
         return
 
-    if event == 4:  # left-mouse-up
-        print('[DEBUG](onMouse) @Left-Click-UP:', x, y, flags)
+    if event == 0 and flags == 1:  # mouse moved & left-mouse down
+        print('[DEBUG](onMouse) @Mouse-Moved:', x, y, flags)
         setRectanglePoints(x, y, slot=1)
 
-        if rectPoints[0] != None and rectPoints[1] != None:
-            [fromPoint, toPoint] = validatePoints(rectPoints)
+        if rectPoints[0] == None or rectPoints[1] == None:
+            return
 
-            if toPoint[0]-fromPoint[0] > 0 and toPoint[1]-fromPoint[1] > 0:
-                showImage(cv2.rectangle(grayImage.copy(),
-                                        fromPoint, toPoint, redColor, 2))
-                createZoomWindow([fromPoint, toPoint])
+        points = sortRectanglePoints(rectPoints)
+
+        if points[1][0]-points[0][0] <= 0 or points[1][1]-points[0][1] <= 0:
+            return
+
+        drawRectangle(points)
+        updateZoomWindow(points)
         return
+
+    # if event == 4:  # left-mouse-up
+    #     print('[DEBUG](onMouse) @Left-Click-UP:', x, y, flags)
+    #     setRectanglePoints(x, y, slot=1)
+
+    #     if rectPoints[0] != None and rectPoints[1] != None:
+    #         [fromPoint, toPoint] = sortRectanglePoints(rectPoints)
+
+    #         if toPoint[0]-fromPoint[0] > 0 and toPoint[1]-fromPoint[1] > 0:
+    #             showImage(cv2.rectangle(grayImage.copy(),
+    #                                     fromPoint, toPoint, redColor, 2))
+    #             updateZoomWindow([fromPoint, toPoint])
+    #     return
 
 
 def zoomOnChange(value):
@@ -81,7 +105,7 @@ cv2.setMouseCallback(mainWindowName, onMouse)
 cv2.createTrackbar('Zoom:', mainWindowName, zoomValue, 3, zoomOnChange)
 # Trackbar creates errors on CV2 v4.6.x release -> fix is in v5.x, see https://github.com/opencv/opencv/issues/22561#issuecomment-1257164504
 
-showImage(grayImage)
+showImage(grayImage, mainWindowName)
 
 print('[DEBUG](main) Press ESC to exit...')
 while cv2.waitKey(0) != 27:
