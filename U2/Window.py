@@ -13,6 +13,9 @@ class Window:
         print(
             f'(Window.init) Init new Window "{name}": \n    Shape: {image.shape} \n    Preview: {self.preview.shape}, \n    Scale: {scale}, Offset: {offset}')
 
+    def addTrackbar(self, name, min, max, onChange):
+        cv2.createTrackbar(name, self.name, min, max, onChange)
+
     def show(self):
         print(f'(Window.show) Show "{self.name}" image')
         cv2.imshow(self.name, self.preview)
