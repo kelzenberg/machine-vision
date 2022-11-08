@@ -2,13 +2,14 @@
 U2 app
 """
 import cv2
-from utils import showImage
+from utils import showImage, convertToGrayBGR
 
 """
 Load Image
 """
 
 mainImage = cv2.imread('./Stop.jpg')
+grayImage = convertToGrayBGR(mainImage)
 print('[DEBUG](main) Image loaded.')
 
 mainWindowName = 'Main'
@@ -23,7 +24,7 @@ Main function
 
 # Logic goes here
 
-showImage(mainWindowName, mainImage)
+showImage(mainWindowName, grayImage)
 
 print('[DEBUG](main) Press ESC to exit...')
 while cv2.waitKey(0) != 27:
