@@ -2,7 +2,7 @@ import cv2
 
 
 class Window:
-    def __init__(self, name, image, scale=0.33, offset=(0, 0)):
+    def __init__(self, name, image, scale=0.2, offset=(0, 0)):
         self.name = name
         self.image = image
         self.preview = cv2.resize(image, None, fx=scale,

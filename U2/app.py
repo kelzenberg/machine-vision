@@ -20,9 +20,14 @@ Main function
 
 imageWindow = Window('Image', grayImage)
 imageWindow.show()
+
 filterWindow = Window('Filter', imageWindow.image,
                       offset=(round(imageWindow.preview.shape[0]*1.8), 0))
 filterWindow.show()
+
+edgesWindow = Window('Edges', filterWindow.image, scale=0.4,
+                     offset=(0, round(imageWindow.preview.shape[1]/1.5)))
+edgesWindow.show()
 
 print('(main) Press ESC to exit...')
 while cv2.waitKey(0) != 27:
