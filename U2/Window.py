@@ -13,11 +13,11 @@ class Window:
         print(
             f'(Window.init) Init new Window "{name}": Scale {scale}, Offset {offset}')
 
-    def addTrackbar(self, name, min, max, onChange):
-        cv2.createTrackbar(name, self.name, min, max, onChange)
+    def addTrackbar(self, name, range, onChange):
+        cv2.createTrackbar(name, self.name, range[0], range[1], onChange)
 
     def show(self, name, image):
-        print(f'(Window.show) Show in "{self.name}" window: {name} {image.shape}')
+        # print(f'(Window.show) Show in "{self.name}" window: {name} {image.shape}')
         preview = cv2.resize(image, None, fx=self.scale,
                              fy=self.scale, interpolation=cv2.INTER_AREA)
         cv2.imshow(self.name, preview)

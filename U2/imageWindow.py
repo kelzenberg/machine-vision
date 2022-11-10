@@ -7,6 +7,8 @@ Trackbar Functions
 
 filterValue = 0
 
+operationValueRange = (0, 3)
+filterValueRange = (0, 2)
 
 def noopFunc(arg):
     print('(noopFunc)', arg)
@@ -30,6 +32,6 @@ Window Functions
 """
 
 ImageWindow = Window('Image', scale=0.2, offset=(0, 0))
-ImageWindow.addTrackbar('Operation: ', 0, 3, noopFunc)
-ImageWindow.addTrackbar('Filter: ', 0, 2, filterOnChange)
+ImageWindow.addTrackbar('Operation: ', operationValueRange, noopFunc)
+ImageWindow.addTrackbar('Filter: ', filterValueRange, filterOnChange)
 ImageWindow.show('grayImage', grayImage)
