@@ -1,14 +1,5 @@
-import cv2
-from utils import convertToGrayBGR
 from Window import Window
-
-"""
-Load Image
-"""
-
-mainImage = cv2.imread('./Stop.jpg')
-grayImage = convertToGrayBGR(mainImage)
-print('(main) Image loaded.')
+from images import grayImage
 
 """
 Trackbar Functions
@@ -29,12 +20,16 @@ def filterOnChange(value):
     filterValue = value
     print('(filterOnChange)', filterValue)
 
+    match filterValue:
+        case 1:
+            print(filterValue)
+
 
 """
 Window Functions
 """
 
-window = Window('Image', grayImage)
-window.addTrackbar('Operation: ', 0, 3, noopFunc)
-window.addTrackbar('Filter: ', 0, 2, filterOnChange)
-window.show()
+ImageWindow = Window('Image', scale=0.2, offset=(0, 0))
+ImageWindow.addTrackbar('Operation: ', 0, 3, noopFunc)
+ImageWindow.addTrackbar('Filter: ', 0, 2, filterOnChange)
+ImageWindow.show('grayImage', grayImage)

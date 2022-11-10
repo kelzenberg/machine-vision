@@ -2,6 +2,7 @@
 U2 app
 """
 import cv2
+import images
 import imageWindow
 import filterWindow
 import edgesWindow
@@ -9,9 +10,10 @@ import edgesWindow
 """
 Main function
 """
-print('(main) Press ESC to exit...')
+
+print('(Main) Press ESC to exit...')
 while cv2.waitKey(0) != 27:
     pass
 
-print('(main) Closing all windows.')
+print('(Main) Closing all windows.')
 cv2.destroyAllWindows()

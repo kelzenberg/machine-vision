@@ -1,5 +1,5 @@
 from Window import Window
-from imageWindow import window as imgWindow
+from images import filteredImage
 
 """
 Trackbar Functions
@@ -27,9 +27,7 @@ def sigmaOnChange(value):
 Window Functions
 """
 
-
-window = Window('Filter', imgWindow.image,
-                offset=(round(imgWindow.preview.shape[0]*1.8), 0))
-window.addTrackbar('Sigma: ', 0, 5, sigmaOnChange)
-window.addTrackbar('Size: ', 0, 4, noopFunc)
-window.show()
+FilterWindow = Window('Filter', scale=0.2, offset=(0, round(filteredImage.shape[1]*0.175)))
+FilterWindow.addTrackbar('Sigma: ', 0, 5, sigmaOnChange)
+FilterWindow.addTrackbar('Size: ', 0, 4, noopFunc)
+FilterWindow.show('filteredImage', filteredImage)
