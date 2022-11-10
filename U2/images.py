@@ -1,5 +1,4 @@
 import cv2
-from utils import convertToGrayBGR
 
 """
 Load Image
@@ -7,6 +6,7 @@ Load Image
 
 mainImage = cv2.imread('./Stop.jpg')
 print('(Images) Image loaded.')
-grayImage = convertToGrayBGR(mainImage)
+
+grayImage = cv2.cvtColor(mainImage, cv2.COLOR_RGB2GRAY)
 filteredImage = grayImage.copy()
 edgesImage = filteredImage.copy()
