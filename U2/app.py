@@ -3,7 +3,8 @@ U2 app
 """
 import cv2
 from Window import Window
-from imageTrackbars import noopFunc
+from imageTrackbars import noopFunc as noop1
+from filterTrackbars import noopFunc as noop2
 from utils import convertToGrayBGR
 
 """
@@ -20,12 +21,14 @@ Main function
 """
 
 imageWindow = Window('Image', grayImage)
-imageWindow.addTrackbar('Operation: ', 0, 3, noopFunc)
-imageWindow.addTrackbar('Filter: ', 0, 2, noopFunc)
+imageWindow.addTrackbar('Operation: ', 0, 3, noop1)
+imageWindow.addTrackbar('Filter: ', 0, 2, noop1)
 imageWindow.show()
 
 filterWindow = Window('Filter', imageWindow.image,
                       offset=(round(imageWindow.preview.shape[0]*1.8), 0))
+filterWindow.addTrackbar('Sigma: ', 0, 255, noop2)
+filterWindow.addTrackbar('Size: ', 0, 4, noop2)
 filterWindow.show()
 
 edgesWindow = Window('Edges', filterWindow.image, scale=0.4,
