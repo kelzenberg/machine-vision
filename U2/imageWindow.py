@@ -1,11 +1,10 @@
 from Window import Window
 from images import grayImage
+from TrackbarValues import TrackbarValues
 
 """
 Trackbar Functions
 """
-
-filterValue = 0
 
 operationValueRange = (0, 3)
 filterValueRange = (0, 2)
@@ -15,16 +14,19 @@ def noopFunc(arg):
 
 
 def filterOnChange(value):
-    global filterValue
-    if filterValue == value:
+    if TrackbarValues.filter == value:
         return
 
-    filterValue = value
-    print('(filterOnChange)', filterValue)
+    TrackbarValues.filter = value
 
-    match filterValue:
+    match value:
+        case 0:
+            return
         case 1:
-            print(filterValue)
+            print(
+                f'(filterOnChange): Selected Gaussian (value {value})')
+        case _:
+            return
 
 
 """
