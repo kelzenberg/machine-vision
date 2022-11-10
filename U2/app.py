@@ -5,6 +5,7 @@ import cv2
 from Window import Window
 from imageTrackbars import noopFunc as noop1
 from filterTrackbars import noopFunc as noop2
+from edgesTrackbars import noopFunc as noop3
 from utils import convertToGrayBGR
 
 """
@@ -33,6 +34,8 @@ filterWindow.show()
 
 edgesWindow = Window('Edges', filterWindow.image, scale=0.4,
                      offset=(0, round(imageWindow.preview.shape[1]/1.5)))
+edgesWindow.addTrackbar('Threshold: ', 0, 255, noop3)
+edgesWindow.addTrackbar('Display Image: ', 0, 5, noop3)
 edgesWindow.show()
 
 print('(main) Press ESC to exit...')
