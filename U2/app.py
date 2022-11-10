@@ -33,7 +33,7 @@ filterWindow.addTrackbar('Size: ', 0, 4, noop2)
 filterWindow.show()
 
 edgesWindow = Window('Edges', filterWindow.image, scale=0.4,
-                     offset=(0, round(imageWindow.preview.shape[1]/1.5)))
+                     offset=(0, round(imageWindow.preview.shape[1]/1.25)))
 edgesWindow.addTrackbar('Threshold: ', 0, 255, noop3)
 edgesWindow.addTrackbar('Display Image: ', 0, 5, noop3)
 edgesWindow.show()
