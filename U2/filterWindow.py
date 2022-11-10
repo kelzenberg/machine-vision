@@ -1,5 +1,5 @@
 from Window import Window
-import imageWindow
+from imageWindow import window as imgWindow
 
 """
 Trackbar Functions
@@ -28,8 +28,8 @@ Window Functions
 """
 
 
-window = Window('Filter', imageWindow.window.image,
-                offset=(round(imageWindow.window.preview.shape[0]*1.8), 0))
+window = Window('Filter', imgWindow.image,
+                offset=(round(imgWindow.preview.shape[0]*1.8), 0))
 window.addTrackbar('Sigma: ', 0, 5, sigmaOnChange)
 window.addTrackbar('Size: ', 0, 4, noopFunc)
 window.show()
