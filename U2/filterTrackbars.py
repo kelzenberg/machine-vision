@@ -2,6 +2,15 @@ def noopFunc(arg):
     print('(noopFunc)', arg)
 
 
-def sigma(value):
+sigmaValue = 0.1
+
+
+def sigmaOnChange(value):
     newValue = (value + 1) / 10
-    print('(sigma)', newValue)
+
+    global sigmaValue
+    if sigmaValue == newValue:
+        return
+
+    sigmaValue = newValue
+    print('(sigma)', sigmaValue)
