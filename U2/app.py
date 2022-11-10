@@ -3,6 +3,7 @@ U2 app
 """
 import cv2
 from Window import Window
+from imageTrackbars import noopFunc
 from utils import convertToGrayBGR
 
 """
@@ -19,14 +20,9 @@ Main function
 """
 
 imageWindow = Window('Image', grayImage)
+imageWindow.addTrackbar('Operation: ', 0, 3, noopFunc)
+imageWindow.addTrackbar('Filter: ', 0, 2, noopFunc)
 imageWindow.show()
-
-
-def noopFunc(arg):
-    print('(noopFunc)', arg)
-
-
-imageWindow.addTrackbar('Test', 0, 5, noopFunc)
 
 filterWindow = Window('Filter', imageWindow.image,
                       offset=(round(imageWindow.preview.shape[0]*1.8), 0))
