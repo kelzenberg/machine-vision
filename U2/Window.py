@@ -4,6 +4,9 @@ import cv2
 OpenCV Window Helper
 """
 
+prevDebugPrint = ''
+
+
 class Window:
     def __init__(self, name, scale=1, offset=(0, 0)):
         self.name = name
@@ -23,7 +26,12 @@ class Window:
         cv2.setTrackbarPos(name, self.name, value)
 
     def show(self, name, image):
-        # print(f'(Window.show) Show in "{self.name}" window: {name} {image.shape}')
+        global prevDebugPrint
+        log = f'(Window.show) Show in "{self.name}" window: {name}'
+        if log != prevDebugPrint:
+            prevDebugPrint = log
+            print(log)
+
         preview = cv2.resize(image, None, fx=self.scale,
                              fy=self.scale, interpolation=cv2.INTER_AREA)
         cv2.imshow(self.name, preview)
