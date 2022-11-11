@@ -21,16 +21,17 @@ def operatorOnChange(value):
     TrackbarValues.updateOperator(value)
     showOperator()
 
+    selection = ''
     match TrackbarValues.operator:
         case 0:
-            print(f'(operatorOnChange): Selected no operator ({value})')
-            return
+            selection = 'no operator'
         case 1:
-            print(f'(operatorOnChange): Selected Sobel ({value})')
-            return
+            selection = 'Sobel'
         case _:
-            print(f'(operatorOnChange): Selected UNKNOWN ({value})')
-            return
+            selection = 'UNKNOWN'
+
+    print(
+        f'(operatorOnChange): Selected {selection} ({TrackbarValues.operator})')
 
 
 def filterOnChange(value):
@@ -40,19 +41,19 @@ def filterOnChange(value):
     TrackbarValues.updateFilter(value)
     showFilter()
 
+    selection = ''
     match TrackbarValues.filter:
         case 0:
-            print(f'(filterOnChange): Selected no filter ({value})')
-            return
+            selection = 'no filter'
         case 1:
-            print(f'(filterOnChange): Selected Gaussian ({value})')
-            return
+            selection = 'Gaussian'
         case 2:
-            print(f'(filterOnChange): Selected Median ({value})')
-            return
+            selection = 'Median'
         case _:
-            print(f'(filterOnChange): Selected UNKNOWN ({value})')
-            return
+            selection = 'UNKNOWN'
+
+    print(
+        f'(filterOnChange): Selected {selection} ({TrackbarValues.filter})')
 
 
 """
