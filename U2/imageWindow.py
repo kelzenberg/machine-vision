@@ -1,6 +1,8 @@
 from Window import Window
 from images import grayImage
+from filterWindow import FilterWindow
 from TrackbarValues import TrackbarValues
+from utils import runGaussian
 
 """
 Trackbar Functions
@@ -20,16 +22,23 @@ def filterOnChange(value):
     if TrackbarValues.filter == value:
         return
 
+    TrackbarValues.updateFilter(value)
+
     match value:
         case 0:
+            print(
+                f'(filterOnChange): Selected no filter ({value})')
+            FilterWindow.show('grayImage', grayImage)
             return
         case 1:
             print(
-                f'(filterOnChange): Selected Gaussian (value {value})')
-        case _:
+                f'(filterOnChange): Selected Gaussian ({value})')
+            FilterWindow.show('guassian', runGaussian())
             return
-
-    TrackbarValues.updateFilter(value)
+        case _:
+            print(
+                f'(filterOnChange): Selected UNKNOWN ({value})')
+            return
 
 
 """

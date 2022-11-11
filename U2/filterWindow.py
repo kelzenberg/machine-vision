@@ -1,4 +1,3 @@
-import cv2
 from numpy import interp, arange
 from Window import Window
 from images import grayImage, filteredImage
@@ -8,15 +7,27 @@ from utils import runGaussian
 """
 Trackbar Functions
 """
+
 sigmaTrackbar = 'Sigma: '
 sigmaValueRange = (0, 60)
 kernelTrackbar = 'Kernal Size: '
 kernelSizeRange = (0, 5)
 
 
+def updateSigma(value):
+    TrackbarValues.updateSigma(value)
+    FilterWindow.setTrackbar(kernelTrackbar, TrackbarValues.kernel)
+
+
+def updateKernel(value):
+    TrackbarValues.updateKernel(value)
+    FilterWindow.setTrackbar(sigmaTrackbar, TrackbarValues.sigma)
+
+
 def sigmaOnChange(value):
-    if value == 0 or TrackbarValues.filter != 1:  # off
-        TrackbarValues.updateSigma(0)
+    if value == 0:
+        print(f'(sigmaOnChange) off')
+        updateSigma(0)
         FilterWindow.show('grayImage', grayImage)
         return
 
@@ -29,15 +40,16 @@ def sigmaOnChange(value):
         return
 
     print(f'(sigmaOnChange) {TrackbarValues.sigma} to {mappedValue}')
-    TrackbarValues.updateSigma(mappedValue)
-    FilterWindow.setTrackbar(kernelTrackbar, TrackbarValues.kernel)
+    updateSigma(mappedValue)
 
-    FilterWindow.show('guassian', runGaussian())
+    if TrackbarValues.filter == 1:
+        FilterWindow.show('guassian', runGaussian())
 
 
 def kernelSizeOnChange(value):
-    if value == 0 or TrackbarValues.filter != 1:  # off
-        TrackbarValues.updateKernel(0)
+    if value == 0:
+        print(f'(kernelSizeOnChange) off')
+        updateKernel(0)
         FilterWindow.show('grayImage', grayImage)
         return
 
@@ -47,10 +59,10 @@ def kernelSizeOnChange(value):
         return
 
     print(f'(kernelSizeOnChange) {TrackbarValues.kernel} to {mappedValue}')
-    TrackbarValues.updateKernel(mappedValue)
-    FilterWindow.setTrackbar(sigmaTrackbar, TrackbarValues.sigma)
+    updateKernel(mappedValue)
 
-    FilterWindow.show('guassian', runGaussian())
+    if TrackbarValues.filter == 1:
+        FilterWindow.show('guassian', runGaussian())
 
 
 """
