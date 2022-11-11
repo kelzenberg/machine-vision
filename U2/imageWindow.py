@@ -1,5 +1,5 @@
 from Window import Window
-from images import grayImage
+from Images import Images
 from filterWindow import showFilter
 from edgesWindow import showOperator
 from TrackbarValues import TrackbarValues
@@ -63,4 +63,4 @@ ImageWindow = Window('Image', scale=0.2, offset=(0, 0))
 ImageWindow.addTrackbar(
     operationTrackbar, operationValueRange, operatorOnChange)
 ImageWindow.addTrackbar(filterTrackbar, filterValueRange, filterOnChange)
-ImageWindow.show('grayImage', grayImage)
+ImageWindow.show('Images.gray', Images.gray)

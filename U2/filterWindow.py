@@ -1,6 +1,6 @@
 from numpy import interp, arange
 from Window import Window
-from images import grayImage, filteredImage
+from Images import Images
 from TrackbarValues import TrackbarValues
 from utils import runGaussian, runMedian
 
@@ -34,7 +34,7 @@ def updateKernelValue(value):
 def showFilter():
     match TrackbarValues.filter:
         case 0:  # no Filter = reset Image
-            FilterWindow.show('grayImage', grayImage)
+            FilterWindow.show('Images.gray', Images.gray)
             return
         case 1:
             FilterWindow.show('guassian', runGaussian())
@@ -60,7 +60,7 @@ def sigmaOnChange(value):
     if value == 0:
         print(f'(sigmaOnChange) off')
         updateSigmaValue(0)
-        FilterWindow.show('grayImage', grayImage)
+        FilterWindow.show('Images.gray', Images.gray)
         return
 
     valueRange = arange(sigmaValueRange[0]+1, sigmaValueRange[1]+1)
@@ -81,7 +81,7 @@ def kernelSizeOnChange(value):
     if value == 0:
         print(f'(kernelSizeOnChange) off')
         updateKernelValue(0)
-        FilterWindow.show('grayImage', grayImage)
+        FilterWindow.show('Images.gray', Images.gray)
         return
 
     mappedValue = arange(1, 10, 2)[value - 1]
@@ -100,7 +100,7 @@ Window Functions
 """
 
 FilterWindow = Window('Filter', scale=0.2, offset=(
-    0, round(filteredImage.shape[1]*0.175)))
+    0, round(Images.filtered.shape[1]*0.175)))
 FilterWindow.addTrackbar(sigmaTrackbar, sigmaValueRange, sigmaOnChange)
 FilterWindow.addTrackbar(kernelTrackbar, kernelSizeRange, kernelSizeOnChange)
-FilterWindow.show('filteredImage', filteredImage)
+FilterWindow.show('Images.filtered', Images.filtered)

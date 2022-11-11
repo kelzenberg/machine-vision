@@ -1,5 +1,5 @@
 from Window import Window
-from images import filteredImage, edgesImage
+from Images import Images
 from TrackbarValues import TrackbarValues
 
 thresholdTrackbar = 'Threshold: '
@@ -15,10 +15,11 @@ Edges Utils
 def showOperator():
     match TrackbarValues.operator:
         case 0:  # no Operator = show Filter only
-            EdgesWindow.show('filteredImage', filteredImage)
+            EdgesWindow.show('Images.filtered', Images.filtered)
             return
         case 1:
-            EdgesWindow.show('filteredImage', edgesImage)  # TODO: Sobel operator
+            # TODO: Sobel operator
+            EdgesWindow.show('Images.edges', Images.edges)
             return
         case _:
             return
@@ -38,7 +39,7 @@ Window Functions
 """
 
 EdgesWindow = Window('Edges', scale=0.5, offset=(
-    round(edgesImage.shape[0]*0.4), 0))
+    round(Images.edges.shape[0]*0.4), 0))
 EdgesWindow.addTrackbar(thresholdTrackbar, thresholdValueRange, noopFunc)
 EdgesWindow.addTrackbar(displayTrackbar, displayValueRange, noopFunc)
-EdgesWindow.show('edgesImage', edgesImage)
+EdgesWindow.show('Images.edges', Images.edges)

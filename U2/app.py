@@ -2,7 +2,7 @@
 U2 app
 """
 import cv2
-import images
+import Images
 import imageWindow
 import filterWindow
 import edgesWindow
