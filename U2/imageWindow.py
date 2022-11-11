@@ -1,6 +1,7 @@
 from Window import Window
 from images import grayImage
 from filterWindow import showFilter
+from edgesWindow import showOperator
 from TrackbarValues import TrackbarValues
 
 operationTrackbar = 'Operator: '
@@ -18,6 +19,18 @@ def operatorOnChange(value):
         return
 
     TrackbarValues.updateOperator(value)
+    showOperator()
+
+    match TrackbarValues.operator:
+        case 0:
+            print(f'(operatorOnChange): Selected no operator ({value})')
+            return
+        case 1:
+            print(f'(operatorOnChange): Selected Sobel ({value})')
+            return
+        case _:
+            print(f'(operatorOnChange): Selected UNKNOWN ({value})')
+            return
 
 
 def filterOnChange(value):
