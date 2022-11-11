@@ -2,7 +2,7 @@ from numpy import interp, arange
 from Window import Window
 from images import grayImage, filteredImage
 from TrackbarValues import TrackbarValues
-from utils import runGaussian
+from utils import runGaussian, runMedian
 
 """
 Trackbar Functions
@@ -14,20 +14,47 @@ kernelTrackbar = 'Kernal Size: '
 kernelSizeRange = (0, 5)
 
 
-def updateSigma(value):
+def resetSigmaFilter():
+    TrackbarValues.updateSigma(0)
+    FilterWindow.setTrackbar(sigmaTrackbar, 0)
+
+
+def updateSigmaValue(value):
     TrackbarValues.updateSigma(value)
+    TrackbarValues.updateKernel(1)  # needed for sigma
     FilterWindow.setTrackbar(kernelTrackbar, TrackbarValues.kernel)
 
 
-def updateKernel(value):
+def updateKernelValue(value):
     TrackbarValues.updateKernel(value)
+    TrackbarValues.updateSigma(0)  # needed to not overwrite kernel
     FilterWindow.setTrackbar(sigmaTrackbar, TrackbarValues.sigma)
 
 
+def showFilter():
+    match TrackbarValues.filter:
+        case 0:  # no Filter = reset Image
+            FilterWindow.show('grayImage', grayImage)
+            return
+        case 1:
+            FilterWindow.show('guassian', runGaussian())
+            return
+        case 2:
+            resetSigmaFilter()  # prevent sigma effect on Median filter
+            FilterWindow.show('median', runMedian())
+            return
+        case _:
+            return
+
+
 def sigmaOnChange(value):
+    if TrackbarValues.filter == 2:
+        resetSigmaFilter()  # prevent sigma effect on Median filter
+        return
+
     if value == 0:
         print(f'(sigmaOnChange) off')
-        updateSigma(0)
+        updateSigmaValue(0)
         FilterWindow.show('grayImage', grayImage)
         return
 
@@ -40,16 +67,15 @@ def sigmaOnChange(value):
         return
 
     print(f'(sigmaOnChange) {TrackbarValues.sigma} to {mappedValue}')
-    updateSigma(mappedValue)
+    updateSigmaValue(mappedValue)
 
-    if TrackbarValues.filter == 1:
-        FilterWindow.show('guassian', runGaussian())
+    showFilter()
 
 
 def kernelSizeOnChange(value):
     if value == 0:
         print(f'(kernelSizeOnChange) off')
-        updateKernel(0)
+        updateKernelValue(0)
         FilterWindow.show('grayImage', grayImage)
         return
 
@@ -59,10 +85,9 @@ def kernelSizeOnChange(value):
         return
 
     print(f'(kernelSizeOnChange) {TrackbarValues.kernel} to {mappedValue}')
-    updateKernel(mappedValue)
+    updateKernelValue(mappedValue)
 
-    if TrackbarValues.filter == 1:
-        FilterWindow.show('guassian', runGaussian())
+    showFilter()
 
 
 """
