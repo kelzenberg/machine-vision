@@ -7,7 +7,7 @@ from TrackbarValues import TrackbarValues
 Trackbar Functions
 """
 
-operationTrackbar = 'Operation: '
+operationTrackbar = 'Operator: '
 operationValueRange = (0, 3)
 filterTrackbar = 'Filter: '
 filterValueRange = (0, 2)
