@@ -1,5 +1,8 @@
 import cv2
 
+"""
+OpenCV Window Helper
+"""
 
 class Window:
     def __init__(self, name, scale=1, offset=(0, 0)):

@@ -11,9 +11,9 @@ import edgesWindow
 Main function
 """
 
-print('(Main) Press ESC to exit...')
+print('(main) Press ESC to exit...')
 while cv2.waitKey(0) != 27:
     pass
 
-print('(Main) Closing all windows.')
+print('(main) Closing all windows.')
 cv2.destroyAllWindows()
