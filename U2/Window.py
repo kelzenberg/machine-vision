@@ -16,6 +16,9 @@ class Window:
     def addTrackbar(self, name, range, onChange):
         cv2.createTrackbar(name, self.name, range[0], range[1], onChange)
 
+    def setTrackbar(self, name, value):
+        cv2.setTrackbarPos(name, self.name, value)
+
     def show(self, name, image):
         # print(f'(Window.show) Show in "{self.name}" window: {name} {image.shape}')
         preview = cv2.resize(image, None, fx=self.scale,
