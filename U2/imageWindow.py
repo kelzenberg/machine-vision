@@ -20,8 +20,6 @@ def filterOnChange(value):
     if TrackbarValues.filter == value:
         return
 
-    TrackbarValues.filter = value
-
     match value:
         case 0:
             return
@@ -30,6 +28,8 @@ def filterOnChange(value):
                 f'(filterOnChange): Selected Gaussian (value {value})')
         case _:
             return
+
+    TrackbarValues.updateFilter(value)
 
 
 """

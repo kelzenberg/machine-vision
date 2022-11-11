@@ -1,3 +1,4 @@
+import cv2
 from numpy import interp, arange
 from Window import Window
 from images import grayImage, filteredImage
@@ -15,7 +16,7 @@ kernelSizeRange = (0, 5)
 
 def sigmaOnChange(value):
     if value == 0 or TrackbarValues.filter != 1:  # off
-        TrackbarValues.sigma = 0
+        TrackbarValues.updateSigma(0)
         FilterWindow.show('grayImage', grayImage)
         return
 
@@ -27,27 +28,28 @@ def sigmaOnChange(value):
     if TrackbarValues.sigma == mappedValue:
         return
 
-    TrackbarValues.kernel = 1
-    TrackbarValues.sigma = mappedValue
-    print('(sigmaOnChange)', TrackbarValues.sigma)
+    print(f'(sigmaOnChange) {TrackbarValues.sigma} to {mappedValue}')
+    TrackbarValues.updateSigma(mappedValue)
+    FilterWindow.setTrackbar(kernelTrackbar, TrackbarValues.kernel)
+
     FilterWindow.show('guassian', runGaussian())
 
 
 def kernelSizeOnChange(value):
     if value == 0 or TrackbarValues.filter != 1:  # off
-        TrackbarValues.kernel = 0
+        TrackbarValues.updateKernel(0)
         FilterWindow.show('grayImage', grayImage)
         return
 
     mappedValue = arange(1, 10, 2)[value - 1]
-    print('foo', TrackbarValues.kernel, mappedValue)
 
     if TrackbarValues.kernel == mappedValue:
         return
 
-    TrackbarValues.sigma = 0
-    TrackbarValues.kernel = mappedValue
-    print('(kernelSizeOnChange)', TrackbarValues.kernel)
+    print(f'(kernelSizeOnChange) {TrackbarValues.kernel} to {mappedValue}')
+    TrackbarValues.updateKernel(mappedValue)
+    FilterWindow.setTrackbar(sigmaTrackbar, TrackbarValues.sigma)
+
     FilterWindow.show('guassian', runGaussian())
 
 
