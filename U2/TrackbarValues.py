@@ -4,9 +4,14 @@ Trackbar Values Store
 
 
 class TrackbarValues:
+    operator = 0
     filter = 0
     sigma = 0
     kernel = 0
+
+    @classmethod
+    def updateOperator(self, value):
+        self.operator = value
 
     @classmethod
     def updateFilter(self, value):
@@ -22,4 +27,4 @@ class TrackbarValues:
 
 
 print(
-    f'(TrackbarValues.init) Filter: {TrackbarValues.filter}, Sigma: {TrackbarValues.sigma}, Kernel: {TrackbarValues.kernel}')
+    f'(TrackbarValues.init) Operator: {TrackbarValues.operator}, Filter: {TrackbarValues.filter}, Sigma: {TrackbarValues.sigma}, Kernel: {TrackbarValues.kernel}')

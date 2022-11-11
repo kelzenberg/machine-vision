@@ -8,12 +8,16 @@ operationValueRange = (0, 3)
 filterTrackbar = 'Filter: '
 filterValueRange = (0, 2)
 
-
-def noopFunc(arg):
-    print('(noopFunc)', arg)
 """
 Trackbar Functions
 """
+
+
+def operatorOnChange(value):
+    if TrackbarValues.operator == value:
+        return
+
+    TrackbarValues.updateOperator(value)
 
 
 def filterOnChange(value):
@@ -43,6 +47,7 @@ Window Functions
 """
 
 ImageWindow = Window('Image', scale=0.2, offset=(0, 0))
-ImageWindow.addTrackbar(operationTrackbar, operationValueRange, noopFunc)
+ImageWindow.addTrackbar(
+    operationTrackbar, operationValueRange, operatorOnChange)
 ImageWindow.addTrackbar(filterTrackbar, filterValueRange, filterOnChange)
 ImageWindow.show('grayImage', grayImage)
