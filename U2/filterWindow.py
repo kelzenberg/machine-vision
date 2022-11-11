@@ -7,8 +7,9 @@ from utils import runGaussian
 """
 Trackbar Functions
 """
-
+sigmaTrackbar = 'Sigma: '
 sigmaValueRange = (0, 60)
+kernelTrackbar = 'Kernal Size: '
 kernelSizeRange = (0, 5)
 
 
@@ -56,6 +57,6 @@ Window Functions
 
 FilterWindow = Window('Filter', scale=0.2, offset=(
     0, round(filteredImage.shape[1]*0.175)))
-FilterWindow.addTrackbar('Sigma: ', sigmaValueRange, sigmaOnChange)
-FilterWindow.addTrackbar('Kernal Size: ', kernelSizeRange, kernelSizeOnChange)
+FilterWindow.addTrackbar(sigmaTrackbar, sigmaValueRange, sigmaOnChange)
+FilterWindow.addTrackbar(kernelTrackbar, kernelSizeRange, kernelSizeOnChange)
 FilterWindow.show('filteredImage', filteredImage)
