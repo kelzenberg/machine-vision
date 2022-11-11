@@ -35,14 +35,11 @@ def showFilter():
     match TrackbarValues.filter:
         case 0:  # no Filter = reset Image
             FilterWindow.show('Images.gray', Images.gray)
-            return
         case 1:
             FilterWindow.show('guassian', runGaussian())
-            return
         case 2:
             resetSigmaValue()  # prevent sigma effect on Median filter
             FilterWindow.show('median', runMedian())
-            return
         case _:
             return
 
