@@ -1,14 +1,14 @@
 from Window import Window
 from images import edgesImage
 
-"""
-Trackbar Functions
-"""
-
 thresholdTrackbar = 'Threshold: '
 thresholdValueRange = (0, 255)
 displayTrackbar = 'Display Image: '
 displayValueRange = (0, 5)
+
+"""
+Trackbar Functions
+"""
 
 
 def noopFunc(arg):

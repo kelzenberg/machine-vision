@@ -4,17 +4,17 @@ from images import grayImage, filteredImage
 from TrackbarValues import TrackbarValues
 from utils import runGaussian, runMedian
 
-"""
-Trackbar Functions
-"""
-
 sigmaTrackbar = 'Sigma: '
 sigmaValueRange = (0, 60)
 kernelTrackbar = 'Kernal Size: '
 kernelSizeRange = (0, 5)
 
+"""
+Filter Utils
+"""
 
-def resetSigmaFilter():
+
+def resetSigmaValue():
     TrackbarValues.updateSigma(0)
     FilterWindow.setTrackbar(sigmaTrackbar, 0)
 
@@ -40,16 +40,21 @@ def showFilter():
             FilterWindow.show('guassian', runGaussian())
             return
         case 2:
-            resetSigmaFilter()  # prevent sigma effect on Median filter
+            resetSigmaValue()  # prevent sigma effect on Median filter
             FilterWindow.show('median', runMedian())
             return
         case _:
             return
 
 
+"""
+Trackbar Functions
+"""
+
+
 def sigmaOnChange(value):
     if TrackbarValues.filter == 2:
-        resetSigmaFilter()  # prevent sigma effect on Median filter
+        resetSigmaValue()  # prevent sigma effect on Median filter
         return
 
     if value == 0:

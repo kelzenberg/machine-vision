@@ -3,10 +3,6 @@ from images import grayImage
 from filterWindow import showFilter
 from TrackbarValues import TrackbarValues
 
-"""
-Trackbar Functions
-"""
-
 operationTrackbar = 'Operator: '
 operationValueRange = (0, 3)
 filterTrackbar = 'Filter: '
@@ -15,6 +11,9 @@ filterValueRange = (0, 2)
 
 def noopFunc(arg):
     print('(noopFunc)', arg)
+"""
+Trackbar Functions
+"""
 
 
 def filterOnChange(value):
