@@ -15,10 +15,10 @@ Edges Utils
 def showOperator():
     match TrackbarValues.operator:
         case 0:  # no Operator = show Filter only
-            EdgesWindow.show('Images.filtered', Images.filtered)
+            EdgesWindow.show('Reset to Filtered', Images.filtered)
         case 1:
             # TODO: Sobel operator
-            EdgesWindow.show('Images.edges', Images.edges)
+            EdgesWindow.show('Sobel', Images.edges)
         case _:
             return
 

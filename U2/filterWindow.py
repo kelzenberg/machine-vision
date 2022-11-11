@@ -2,6 +2,7 @@ from numpy import interp, arange
 from Window import Window
 from Images import Images
 from TrackbarValues import TrackbarValues
+from edgesWindow import showOperator
 from utils import runGaussian, runMedian
 
 sigmaTrackbar = 'Sigma: '
@@ -34,14 +35,16 @@ def updateKernelValue(value):
 def showFilter():
     match TrackbarValues.filter:
         case 0:  # no Filter = reset Image
-            FilterWindow.show('Images.gray', Images.gray)
+            Images.updateFiltered(Images.gray.copy())
+            FilterWindow.show('Reset to Gray', Images.filtered)
         case 1:
-            FilterWindow.show('guassian', runGaussian())
+            FilterWindow.show('Gaussian', runGaussian())
         case 2:
             resetSigmaValue()  # prevent sigma effect on Median filter
-            FilterWindow.show('median', runMedian())
+            FilterWindow.show('Median', runMedian())
         case _:
             return
+    showOperator()
 
 
 """
