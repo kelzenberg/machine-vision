@@ -18,15 +18,15 @@ class Images:
     edges = gray.copy()
 
     @classmethod
-    def updateGrayImage(self, image):
+    def updateGray(self, image):
         self.gray = image
 
     @classmethod
-    def updateFilteredImage(self, image):
+    def updateFiltered(self, image):
         self.filtered = image
 
     @classmethod
-    def updateEdgesImage(self, image):
+    def updateEdges(self, image):
         self.edges = image
 
 
