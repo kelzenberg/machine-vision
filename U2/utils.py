@@ -8,7 +8,7 @@ Utility functions
 
 
 def runGaussian():
-    multiplier = 10
+    multiplier = 6
     Images.updateFiltered(cv2.GaussianBlur(Images.gray.copy(), (TrackbarValues.kernel * multiplier + 1,
                                                                 TrackbarValues.kernel * multiplier + 1), TrackbarValues.sigma, borderType=cv2.BORDER_REFLECT_101))
     return Images.filtered
