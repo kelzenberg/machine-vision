@@ -1,6 +1,7 @@
 from Window import Window
 from Images import Images
 from TrackbarValues import TrackbarValues
+from utils import runSobel
 
 thresholdTrackbar = 'Threshold: '
 thresholdValueRange = (0, 255)
@@ -17,8 +18,7 @@ def showOperator():
         case 0:  # no Operator = show Filter only
             EdgesWindow.show('Reset to Filtered', Images.filtered)
         case 1:
-            # TODO: Sobel operator
-            EdgesWindow.show('Sobel', Images.edges)
+            EdgesWindow.show('Sobel', runSobel())
         case _:
             return
 
