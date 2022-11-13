@@ -8,6 +8,7 @@ class TrackbarValues:
     filter = 0
     sigma = 0
     kernel = 0
+    threshold = 255
 
     @classmethod
     def updateOperator(self, value):
@@ -24,6 +25,10 @@ class TrackbarValues:
     @classmethod
     def updateKernel(self, value):
         self.kernel = value
+
+    @classmethod
+    def updateThreshold(self, value):
+        self.threshold = value
 
 
 print(
