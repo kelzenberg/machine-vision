@@ -9,6 +9,7 @@ class TrackbarValues:
     sigma = 0
     kernel = 0
     threshold = 0
+    threshold2 = 255
     displayValue = 0
 
     @classmethod
@@ -30,6 +31,10 @@ class TrackbarValues:
     @classmethod
     def updateThreshold(self, value):
         self.threshold = value
+
+    @classmethod
+    def updateThreshold2(self, value):
+        self.threshold2 = value
 
     @classmethod
     def updateDisplayValue(self, value):
