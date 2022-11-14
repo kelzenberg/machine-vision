@@ -18,7 +18,7 @@ Sobel & Scharr Utils
 def updateDisplay():
     match TrackbarValues.displayValue:
         case 0:
-            SobelScharrWindow.show('Reset to Filtered', Images.filtered)
+            SobelScharrWindow.show('Filtered', Images.filtered)
         case 1:
             SobelScharrWindow.show('Binary', Images.binary)
         case 2:

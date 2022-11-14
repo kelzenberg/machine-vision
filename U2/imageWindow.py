@@ -44,12 +44,11 @@ def filterOnChange(value):
         return
 
     TrackbarValues.updateFilter(value)
-    updateFilterWindow()
 
     selection = ''
     match TrackbarValues.filter:
         case 0:
-            selection = 'no filter'
+            selection = 'No Filter'
         case 1:
             selection = 'Gaussian'
         case 2:
@@ -59,6 +58,8 @@ def filterOnChange(value):
 
     print(
         f'(filterOnChange): Selected {selection} ({TrackbarValues.filter})')
+
+    updateFilterWindow()
 
 
 """

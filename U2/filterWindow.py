@@ -36,15 +36,27 @@ def updateFilterWindow():
     match TrackbarValues.filter:
         case 0:  # no Filter = reset Image
             Images.updateFiltered(Images.gray.copy())
-            FilterWindow.show('Reset to Gray', Images.filtered)
+            FilterWindow.show('Gray', Images.filtered)
         case 1:
             FilterWindow.show('Gaussian', runGaussian())
         case 2:
             resetSigmaValue()  # prevent sigma effect on Median filter
             FilterWindow.show('Median', runMedian())
         case _:
-            return
-    updateSobelScharrWindow()
+            pass
+
+    match TrackbarValues.operator:
+        case 0:  # no Operator
+            updateSobelScharrWindow()
+        case 1:
+            updateSobelScharrWindow()
+        case 2:
+            updateSobelScharrWindow()
+        case 3:
+            # TODO: updateCannyWindow()
+            pass
+        case _:
+            pass
 
 
 """
@@ -58,7 +70,9 @@ def sigmaOnChange(value):
         return
 
     if value == 0:
-        print(f'(sigmaOnChange) off')
+        if TrackbarValues.sigma != value:
+            print(f'(sigmaOnChange) off')
+
         updateSigmaValue(0)
         FilterWindow.show('Images.gray', Images.gray)
         return
@@ -79,7 +93,9 @@ def sigmaOnChange(value):
 
 def kernelSizeOnChange(value):
     if value == 0:
-        print(f'(kernelSizeOnChange) off')
+        if TrackbarValues.kernel != value:
+            print(f'(kernelSizeOnChange) off')
+
         updateKernelValue(0)
         FilterWindow.show('Images.gray', Images.gray)
         return
