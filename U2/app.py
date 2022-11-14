@@ -6,6 +6,7 @@ import Images
 import imageWindow
 import filterWindow
 import sobelScharrWindow
+import cannyWindow
 
 """
 Main function
