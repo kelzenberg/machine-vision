@@ -1,26 +1,51 @@
 from Window import Window
 from Images import Images
 from TrackbarValues import TrackbarValues
-from utils import runSobel
+from utils import runSobelWithThreshold
 
 thresholdTrackbar = 'Threshold: '
-thresholdValueRange = (0, 255)
+thresholdValueRange = (0, 257)
 displayTrackbar = 'Display Image: '
-displayValueRange = (0, 5)
+displayValueRange = (0, 4)
 
 """
 Edges Utils
 """
 
 
-def showOperator():
-    match TrackbarValues.operator:
-        case 0:  # no Operator = show Filter only
+def showDisplayValue():
+    if TrackbarValues.operator == 0:  # no Operator = show Filter only
+        TrackbarValues.updateThreshold(0)
+        EdgesWindow.setTrackbar(
+            thresholdTrackbar, TrackbarValues.threshold)
+        TrackbarValues.updateDisplayValue(0)
+        EdgesWindow.setTrackbar(
+            displayTrackbar, TrackbarValues.displayValue)
+        EdgesWindow.show('Reset to Filtered', Images.filtered)
+
+    match TrackbarValues.displayValue:
+        case 0:  # show Filtered only
             EdgesWindow.show('Reset to Filtered', Images.filtered)
         case 1:
-            EdgesWindow.show('Sobel', runSobel())
+            EdgesWindow.show('Binary', Images.binary)
+        case 2:
+            EdgesWindow.show('GradientX', Images.gradientX)
+        case 3:
+            EdgesWindow.show('GradientY', Images.gradientY)
+        case 4:
+            EdgesWindow.show('SumXY', Images.sumXY)
         case _:
             return
+
+
+def showOperator():
+    match TrackbarValues.operator:
+        case 1:
+            runSobelWithThreshold()
+        case _:
+            pass
+
+    showDisplayValue()
 
 
 """
@@ -38,8 +63,14 @@ def thresholdOnChange(value):
     showOperator()
 
 
-def noopFunc(arg):
-    print('(noopFunc)', arg)
+def displayValueOnChange(value):
+    if TrackbarValues.displayValue == value:
+        return
+
+    print(f'(displayValueOnChange) {TrackbarValues.displayValue} to {value}')
+    TrackbarValues.updateDisplayValue(value)
+
+    showOperator()
 
 
 """
@@ -50,5 +81,6 @@ EdgesWindow = Window('Edges', scale=0.5, offset=(
     round(Images.edges.shape[0]*0.4), 0))
 EdgesWindow.addTrackbar(
     thresholdTrackbar, thresholdValueRange, thresholdOnChange)
-EdgesWindow.addTrackbar(displayTrackbar, displayValueRange, noopFunc)
+EdgesWindow.addTrackbar(
+    displayTrackbar, displayValueRange, displayValueOnChange)
 EdgesWindow.show('Images.edges', Images.edges)

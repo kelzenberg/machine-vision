@@ -21,16 +21,24 @@ def runMedian():
     return Images.filtered
 
 
-def runSobel():
-    _, threshold = cv2.threshold(Images.filtered.copy(
-    ), TrackbarValues.threshold, 255, cv2.THRESH_BINARY)
+def runSobel(image):
     gradientX = cv2.convertScaleAbs(
-        cv2.Sobel(threshold, cv2.CV_64F, 1, 0, borderType=cv2.BORDER_REFLECT_101))
-    Images.updateGradientX(gradientX)
+        cv2.Sobel(image, cv2.CV_64F, 1, 0, borderType=cv2.BORDER_REFLECT_101))
     gradientY = cv2.convertScaleAbs(
-        cv2.Sobel(threshold, cv2.CV_64F, 0, 1, borderType=cv2.BORDER_REFLECT_101))
+        cv2.Sobel(image, cv2.CV_64F, 0, 1, borderType=cv2.BORDER_REFLECT_101))
+    sumXY = cv2.addWeighted(gradientX, 0.5, gradientY, 0.5, 0)
+    return [gradientX, gradientY, sumXY]
+
+
+def runSobelWithThreshold():
+    image = Images.filtered.copy()
+
+    if 0 < TrackbarValues.threshold < 257:
+        _, image = cv2.threshold(
+            image, TrackbarValues.threshold, 255, cv2.THRESH_BINARY)
+
+    [gradientX, gradientY, sumXY] = runSobel(image)
+    Images.updateBinary(image)
+    Images.updateGradientX(gradientX)
     Images.updateGradientY(gradientY)
-    gradient = cv2.addWeighted(gradientX, 0.5, gradientY, 0.5, 0)
-    Images.updateGradientXY(gradient)
-    Images.updateEdges(gradient)
-    return Images.edges
+    Images.updateSumXY(sumXY)
