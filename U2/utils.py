@@ -44,9 +44,9 @@ def runScharr(image):
 def runWithThreshold(opType):
     image = Images.filtered.copy()
 
-    if 0 < TrackbarValues.threshold < 257:
+    if 0 < TrackbarValues.threshold < 256:
         _, image = cv2.threshold(
-            image, TrackbarValues.threshold, 255, cv2.THRESH_BINARY)
+            image, TrackbarValues.threshold - 1, 255, cv2.THRESH_BINARY)
 
     match opType:
         case 'sobel':
@@ -63,7 +63,7 @@ def runWithThreshold(opType):
 def runCanny():
     image = Images.filtered.copy()
 
-    if 0 < TrackbarValues.threshold < 257 and 0 < TrackbarValues.threshold2 < 257:
+    if 0 < TrackbarValues.threshold < 256 and 0 < TrackbarValues.threshold2 < 256:
         image = cv2.Canny(image, TrackbarValues.threshold - 1,
                           TrackbarValues.threshold2 - 1)
 

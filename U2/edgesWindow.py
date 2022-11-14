@@ -4,7 +4,7 @@ from TrackbarValues import TrackbarValues
 from utils import runWithThreshold
 
 thresholdTrackbar = 'Threshold: '
-thresholdValueRange = (0, 257)
+thresholdValueRange = (0, 256)
 displayTrackbar = 'Display Image: '
 displayValueRange = (0, 4)
 
