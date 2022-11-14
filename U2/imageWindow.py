@@ -1,13 +1,15 @@
 from Window import Window
 from Images import Images
-from filterWindow import updateFilterWindow
-from sobelScharrWindow import updateSobelScharrWindow
 from TrackbarValues import TrackbarValues
+from filterWindow import updateFilterWindow
+from sobelScharrWindow import SobelScharrWindow, updateSobelScharrWindow, createSobelScharrWindow
+from cannyWindow import CannyWindow, updateCannyWindow, createCannyWindow
 
 operationTrackbar = 'Operator: '
 operationValueRange = (0, 3)
 filterTrackbar = 'Filter: '
 filterValueRange = (0, 2)
+
 
 """
 Trackbar Functions
@@ -23,15 +25,28 @@ def operatorOnChange(value):
     match TrackbarValues.operator:
         case 0:
             selection = 'No Operator'
+            if CannyWindow != None:
+                CannyWindow.destroy()
+            createSobelScharrWindow()
             updateSobelScharrWindow()
         case 1:
             selection = 'Sobel'
+            if CannyWindow != None:
+                CannyWindow.destroy()
+            createSobelScharrWindow()
             updateSobelScharrWindow()
         case 2:
             selection = 'Scharr'
+            if CannyWindow != None:
+                CannyWindow.destroy()
+            createSobelScharrWindow()
             updateSobelScharrWindow()
         case 3:
             selection = 'Canny'
+            if SobelScharrWindow != None:
+                SobelScharrWindow.destroy()
+            createCannyWindow()
+            updateCannyWindow()
         case _:
             selection = 'UNKNOWN'
 
