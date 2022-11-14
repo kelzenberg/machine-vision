@@ -28,6 +28,16 @@ Trackbar Functions
 """
 
 
+def thresholdOnChange(value):
+    if TrackbarValues.threshold == value:
+        return
+
+    print(f'(thresholdOnChange) {TrackbarValues.threshold} to {value}')
+    TrackbarValues.updateThreshold(value)
+
+    showOperator()
+
+
 def noopFunc(arg):
     print('(noopFunc)', arg)
 
@@ -38,6 +48,7 @@ Window Functions
 
 EdgesWindow = Window('Edges', scale=0.5, offset=(
     round(Images.edges.shape[0]*0.4), 0))
-EdgesWindow.addTrackbar(thresholdTrackbar, thresholdValueRange, noopFunc)
+EdgesWindow.addTrackbar(
+    thresholdTrackbar, thresholdValueRange, thresholdOnChange)
 EdgesWindow.addTrackbar(displayTrackbar, displayValueRange, noopFunc)
 EdgesWindow.show('Images.edges', Images.edges)
