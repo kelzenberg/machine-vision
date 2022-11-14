@@ -40,7 +40,7 @@ def showDisplayValue():
             return
 
 
-def showOperator():
+def updateOperatorWindow():
     match TrackbarValues.operator:
         case 1:
             runWithThreshold('sobel')
@@ -64,7 +64,7 @@ def thresholdOnChange(value):
     print(f'(thresholdOnChange) {TrackbarValues.threshold} to {value}')
     TrackbarValues.updateThreshold(value)
 
-    showOperator()
+    updateOperatorWindow()
 
 
 def displayValueOnChange(value):
@@ -74,7 +74,7 @@ def displayValueOnChange(value):
     print(f'(displayValueOnChange) {TrackbarValues.displayValue} to {value}')
     TrackbarValues.updateDisplayValue(value)
 
-    showOperator()
+    updateOperatorWindow()
 
 
 """
@@ -88,7 +88,7 @@ def createSobelScharrWindow():
     if SobelScharrWindow != None:
         SobelScharrWindow.destroy()
 
-    SobelScharrWindow = Window('Edges Sobel & Scharr', scale=0.5, offset=(
+    SobelScharrWindow = Window('Operator Sobel & Scharr', scale=0.5, offset=(
         round(Images.filtered.shape[0]*0.4), 0))
     SobelScharrWindow.addTrackbar(
         thresholdTrackbar, thresholdValueRange, thresholdOnChange)

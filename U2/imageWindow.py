@@ -1,7 +1,7 @@
 from Window import Window
 from Images import Images
 from filterWindow import updateFilterWindow
-from sobelScharrWindow import showOperator
+from sobelScharrWindow import updateOperatorWindow
 from TrackbarValues import TrackbarValues
 
 operationTrackbar = 'Operator: '
@@ -19,7 +19,7 @@ def operatorOnChange(value):
         return
 
     TrackbarValues.updateOperator(value)
-    showOperator()
+    updateOperatorWindow()
 
     match TrackbarValues.operator:
         case 0:
