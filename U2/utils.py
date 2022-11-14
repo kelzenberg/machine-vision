@@ -58,3 +58,13 @@ def runWithThreshold(opType):
     Images.updateGradientX(gradientX)
     Images.updateGradientY(gradientY)
     Images.updateSumXY(sumXY)
+
+
+def runCanny():
+    image = Images.filtered.copy()
+
+    if 0 < TrackbarValues.threshold < 257 and 0 < TrackbarValues.threshold2 < 257:
+        image = cv2.Canny(image, TrackbarValues.threshold - 1,
+                          TrackbarValues.threshold2 - 1)
+
+    Images.updateEdges(image)
