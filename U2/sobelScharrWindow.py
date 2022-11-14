@@ -40,7 +40,7 @@ def updateDisplay():
             return
 
 
-def updateOperatorWindow():
+def updateSobelScharrWindow():
     match TrackbarValues.operator:
         case 1:
             runWithThreshold('sobel')
@@ -64,7 +64,7 @@ def thresholdOnChange(value):
     print(f'(thresholdOnChange) {TrackbarValues.threshold} to {value}')
     TrackbarValues.updateThreshold(value)
 
-    updateOperatorWindow()
+    updateSobelScharrWindow()
 
 
 def displayValueOnChange(value):
@@ -74,7 +74,7 @@ def displayValueOnChange(value):
     print(f'(displayValueOnChange) {TrackbarValues.displayValue} to {value}')
     TrackbarValues.updateDisplayValue(value)
 
-    updateOperatorWindow()
+    updateSobelScharrWindow()
 
 
 """

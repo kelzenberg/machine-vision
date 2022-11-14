@@ -2,7 +2,7 @@ from numpy import interp, arange
 from Window import Window
 from Images import Images
 from TrackbarValues import TrackbarValues
-from sobelScharrWindow import updateOperatorWindow
+from sobelScharrWindow import updateSobelScharrWindow
 from utils import runGaussian, runMedian
 
 sigmaTrackbar = 'Sigma: '
@@ -44,7 +44,7 @@ def updateFilterWindow():
             FilterWindow.show('Median', runMedian())
         case _:
             return
-    updateOperatorWindow()
+    updateSobelScharrWindow()
 
 
 """
