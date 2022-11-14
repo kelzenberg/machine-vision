@@ -22,7 +22,8 @@ def operatorOnChange(value):
 
     match TrackbarValues.operator:
         case 0:
-            selection = 'no operator'
+            selection = 'No Operator'
+            updateSobelScharrWindow()
         case 1:
             selection = 'Sobel'
             updateSobelScharrWindow()

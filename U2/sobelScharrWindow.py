@@ -16,17 +16,8 @@ Sobel & Scharr Utils
 
 
 def updateDisplay():
-    if TrackbarValues.operator == 0:  # no Operator = show Filter only
-        TrackbarValues.updateThreshold(0)
-        SobelScharrWindow.setTrackbar(
-            thresholdTrackbar, TrackbarValues.threshold)
-        TrackbarValues.updateDisplayValue(0)
-        SobelScharrWindow.setTrackbar(
-            displayTrackbar, TrackbarValues.displayValue)
-        SobelScharrWindow.show('Reset to Filtered', Images.filtered)
-
     match TrackbarValues.displayValue:
-        case 0:  # show Filtered only
+        case 0:
             SobelScharrWindow.show('Reset to Filtered', Images.filtered)
         case 1:
             SobelScharrWindow.show('Binary', Images.binary)
@@ -42,6 +33,14 @@ def updateDisplay():
 
 def updateSobelScharrWindow():
     match TrackbarValues.operator:
+        case 0:
+            TrackbarValues.updateThreshold(0)
+            SobelScharrWindow.setTrackbar(
+                thresholdTrackbar, TrackbarValues.threshold)
+
+            TrackbarValues.updateDisplayValue(0)
+            SobelScharrWindow.setTrackbar(
+                displayTrackbar, TrackbarValues.displayValue)
         case 1:
             runWithThreshold('sobel')
         case 2:
