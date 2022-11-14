@@ -19,6 +19,7 @@ class Images:
     gradientX = gray.copy()
     gradientY = gray.copy()
     gradientXY = gray.copy()
+    maximum = gray.copy()
     binary = gray.copy()
 
     @classmethod
@@ -44,6 +45,10 @@ class Images:
     @classmethod
     def updateGradientXY(self, image):
         self.gradientXY = image
+
+    @classmethod
+    def updateMaximum(self, image):
+        self.maximum = image
 
     @classmethod
     def updateBinary(self, image):
