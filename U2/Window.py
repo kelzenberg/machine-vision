@@ -25,6 +25,9 @@ class Window:
     def setTrackbar(self, name, value):
         cv2.setTrackbarPos(name, self.name, value)
 
+    def destroy(self):
+        cv2.destroyWindow(self.name)
+
     def show(self, name, image):
         global prevDebugPrint
         log = f'(Window.show) Show in "{self.name}" window: {name}'
