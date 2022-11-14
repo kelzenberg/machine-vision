@@ -67,4 +67,4 @@ def runCanny():
         image = cv2.Canny(image, TrackbarValues.threshold - 1,
                           TrackbarValues.threshold2 - 1)
 
-    Images.updateEdges(image)
+    Images.updateCanny(image)

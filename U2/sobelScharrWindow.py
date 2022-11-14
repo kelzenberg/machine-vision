@@ -9,7 +9,7 @@ displayTrackbar = 'Display Image: '
 displayValueRange = (0, 4)
 
 """
-Edges Utils
+Sobel & Scharr Utils
 """
 
 
@@ -79,10 +79,10 @@ def displayValueOnChange(value):
 Window Functions
 """
 
-SobelScharrWindow = Window('Edges', scale=0.5, offset=(
-    round(Images.edges.shape[0]*0.4), 0))
+SobelScharrWindow = Window('Edges Sobel & Scharr', scale=0.5, offset=(
+    round(Images.filtered.shape[0]*0.4), 0))
 SobelScharrWindow.addTrackbar(
     thresholdTrackbar, thresholdValueRange, thresholdOnChange)
 SobelScharrWindow.addTrackbar(
     displayTrackbar, displayValueRange, displayValueOnChange)
-SobelScharrWindow.show('Images.edges', Images.edges)
+SobelScharrWindow.show('Images.filtered', Images.filtered)
