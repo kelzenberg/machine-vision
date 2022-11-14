@@ -21,12 +21,15 @@ def operatorOnChange(value):
     TrackbarValues.updateOperator(value)
     showOperator()
 
-    selection = ''
     match TrackbarValues.operator:
         case 0:
             selection = 'no operator'
         case 1:
             selection = 'Sobel'
+        case 2:
+            selection = 'Scharr'
+        case 3:
+            selection = 'Canny'
         case _:
             selection = 'UNKNOWN'
 
