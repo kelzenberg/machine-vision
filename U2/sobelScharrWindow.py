@@ -1,8 +1,10 @@
+from cv2 import Sobel
 from Window import Window
 from Images import Images
 from TrackbarValues import TrackbarValues
 from utils import runWithThreshold
 
+SobelScharrWindow = None
 thresholdTrackbar = 'Threshold: '
 thresholdValueRange = (0, 256)
 displayTrackbar = 'Display Image: '
@@ -79,10 +81,20 @@ def displayValueOnChange(value):
 Window Functions
 """
 
-SobelScharrWindow = Window('Edges Sobel & Scharr', scale=0.5, offset=(
-    round(Images.filtered.shape[0]*0.4), 0))
-SobelScharrWindow.addTrackbar(
-    thresholdTrackbar, thresholdValueRange, thresholdOnChange)
-SobelScharrWindow.addTrackbar(
-    displayTrackbar, displayValueRange, displayValueOnChange)
+
+def createSobelScharrWindow():
+    global SobelScharrWindow
+
+    if SobelScharrWindow != None:
+        SobelScharrWindow.destroy()
+
+    SobelScharrWindow = Window('Edges Sobel & Scharr', scale=0.5, offset=(
+        round(Images.filtered.shape[0]*0.4), 0))
+    SobelScharrWindow.addTrackbar(
+        thresholdTrackbar, thresholdValueRange, thresholdOnChange)
+    SobelScharrWindow.addTrackbar(
+        displayTrackbar, displayValueRange, displayValueOnChange)
+
+
+createSobelScharrWindow()
 SobelScharrWindow.show('Images.filtered', Images.filtered)
