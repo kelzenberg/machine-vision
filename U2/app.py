@@ -5,7 +5,7 @@ import cv2
 import Images
 import imageWindow
 import filterWindow
-import edgesWindow
+import sobelScharrWindow
 
 """
 Main function

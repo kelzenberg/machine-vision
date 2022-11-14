@@ -2,7 +2,7 @@ from numpy import interp, arange
 from Window import Window
 from Images import Images
 from TrackbarValues import TrackbarValues
-from edgesWindow import showOperator
+from sobelScharrWindow import showOperator
 from utils import runGaussian, runMedian
 
 sigmaTrackbar = 'Sigma: '

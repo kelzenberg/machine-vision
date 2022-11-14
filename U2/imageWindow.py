@@ -1,7 +1,7 @@
 from Window import Window
 from Images import Images
 from filterWindow import showFilter
-from edgesWindow import showOperator
+from sobelScharrWindow import showOperator
 from TrackbarValues import TrackbarValues
 
 operationTrackbar = 'Operator: '

@@ -16,24 +16,24 @@ Edges Utils
 def showDisplayValue():
     if TrackbarValues.operator == 0:  # no Operator = show Filter only
         TrackbarValues.updateThreshold(0)
-        EdgesWindow.setTrackbar(
+        SobelScharrWindow.setTrackbar(
             thresholdTrackbar, TrackbarValues.threshold)
         TrackbarValues.updateDisplayValue(0)
-        EdgesWindow.setTrackbar(
+        SobelScharrWindow.setTrackbar(
             displayTrackbar, TrackbarValues.displayValue)
-        EdgesWindow.show('Reset to Filtered', Images.filtered)
+        SobelScharrWindow.show('Reset to Filtered', Images.filtered)
 
     match TrackbarValues.displayValue:
         case 0:  # show Filtered only
-            EdgesWindow.show('Reset to Filtered', Images.filtered)
+            SobelScharrWindow.show('Reset to Filtered', Images.filtered)
         case 1:
-            EdgesWindow.show('Binary', Images.binary)
+            SobelScharrWindow.show('Binary', Images.binary)
         case 2:
-            EdgesWindow.show('GradientX', Images.gradientX)
+            SobelScharrWindow.show('GradientX', Images.gradientX)
         case 3:
-            EdgesWindow.show('GradientY', Images.gradientY)
+            SobelScharrWindow.show('GradientY', Images.gradientY)
         case 4:
-            EdgesWindow.show('SumXY', Images.sumXY)
+            SobelScharrWindow.show('SumXY', Images.sumXY)
         case _:
             return
 
@@ -79,10 +79,10 @@ def displayValueOnChange(value):
 Window Functions
 """
 
-EdgesWindow = Window('Edges', scale=0.5, offset=(
+SobelScharrWindow = Window('Edges', scale=0.5, offset=(
     round(Images.edges.shape[0]*0.4), 0))
-EdgesWindow.addTrackbar(
+SobelScharrWindow.addTrackbar(
     thresholdTrackbar, thresholdValueRange, thresholdOnChange)
-EdgesWindow.addTrackbar(
+SobelScharrWindow.addTrackbar(
     displayTrackbar, displayValueRange, displayValueOnChange)
-EdgesWindow.show('Images.edges', Images.edges)
+SobelScharrWindow.show('Images.edges', Images.edges)
