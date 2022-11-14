@@ -1,6 +1,6 @@
 from Window import Window
 from Images import Images
-from filterWindow import showFilter
+from filterWindow import updateFilterWindow
 from sobelScharrWindow import showOperator
 from TrackbarValues import TrackbarValues
 
@@ -42,7 +42,7 @@ def filterOnChange(value):
         return
 
     TrackbarValues.updateFilter(value)
-    showFilter()
+    updateFilterWindow()
 
     selection = ''
     match TrackbarValues.filter:

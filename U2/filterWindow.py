@@ -32,7 +32,7 @@ def updateKernelValue(value):
     FilterWindow.setTrackbar(sigmaTrackbar, TrackbarValues.sigma)
 
 
-def showFilter():
+def updateFilterWindow():
     match TrackbarValues.filter:
         case 0:  # no Filter = reset Image
             Images.updateFiltered(Images.gray.copy())
@@ -74,7 +74,7 @@ def sigmaOnChange(value):
     print(f'(sigmaOnChange) {TrackbarValues.sigma} to {mappedValue}')
     updateSigmaValue(mappedValue)
 
-    showFilter()
+    updateFilterWindow()
 
 
 def kernelSizeOnChange(value):
@@ -92,7 +92,7 @@ def kernelSizeOnChange(value):
     print(f'(kernelSizeOnChange) {TrackbarValues.kernel} to {mappedValue}')
     updateKernelValue(mappedValue)
 
-    showFilter()
+    updateFilterWindow()
 
 
 """
