@@ -15,7 +15,7 @@ Sobel & Scharr Utils
 """
 
 
-def showDisplayValue():
+def updateDisplay():
     if TrackbarValues.operator == 0:  # no Operator = show Filter only
         TrackbarValues.updateThreshold(0)
         SobelScharrWindow.setTrackbar(
@@ -49,7 +49,7 @@ def updateOperatorWindow():
         case _:
             pass
 
-    showDisplayValue()
+    updateDisplay()
 
 
 """
