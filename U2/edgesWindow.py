@@ -1,7 +1,7 @@
 from Window import Window
 from Images import Images
 from TrackbarValues import TrackbarValues
-from utils import runSobelWithThreshold
+from utils import runWithThreshold
 
 thresholdTrackbar = 'Threshold: '
 thresholdValueRange = (0, 257)
@@ -41,7 +41,9 @@ def showDisplayValue():
 def showOperator():
     match TrackbarValues.operator:
         case 1:
-            runSobelWithThreshold()
+            runWithThreshold('sobel')
+        case 2:
+            runWithThreshold('scharr')
         case _:
             pass
 
