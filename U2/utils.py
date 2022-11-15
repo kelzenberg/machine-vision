@@ -71,3 +71,19 @@ def runCanny():
             cv2.Canny(image, TrackbarValues.threshold - 1, TrackbarValues.threshold2 - 1))
 
     Images.updateCanny(image)
+
+
+def runDoG():
+    image = Images.filtered.copy()
+    lowpass1 = cv2.GaussianBlur(
+        image, (3, 3), TrackbarValues.sigmaL, borderType)
+    lowpass2 = cv2.GaussianBlur(
+        image, (3, 3), TrackbarValues.sigmaH, borderType)
+    difference = cv2.subtract(lowpass1, lowpass2)
+    _, binary = cv2.threshold(
+        difference, TrackbarValues.threshold - 1, 255, cv2.THRESH_BINARY)
+
+    Images.updateLowpass1(cv2.bitwise_not(lowpass1))
+    Images.updateLowpass2(cv2.bitwise_not(lowpass2))
+    Images.updateDifference(cv2.bitwise_not(difference))
+    Images.updateBinary(cv2.bitwise_not(binary))
