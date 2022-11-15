@@ -7,6 +7,8 @@ class TrackbarValues:
     operator = 0
     filter = 0
     sigma = 0
+    sigmaL = 0
+    sigmaH = 0
     kernel = 0
     threshold = 0
     threshold2 = 0
@@ -23,6 +25,14 @@ class TrackbarValues:
     @classmethod
     def updateSigma(self, value):
         self.sigma = value
+
+    @classmethod
+    def updateSigmaL(self, value):
+        self.sigmaL = value
+
+    @classmethod
+    def updateSigmaH(self, value):
+        self.sigmaH = value
 
     @classmethod
     def updateKernel(self, value):
