@@ -23,7 +23,7 @@ def updateCannyWindow():
             CannyWindow.setTrackbar(
                 thresholdTrackbar + ' H: ', TrackbarValues.displayValue)
             CannyWindow.show('Canny', Images.filtered)
-        case 1:
+        case 3:
             # TODO: show Canny
             runCanny()
             CannyWindow.show('Canny', Images.canny)
