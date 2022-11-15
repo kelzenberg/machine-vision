@@ -6,6 +6,7 @@ from Images import Images
 Utility functions
 """
 
+imageDepth = cv2.CV_16S
 borderType = cv2.BORDER_REFLECT_101
 
 
@@ -25,9 +26,9 @@ def runMedian():
 
 def runSobel(image):
     gradientX = cv2.convertScaleAbs(
-        cv2.Sobel(image, cv2.CV_16S, 1, 0, borderType))
+        cv2.Sobel(image, imageDepth, 1, 0, borderType))
     gradientY = cv2.convertScaleAbs(
-        cv2.Sobel(image, cv2.CV_16S, 0, 1, borderType))
+        cv2.Sobel(image, imageDepth, 0, 1, borderType))
     maxXY = cv2.max(gradientX, gradientY)
     sumXY = cv2.addWeighted(gradientX, 0.5, gradientY, 0.5, 0)
     return [gradientX, gradientY, maxXY, sumXY]
@@ -35,9 +36,9 @@ def runSobel(image):
 
 def runScharr(image):
     gradientX = cv2.convertScaleAbs(cv2.Scharr(
-        image, cv2.CV_16S, 1, 0, borderType))
+        image, imageDepth, 1, 0, borderType))
     gradientY = cv2.convertScaleAbs(cv2.Scharr(
-        image, cv2.CV_16S, 0, 1, borderType))
+        image, imageDepth, 0, 1, borderType))
     maxXY = cv2.max(gradientX, gradientY)
     sumXY = cv2.addWeighted(gradientX, 0.5, gradientY, 0.5, 0)
     return [gradientX, gradientY, maxXY, sumXY]
