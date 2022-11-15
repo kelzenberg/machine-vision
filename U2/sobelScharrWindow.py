@@ -1,4 +1,3 @@
-from cv2 import Sobel
 from Window import Window
 from Images import Images
 from TrackbarValues import TrackbarValues
@@ -18,17 +17,22 @@ Sobel & Scharr Utils
 def updateDisplay():
     match TrackbarValues.displayValue:
         case 0:
+            SobelScharrWindow.setTrackbar(thresholdTrackbar, 0)
             SobelScharrWindow.show('Filtered', Images.filtered)
         case 1:
-            SobelScharrWindow.show('Binary', Images.binary)
-        case 2:
+            SobelScharrWindow.setTrackbar(thresholdTrackbar, 0)
             SobelScharrWindow.show('GradientX', Images.gradientX)
-        case 3:
+        case 2:
+            SobelScharrWindow.setTrackbar(thresholdTrackbar, 0)
             SobelScharrWindow.show('GradientY', Images.gradientY)
-        case 4:
+        case 3:
+            SobelScharrWindow.setTrackbar(thresholdTrackbar, 0)
             SobelScharrWindow.show('MaxXY', Images.maxXY)
-        case 5:
+        case 4:
+            SobelScharrWindow.setTrackbar(thresholdTrackbar, 0)
             SobelScharrWindow.show('SumXY', Images.sumXY)
+        case 5:
+            SobelScharrWindow.show('Binary', Images.binary)
         case _:
             return
 
