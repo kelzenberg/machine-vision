@@ -41,5 +41,4 @@ class TrackbarValues:
         self.displayValue = value
 
 
-print(
-    f'(TrackbarValues.init) Operator: {TrackbarValues.operator}, Filter: {TrackbarValues.filter}, Sigma: {TrackbarValues.sigma}, Kernel: {TrackbarValues.kernel}')
+print(f'(TrackbarValues.init) operator: {TrackbarValues.operator}, filter: {TrackbarValues.filter}, sigma: {TrackbarValues.sigma}, sigmaL: {TrackbarValues.sigmaL}, sigmaH: {TrackbarValues.sigmaH}, kernel: {TrackbarValues.kernel}, threshold: {TrackbarValues.threshold}, threshold2: {TrackbarValues.threshold2}, displayValue: {TrackbarValues.displayValue}')
