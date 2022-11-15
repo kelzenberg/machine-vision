@@ -123,7 +123,3 @@ def createDoGWindow():
         thresholdTrackbar, thresholdValueRange, thresholdOnChange)
     DoGWindow.addTrackbar(
         displayTrackbar, displayValueRange, displayValueOnChange)
-
-
-createDoGWindow()
-DoGWindow.show('Images.filtered', Images.filtered)

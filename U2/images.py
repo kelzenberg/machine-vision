@@ -21,6 +21,9 @@ class Images:
     sumXY = gray.copy()
     binary = gray.copy()
     canny = gray.copy()
+    lowpass1 = gray.copy()
+    lowpass2 = gray.copy()
+    difference = gray.copy()
 
     @classmethod
     def updateGray(self, image):
@@ -53,6 +56,18 @@ class Images:
     @classmethod
     def updateCanny(self, image):
         self.canny = image
+
+    @classmethod
+    def updateLowpass1(self, image):
+        self.lowpass1 = image
+
+    @classmethod
+    def updateLowpass2(self, image):
+        self.lowpass2 = image
+
+    @classmethod
+    def updateDifference(self, image):
+        self.difference = image
 
 
 print(

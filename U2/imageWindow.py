@@ -4,9 +4,10 @@ from TrackbarValues import TrackbarValues
 from filterWindow import updateFilterWindow
 from sobelScharrWindow import SobelScharrWindow, updateSobelScharrWindow, createSobelScharrWindow
 from cannyWindow import CannyWindow, updateCannyWindow, createCannyWindow
+from dogWindow import DoGWindow, createDoGWindow, updateDoGWindow
 
 operationTrackbar = 'Operator: '
-operationValueRange = (0, 3)
+operationValueRange = (0, 4)
 filterTrackbar = 'Filter: '
 filterValueRange = (0, 2)
 
@@ -27,26 +28,42 @@ def operatorOnChange(value):
             selection = 'No Operator'
             if CannyWindow != None:
                 CannyWindow.destroy()
+            if DoGWindow != None:
+                DoGWindow.destroy()
             createSobelScharrWindow()
             updateSobelScharrWindow()
         case 1:
             selection = 'Sobel'
             if CannyWindow != None:
                 CannyWindow.destroy()
+            if DoGWindow != None:
+                DoGWindow.destroy()
             createSobelScharrWindow()
             updateSobelScharrWindow()
         case 2:
             selection = 'Scharr'
             if CannyWindow != None:
                 CannyWindow.destroy()
+            if DoGWindow != None:
+                DoGWindow.destroy()
             createSobelScharrWindow()
             updateSobelScharrWindow()
         case 3:
             selection = 'Canny'
             if SobelScharrWindow != None:
                 SobelScharrWindow.destroy()
+            if DoGWindow != None:
+                DoGWindow.destroy()
             createCannyWindow()
             updateCannyWindow()
+        case 4:
+            selection = 'DoG'
+            if SobelScharrWindow != None:
+                SobelScharrWindow.destroy()
+            if CannyWindow != None:
+                CannyWindow.destroy()
+            createDoGWindow()
+            updateDoGWindow()
         case _:
             selection = 'UNKNOWN'
 

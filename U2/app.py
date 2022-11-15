@@ -7,6 +7,7 @@ import imageWindow
 import filterWindow
 import sobelScharrWindow
 import cannyWindow
+import dogWindow
 
 """
 Main function
