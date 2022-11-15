@@ -5,7 +5,7 @@ from utils import runCanny
 
 CannyWindow = None
 thresholdTrackbar = 'Threshold'
-thresholdValueRange = (0, 256)
+thresholdValueRange = (0, 300)
 
 """
 Canny Utils
