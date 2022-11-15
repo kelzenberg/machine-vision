@@ -19,7 +19,6 @@ class Images:
     gradientY = gray.copy()
     maxXY = gray.copy()
     sumXY = gray.copy()
-    maximum = gray.copy()
     binary = gray.copy()
     canny = gray.copy()
 
@@ -46,10 +45,6 @@ class Images:
     @classmethod
     def updateSumXY(self, image):
         self.sumXY = image
-
-    @classmethod
-    def updateMaximum(self, image):
-        self.maximum = image
 
     @classmethod
     def updateBinary(self, image):
