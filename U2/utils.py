@@ -10,14 +10,14 @@ borderType = cv2.BORDER_REFLECT_101
 
 
 def runGaussian():
-    multiplier = 6
+    multiplier = 2
     Images.updateFiltered(cv2.GaussianBlur(Images.gray.copy(), (TrackbarValues.kernel *
                           multiplier + 1, TrackbarValues.kernel * multiplier + 1), TrackbarValues.sigma, borderType))
     return Images.filtered
 
 
 def runMedian():
-    multiplier = 6
+    multiplier = 2
     Images.updateFiltered(cv2.medianBlur(
         Images.gray.copy(), TrackbarValues.kernel * multiplier + 1))
     return Images.filtered
