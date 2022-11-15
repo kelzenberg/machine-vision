@@ -63,7 +63,7 @@ def runWithThreshold(opType):
 def runCanny():
     image = Images.filtered.copy()
 
-    if 0 < TrackbarValues.threshold < 256 and 0 < TrackbarValues.threshold2 < 256:
+    if 0 < TrackbarValues.threshold < 301 and 0 < TrackbarValues.threshold2 < 301:
         image = cv2.Canny(image, TrackbarValues.threshold - 1,
                           TrackbarValues.threshold2 - 1)
 
