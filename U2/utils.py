@@ -66,8 +66,8 @@ def runWithThreshold(opType):
 def runCanny():
     image = Images.filtered.copy()
 
-    if 0 < TrackbarValues.threshold < 301 and 0 < TrackbarValues.threshold2 < 301:
-        image = cv2.Canny(image, TrackbarValues.threshold - 1,
-                          TrackbarValues.threshold2 - 1)
+    if 0 < TrackbarValues.threshold < 301 or 0 < TrackbarValues.threshold2 < 301:
+        image = cv2.bitwise_not(
+            cv2.Canny(image, TrackbarValues.threshold - 1, TrackbarValues.threshold2 - 1))
 
     Images.updateCanny(image)

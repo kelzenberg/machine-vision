@@ -9,7 +9,7 @@ class TrackbarValues:
     sigma = 0
     kernel = 0
     threshold = 0
-    threshold2 = 255
+    threshold2 = 301
     displayValue = 0
 
     @classmethod

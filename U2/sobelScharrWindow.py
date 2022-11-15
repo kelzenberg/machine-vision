@@ -5,7 +5,7 @@ from utils import runWithThreshold
 
 SobelScharrWindow = None
 thresholdTrackbar = 'Threshold: '
-thresholdValueRange = (0, 256)
+thresholdValueRange = (0, 255)
 displayTrackbar = 'Display Image: '
 displayValueRange = (0, 5)
 
