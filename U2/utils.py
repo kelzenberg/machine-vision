@@ -25,18 +25,18 @@ def runMedian():
 
 def runSobel(image):
     gradientX = cv2.convertScaleAbs(
-        cv2.Sobel(image, cv2.CV_64F, 1, 0, borderType))
+        cv2.Sobel(image, cv2.CV_16S, 1, 0, borderType))
     gradientY = cv2.convertScaleAbs(
-        cv2.Sobel(image, cv2.CV_64F, 0, 1, borderType))
+        cv2.Sobel(image, cv2.CV_16S, 0, 1, borderType))
     sumXY = cv2.addWeighted(gradientX, 0.5, gradientY, 0.5, 0)
     return [gradientX, gradientY, sumXY]
 
 
 def runScharr(image):
     gradientX = cv2.convertScaleAbs(cv2.Scharr(
-        image, cv2.CV_64F, 1, 0, borderType))
+        image, cv2.CV_16S, 1, 0, borderType))
     gradientY = cv2.convertScaleAbs(cv2.Scharr(
-        image, cv2.CV_64F, 0, 1, borderType))
+        image, cv2.CV_16S, 0, 1, borderType))
     sumXY = cv2.addWeighted(gradientX, 0.5, gradientY, 0.5, 0)
     return [gradientX, gradientY, sumXY]
 
