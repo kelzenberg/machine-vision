@@ -8,7 +8,7 @@ SobelScharrWindow = None
 thresholdTrackbar = 'Threshold: '
 thresholdValueRange = (0, 256)
 displayTrackbar = 'Display Image: '
-displayValueRange = (0, 4)
+displayValueRange = (0, 5)
 
 """
 Sobel & Scharr Utils
@@ -26,6 +26,8 @@ def updateDisplay():
         case 3:
             SobelScharrWindow.show('GradientY', Images.gradientY)
         case 4:
+            SobelScharrWindow.show('MaxXY', Images.maxXY)
+        case 5:
             SobelScharrWindow.show('SumXY', Images.sumXY)
         case _:
             return
