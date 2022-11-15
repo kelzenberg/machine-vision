@@ -10,3 +10,32 @@ With the help of [OpenCv](https://opencv.org/).
 - Display the image content enclosed by the frame zoomed in another image field. The magnification factor is to be adjustable between 1 and 4 by means of a slider.
 - Use another slider to display the zoomed image content with adjustable false colors, as a gray-scale image or inverted gray-scale image.
 - When displaying as a gray-scale image, the zoom factor is to be written into the new image field.
+
+## U2 (Exercise 2)
+
+- Read the image "stop.jpg" as a gray value image
+- Filter the image with adjustable filter functions and operator parameters
+  - No filter
+  - Gaussian low pass (parameter: σ)
+  - Median filter (parameter: size)
+- Find outlines using
+  - Sobel operator, Scharr operator
+    - Maximum value of the amounts of the partial derivatives
+    - Sum of the amounts of the partial derivatives
+  - Canny operator
+    - Choice of lower and upper threshold value
+  - Difference of Gaussian (DoG)
+    - Make the cutoff frequency of the low pass filter adjustable
+- Binarize the outline image at an adjustable threshold value for
+  - Sobel operator
+  - Scrape operator
+  - DoG
+- Select operator, filter function and filter size by slider
+- Visualize partial results (selection by slider)
+  - Sobel: |X'|, |Y'|, Sum(|X'|,|Y'|) resp. Max(|X'|,|Y'|), Bin
+  - Scharr: |X'|, |Y'|, Sum(|X'|,|Y'|) resp. Max(|X'|,|Y'|), Bin
+  - DoG: Lowpass1, Lowpass2, Difference, Bin
+- Hints:
+  - The target images for the foldings (Sobel/Scharr operator) are signed
+  - The cutoff frequency of the Gaussian low-pass filters should be adjustable from 0.1 ≤ σ ≤ 6.0
+
