@@ -28,8 +28,9 @@ def runSobel(image):
         cv2.Sobel(image, cv2.CV_16S, 1, 0, borderType))
     gradientY = cv2.convertScaleAbs(
         cv2.Sobel(image, cv2.CV_16S, 0, 1, borderType))
+    maxXY = cv2.max(gradientX, gradientY)
     sumXY = cv2.addWeighted(gradientX, 0.5, gradientY, 0.5, 0)
-    return [gradientX, gradientY, sumXY]
+    return [gradientX, gradientY, maxXY, sumXY]
 
 
 def runScharr(image):
@@ -37,27 +38,28 @@ def runScharr(image):
         image, cv2.CV_16S, 1, 0, borderType))
     gradientY = cv2.convertScaleAbs(cv2.Scharr(
         image, cv2.CV_16S, 0, 1, borderType))
+    maxXY = cv2.max(gradientX, gradientY)
     sumXY = cv2.addWeighted(gradientX, 0.5, gradientY, 0.5, 0)
-    return [gradientX, gradientY, sumXY]
+    return [gradientX, gradientY, maxXY, sumXY]
 
 
 def runWithThreshold(opType):
     image = Images.filtered.copy()
 
-    if 0 < TrackbarValues.threshold < 256:
-        _, image = cv2.threshold(
-            image, TrackbarValues.threshold - 1, 255, cv2.THRESH_BINARY)
-
     match opType:
         case 'sobel':
-            [gradientX, gradientY, sumXY] = runSobel(image)
+            [gradientX, gradientY, maxXY, sumXY] = runSobel(image)
         case 'scharr':
-            [gradientX, gradientY, sumXY] = runScharr(image)
+            [gradientX, gradientY, maxXY, sumXY] = runScharr(image)
 
-    Images.updateBinary(image)
-    Images.updateGradientX(gradientX)
-    Images.updateGradientY(gradientY)
-    Images.updateSumXY(sumXY)
+    _, binary = cv2.threshold(
+        sumXY, TrackbarValues.threshold - 1, 255, cv2.THRESH_BINARY)
+
+    Images.updateGradientX(cv2.bitwise_not(gradientX))
+    Images.updateGradientY(cv2.bitwise_not(gradientY))
+    Images.updateMaxXY(cv2.bitwise_not(maxXY))
+    Images.updateSumXY(cv2.bitwise_not(sumXY))
+    Images.updateBinary(cv2.bitwise_not(binary))
 
 
 def runCanny():
