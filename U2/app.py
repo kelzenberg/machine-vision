@@ -8,6 +8,7 @@ import filterWindow
 import sobelScharrWindow
 import cannyWindow
 import dogWindow
+print('(main) Windows loaded.')
 
 """
 Main function
