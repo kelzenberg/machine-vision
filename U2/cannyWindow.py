@@ -73,3 +73,4 @@ def createCannyWindow():
                             thresholdValueRange, thresholdOnChange)
     CannyWindow.addTrackbar(thresholdTrackbar + ' H: ',
                             thresholdValueRange, threshold2OnChange)
+    return CannyWindow

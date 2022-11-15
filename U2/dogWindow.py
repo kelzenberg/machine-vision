@@ -123,3 +123,4 @@ def createDoGWindow():
         thresholdTrackbar, thresholdValueRange, thresholdOnChange)
     DoGWindow.addTrackbar(
         displayTrackbar, displayValueRange, displayValueOnChange)
+    return DoGWindow

@@ -26,6 +26,7 @@ class Window:
         cv2.setTrackbarPos(name, self.name, value)
 
     def destroy(self):
+        print(f'(Window.destroy) Destroy "{self.name}" window')
         cv2.destroyWindow(self.name)
 
     def show(self, name, image):

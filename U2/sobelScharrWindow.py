@@ -99,6 +99,7 @@ def createSobelScharrWindow():
         thresholdTrackbar, thresholdValueRange, thresholdOnChange)
     SobelScharrWindow.addTrackbar(
         displayTrackbar, displayValueRange, displayValueOnChange)
+    return SobelScharrWindow
 
 
 createSobelScharrWindow()

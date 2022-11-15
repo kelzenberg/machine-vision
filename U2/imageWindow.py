@@ -18,6 +18,10 @@ Trackbar Functions
 
 
 def operatorOnChange(value):
+    global SobelScharrWindow
+    global CannyWindow
+    global DoGWindow
+
     if TrackbarValues.operator == value:
         return
 
@@ -30,7 +34,7 @@ def operatorOnChange(value):
                 CannyWindow.destroy()
             if DoGWindow != None:
                 DoGWindow.destroy()
-            createSobelScharrWindow()
+            SobelScharrWindow = createSobelScharrWindow()
             updateSobelScharrWindow()
         case 1:
             selection = 'Sobel'
@@ -38,7 +42,7 @@ def operatorOnChange(value):
                 CannyWindow.destroy()
             if DoGWindow != None:
                 DoGWindow.destroy()
-            createSobelScharrWindow()
+            SobelScharrWindow = createSobelScharrWindow()
             updateSobelScharrWindow()
         case 2:
             selection = 'Scharr'
@@ -46,7 +50,7 @@ def operatorOnChange(value):
                 CannyWindow.destroy()
             if DoGWindow != None:
                 DoGWindow.destroy()
-            createSobelScharrWindow()
+            SobelScharrWindow = createSobelScharrWindow()
             updateSobelScharrWindow()
         case 3:
             selection = 'Canny'
@@ -54,7 +58,7 @@ def operatorOnChange(value):
                 SobelScharrWindow.destroy()
             if DoGWindow != None:
                 DoGWindow.destroy()
-            createCannyWindow()
+            CannyWindow = createCannyWindow()
             updateCannyWindow()
         case 4:
             selection = 'DoG'
@@ -62,7 +66,7 @@ def operatorOnChange(value):
                 SobelScharrWindow.destroy()
             if CannyWindow != None:
                 CannyWindow.destroy()
-            createDoGWindow()
+            DoGWindow = createDoGWindow()
             updateDoGWindow()
         case _:
             selection = 'UNKNOWN'
