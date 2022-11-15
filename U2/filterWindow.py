@@ -4,6 +4,7 @@ from Images import Images
 from TrackbarValues import TrackbarValues
 from sobelScharrWindow import updateSobelScharrWindow
 from cannyWindow import updateCannyWindow
+from dogWindow import updateDoGWindow
 from utils import runGaussian, runMedian
 
 sigmaTrackbar = 'Sigma: '
@@ -55,7 +56,8 @@ def updateFilterWindow():
             updateSobelScharrWindow()
         case 3:
             updateCannyWindow()
-            pass
+        case 4:
+            updateDoGWindow()
         case _:
             pass
 

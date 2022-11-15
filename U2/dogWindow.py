@@ -1,13 +1,14 @@
+from numpy import interp, arange
 from Window import Window
 from Images import Images
 from TrackbarValues import TrackbarValues
-from utils import runWithThreshold
+from utils import runDoG
 
 DoGWindow = None
 sigmaLTrackbar = 'Sigma L: '
-sigmaLValueRange = (0, 600)
+sigmaLValueRange = (0, 60)
 sigmaHTrackbar = 'Sigma H: '
-sigmaHValueRange = (0, 600)
+sigmaHValueRange = (0, 60)
 thresholdTrackbar = 'Threshold: '
 thresholdValueRange = (0, 255)
 displayTrackbar = 'Display Image: '
@@ -49,8 +50,7 @@ def updateDoGWindow():
             DoGWindow.setTrackbar(
                 displayTrackbar, TrackbarValues.displayValue)
         case 4:
-            # TODO: runDoG()
-            pass
+            runDoG()
         case _:
             pass
 
@@ -63,21 +63,31 @@ Trackbar Functions
 
 
 def sigmaLOnChange(value):
-    if TrackbarValues.sigmaL == value:
+    valueRange = arange(sigmaLValueRange[0]+1, sigmaLValueRange[1]+1)
+    mappedRange = interp(valueRange, (valueRange.min(),
+                         valueRange.max()), (0.1, 6.0))
+    mappedValue = round(mappedRange[value - 1], 1)
+
+    if TrackbarValues.sigmaL == mappedValue:
         return
 
-    print(f'(sigmaLOnChange) {TrackbarValues.sigmaL} to {value}')
-    TrackbarValues.updateSigmaL(value)
+    print(f'(sigmaLOnChange) {TrackbarValues.sigmaL} to {mappedValue}')
+    TrackbarValues.updateSigmaL(mappedValue)
 
     updateDoGWindow()
 
 
 def sigmaHOnChange(value):
-    if TrackbarValues.sigmaH == value:
+    valueRange = arange(sigmaHValueRange[0]+1, sigmaHValueRange[1]+1)
+    mappedRange = interp(valueRange, (valueRange.min(),
+                         valueRange.max()), (0.1, 6.0))
+    mappedValue = round(mappedRange[value - 1], 1)
+
+    if TrackbarValues.sigmaH == mappedValue:
         return
 
-    print(f'(sigmaHOnChange) {TrackbarValues.sigmaH} to {value}')
-    TrackbarValues.updateSigmaH(value)
+    print(f'(sigmaHOnChange) {TrackbarValues.sigmaH} to {mappedValue}')
+    TrackbarValues.updateSigmaH(mappedValue)
 
     updateDoGWindow()
 

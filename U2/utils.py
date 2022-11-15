@@ -1,4 +1,5 @@
 import cv2
+from numpy import zeros
 from TrackbarValues import TrackbarValues
 from Images import Images
 
@@ -11,7 +12,7 @@ borderType = cv2.BORDER_REFLECT_101
 
 
 def runGaussian():
-    multiplier = 2
+    multiplier = 6
     Images.updateFiltered(cv2.GaussianBlur(Images.gray.copy(), (TrackbarValues.kernel *
                           multiplier + 1, TrackbarValues.kernel * multiplier + 1), TrackbarValues.sigma, borderType))
     return Images.filtered
@@ -76,14 +77,16 @@ def runCanny():
 def runDoG():
     image = Images.filtered.copy()
     lowpass1 = cv2.GaussianBlur(
-        image, (3, 3), TrackbarValues.sigmaL, borderType)
+        image, (7, 7), TrackbarValues.sigmaL, borderType)
     lowpass2 = cv2.GaussianBlur(
-        image, (3, 3), TrackbarValues.sigmaH, borderType)
-    difference = cv2.subtract(lowpass1, lowpass2)
+        image, (7, 7), TrackbarValues.sigmaH, borderType)
+    outputImage = zeros(image.shape)
+    difference = cv2.normalize(cv2.subtract(
+        lowpass1, lowpass2), outputImage, alpha=255, beta=0, norm_type=cv2.NORM_MINMAX)
     _, binary = cv2.threshold(
         difference, TrackbarValues.threshold - 1, 255, cv2.THRESH_BINARY)
 
-    Images.updateLowpass1(cv2.bitwise_not(lowpass1))
-    Images.updateLowpass2(cv2.bitwise_not(lowpass2))
+    Images.updateLowpass1(lowpass1)
+    Images.updateLowpass2(lowpass2)
     Images.updateDifference(cv2.bitwise_not(difference))
     Images.updateBinary(cv2.bitwise_not(binary))
