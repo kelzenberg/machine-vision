@@ -11,7 +11,7 @@ sigmaHValueRange = (0, 600)
 thresholdTrackbar = 'Threshold: '
 thresholdValueRange = (0, 255)
 displayTrackbar = 'Display Image: '
-displayValueRange = (0, 5)
+displayValueRange = (0, 4)
 
 """
 DoG Utils
