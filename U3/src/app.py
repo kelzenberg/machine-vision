@@ -23,10 +23,33 @@ for file in sorted(glob(globPath)):
 Main function
 """
 
+displayValue = 0
+
+
+def displayOnChange(value):
+    global displayValue
+    if displayValue == value:
+        return
+
+    displayValue = value
+    print(f'(displayValueOnChange) {displayValue} to {value}')
+
+    imageName = name
+    match displayValue:
+        case 1:
+            imageName = 'median'
+        case 2:
+            imageName = 'opening'
+
+    window.show(imageName, ImageStore.get(imageName))
+
+
 # TODO: run for all images:
 name = 'DOW1'
 analyzedImage = analyzeImage(name)
+
 window = Window(name)
+window.addTrackbar('Display ', (0, 11), displayOnChange)
 window.show(name, analyzedImage)
 
 print('(main) Press ESC to exit...')
