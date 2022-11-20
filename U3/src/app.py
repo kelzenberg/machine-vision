@@ -23,19 +23,37 @@ for file in sorted(glob(globPath)):
 Main function
 """
 
-displayValue = 0
+TRACKBAR = {'IMAGE': -1, 'DISPLAY': -1}
+
+
+def selectionOnChange(value):
+    stored = TRACKBAR['IMAGE']
+    if stored == value:
+        return
+
+    print(f'(selectionOnChange) {stored} to {value}')
+    TRACKBAR['IMAGE'] = value
+    stored = value
+
+    imageName = f'DOW{stored + 1}'
+    analyzeImage(imageName)
+
+    displayOnChange(0)
+    window.setTrackbar('Display ', 0)
+    window.show(imageName, ImageStore.get(imageName))
 
 
 def displayOnChange(value):
-    global displayValue
-    if displayValue == value:
+    stored = TRACKBAR['DISPLAY']
+    if stored == value:
         return
 
-    displayValue = value
-    print(f'(displayValueOnChange) {displayValue} to {value}')
+    print(f'(displayValueOnChange) {stored} to {value}')
+    TRACKBAR['DISPLAY'] = value
+    stored = value
 
-    imageName = name
-    match displayValue:
+    imageName = f'DOW{stored + 1}'
+    match stored:
         case 1:
             imageName = 'median'
         case 2:
@@ -44,13 +62,12 @@ def displayOnChange(value):
     window.show(imageName, ImageStore.get(imageName))
 
 
-# TODO: run for all images:
-name = 'DOW1'
-analyzedImage = analyzeImage(name)
-
-window = Window(name)
+window = Window('Main')
+window.addTrackbar(
+    'Image Select ', (0, ImageStore.size() - 1), selectionOnChange)
 window.addTrackbar('Display ', (0, 11), displayOnChange)
-window.show(name, analyzedImage)
+
+selectionOnChange(0)  # to trigger first image
 
 print('(main) Press ESC to exit...')
 while cv2.waitKey(0) != 27:
