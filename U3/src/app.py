@@ -58,7 +58,13 @@ def displayOnChange(value):
         case 1:
             imageName = 'median'
         case 2:
+            imageName = 'sobel'
+        case 3:
             imageName = 'opening'
+        case 4:
+            imageName = 'normal'
+        case 5:
+            imageName = 'binary'
 
     window.show(imageName, ImageStore.get(imageName))
 
