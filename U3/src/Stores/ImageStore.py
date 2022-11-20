@@ -11,6 +11,7 @@ class ImageStore:
     @classmethod
     def add(self, name: str, image: ndarray):
         self.images.update({name: image})
+        return self.get(name)
 
     @classmethod
     def get(self, name: str):
