@@ -20,7 +20,7 @@ for file in sorted(glob(globPath)):
     print(f'(main) Image loaded: {imageName}')
 
 """
-Main function
+Trackbar functions
 """
 
 TRACKBAR = {'IMAGE': -1, 'DISPLAY': -1}
@@ -61,6 +61,10 @@ def displayOnChange(value):
 
     window.show(imageName, ImageStore.get(imageName))
 
+
+"""
+Main function
+"""
 
 window = Window('Main')
 window.addTrackbar(
