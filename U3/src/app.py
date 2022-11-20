@@ -4,7 +4,7 @@ U3 app
 import os
 import cv2
 from glob import glob
-from GUI.Window import Window
+from detector import analyzeImage
 
 """
 Load Images
@@ -22,7 +22,7 @@ for file in sorted(glob(globPath)):
 Main function
 """
 
-print(f'(main) {len(images)} Images loaded')
+analyzeImage('DOW1', images['DOW1.png'])
 
 print('(main) Press ESC to exit...')
 while cv2.waitKey(0) != 27:
