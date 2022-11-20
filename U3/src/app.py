@@ -52,7 +52,8 @@ def displayOnChange(value):
     TRACKBAR['DISPLAY'] = value
     stored = value
 
-    imageName = f'DOW{stored + 1}'
+    displayValue = TRACKBAR['IMAGE']
+    imageName = f'DOW{displayValue + 1}'
     match stored:
         case 1:
             imageName = 'median'
