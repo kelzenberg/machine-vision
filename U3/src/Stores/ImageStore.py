@@ -12,11 +12,15 @@ class ImageStore:
     def add(self, name: str, image: ndarray):
         print(f'(ImageStore.add) Add "{name}"')
         self.images.update({name: image})
-        return self.get(name)
+        return self.getByName(name)
 
     @classmethod
-    def get(self, name: str):
+    def getByName(self, name: str):
         return self.images.get(name)
+
+    @classmethod
+    def getByPosition(self, pos: int):
+        return list(self.images.items())[pos]
 
     @classmethod
     def size(self):

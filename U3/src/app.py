@@ -11,12 +11,14 @@ from detector import analyzeImage
 """
 Load Images
 """
+imageCounter = 0
 globPath = os.path.join(os.path.abspath('./images'), '*.png')
 
 for file in sorted(glob(globPath)):
     image = cv2.imread(file)
     imageName = file.split('/')[-1].split('.')[0]
     ImageStore.add(imageName, cv2.cvtColor(image, cv2.COLOR_RGB2GRAY))
+    imageCounter += 1
     print(f'(main) Image loaded: {imageName}')
 
 """
@@ -27,46 +29,39 @@ TRACKBAR = {'IMAGE': -1, 'DISPLAY': -1}
 
 
 def selectionOnChange(value):
-    stored = TRACKBAR['IMAGE']
-    if stored == value:
+    temp = TRACKBAR['IMAGE']
+    if temp == value:
         return
 
-    print(f'(selectionOnChange) {stored} to {value}')
+    print(f'(selectionOnChange) {temp} to {value}')
     TRACKBAR['IMAGE'] = value
-    stored = value
 
-    imageName = f'DOW{stored + 1}'
+    imageName = f'DOW{value + 1}'
     analyzeImage(imageName)
 
     displayOnChange(0)
     window.setTrackbar('Display ', 0)
-    window.show(imageName, ImageStore.get(imageName))
+    window.show(imageName, ImageStore.getByName(imageName))
 
 
 def displayOnChange(value):
-    stored = TRACKBAR['DISPLAY']
-    if stored == value:
+    temp = TRACKBAR['DISPLAY']
+    if temp == value:
         return
 
-    print(f'(displayValueOnChange) {stored} to {value}')
+    print(f'(displayValueOnChange) {temp} to {value}')
     TRACKBAR['DISPLAY'] = value
-    stored = value
 
-    displayValue = TRACKBAR['IMAGE']
-    imageName = f'DOW{displayValue + 1}'
-    match stored:
-        case 1:
-            imageName = 'median'
-        case 2:
-            imageName = 'sobel'
-        case 3:
-            imageName = 'opening'
-        case 4:
-            imageName = 'normal'
-        case 5:
-            imageName = 'binary'
+    if value == 0:
+        # show original Image
+        imageValue = TRACKBAR['IMAGE']
+        imageName = f'DOW{imageValue + 1}'
+        window.show(imageName, ImageStore.getByName(imageName))
+        return
 
-    window.show(imageName, ImageStore.get(imageName))
+    [imageName, image] = ImageStore.getByPosition(value + imageCounter - 1)
+
+    window.show(imageName, image)
 
 
 """
