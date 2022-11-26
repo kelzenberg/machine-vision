@@ -72,16 +72,25 @@ def analyzeImage(name, image):
     mask = ImageStore.add('mask erosion', runErosion(mask))
     # mask = ImageStore.add('mask closing', runClosing(mask)) # TODO: to clean inside -> needed?
     imageStats.append(
-        f'{name} Mask area: {cv2.countNonZero(mask)}')
+        f'{name} Mask area: {cv2.countNonZero(mask)}px')
 
     grayImage = ImageStore.add('gray median', runMedian(image))
     grayImage = ImageStore.add('gray offset', runOffset(image, grayImage))
     grayImage = ImageStore.add('gray masked', runMask(grayImage, mask))
-    imageStats.append(
-        f'{name} gray mean: {round(cv2.mean(grayImage, mask=mask)[0],3)}')
-    grayImage = ImageStore.add('gray threshold', runThreshold(grayImage, 70))
 
+    mean = cv2.mean(grayImage, mask=mask)[0]
+    imageStats.append(f'{name} Gray mean: {round(mean, 3)}')
+
+    threshold = 70
+    thresholdPercentage = (threshold * mean) / 100.0
+    imageStats.append(
+        f'{name} Error threshold: {round(thresholdPercentage, 3)} ({threshold}%)')
+
+    grayImage = ImageStore.add(
+        'gray threshold', runThreshold(grayImage, thresholdPercentage))
     mask = ImageStore.add('mask fill outside', runFill(mask))
 
     # grayImage = ImageStore.add('opening', runOpening(grayImage))
     # grayImage = ImageStore.add('normal', runNormal(grayImage))
+
+    imageStats.append('')
