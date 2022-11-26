@@ -71,15 +71,16 @@ def analyzeImage(name, image):
     mask = ImageStore.add('mask threshold', runThreshold(image, 8))
     mask = ImageStore.add('mask erosion', runErosion(mask))
     # mask = ImageStore.add('mask closing', runClosing(mask)) # TODO: fill inside holes -> needed?
-    imageStats.append(
-        f'{name} Mask area: {cv2.countNonZero(mask)}px')
+
+    maskArea = cv2.countNonZero(mask)
+    imageStats.append(f'{name} Mask area: {maskArea}px')
 
     grayImage = ImageStore.add('gray median', runMedian(image))
     grayImage = ImageStore.add('gray offset', runOffset(image, grayImage))
     grayImage = ImageStore.add('gray masked', runMask(grayImage, mask))
 
     mean = cv2.mean(grayImage, mask=mask)[0]
-    imageStats.append(f'{name} Gray mean: {round(mean, 3)}')
+    imageStats.append(f'{name} Mask gray mean: {round(mean, 3)}')
 
     threshold = 70
     thresholdPercentage = (threshold * mean) / 100.0
@@ -90,6 +91,12 @@ def analyzeImage(name, image):
         'gray threshold', runThreshold(grayImage, thresholdPercentage))
     grayImage = ImageStore.add('gray detect error', runFill(grayImage))
     grayImage = ImageStore.add('gray closing', runClosing(grayImage, 1))
-    # TODO: fill inside 1px errors -> runClosing correct?
+    # TODO: fill inside 1px errors -> runClosing above correct?
+
+    errorArea = cv2.countNonZero(grayImage)
+    imageStats.append(f'{name} Error area: {errorArea}px')
+    errorPercentage = (errorArea / maskArea) * 100.0
+    imageStats.append(
+        f'{name} Faulty area to mask: {round(errorPercentage,4)}%')
 
     imageStats.append('')
