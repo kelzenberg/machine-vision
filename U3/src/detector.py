@@ -15,8 +15,13 @@ def runThreshold(image):
     return threshold
 
 
+def runErosion(image):
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 15))
+    return cv2.erode(image, kernel)
+
+
 def runMedian(image):
-    return cv2.medianBlur(image.copy(), 51)
+    return cv2.medianBlur(image, 51)
 
 
 def runSobel(image):
@@ -36,16 +41,6 @@ def runNormal(image):
     offset = 100
     outputImage = numpy.zeros(image.shape)
     return cv2.normalize(image, outputImage, alpha=0, beta=100, norm_type=cv2.NORM_MINMAX) + offset
-
-
-def runEqualize(image):
-    # TODO: unused
-    return cv2.equalizeHist(image)
-
-
-def runErosion(image):
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 15))
-    return cv2.erode(image, kernel)
 
 
 def analyzeImage(name, image):
