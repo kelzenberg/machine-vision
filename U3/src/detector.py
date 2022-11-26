@@ -4,6 +4,7 @@ Image Detector
 
 import cv2
 from numpy import zeros as nzeroes
+from typing import List
 from Stores.ImageStore import ImageStore
 
 imageDepth = cv2.CV_16S
@@ -61,6 +62,9 @@ def runNormal(image):
     return cv2.normalize(image, outputImage, alpha=0, beta=100, norm_type=cv2.NORM_MINMAX) + offset
 
 
+imageStats: List[str] = []
+
+
 def analyzeImage(name, image):
     print(f'(analyzeImage) Analyzing {name} {image.shape}')
 
@@ -71,7 +75,8 @@ def analyzeImage(name, image):
     grayImage = ImageStore.add('gray median', runMedian(image))
     grayImage = ImageStore.add('gray offset', runOffset(image, grayImage))
     grayImage = ImageStore.add('gray masked', runMask(grayImage, mask))
-    print(f'(analyzeImage) {name} gray mean: {cv2.mean(grayImage, mask=mask)[0]}')
+    imageStats.append(
+        f'{name} gray mean: {round(cv2.mean(grayImage, mask=mask)[0],3)}')
 
     mask = ImageStore.add('mask fill outside', runFill(mask))
 

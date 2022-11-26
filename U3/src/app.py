@@ -6,7 +6,7 @@ import cv2
 from glob import glob
 from GUI.Window import Window
 from Stores.ImageStore import ImageStore
-from detector import analyzeImage
+from detector import analyzeImage, imageStats
 
 """
 Load Images
@@ -71,6 +71,9 @@ imageOnChange(0)  # to trigger first image generation
 print('(main) Press ESC to exit...')
 while cv2.waitKey(0) != 27:
     pass
+
+print('(main) Image Stats:')
+[print(f'       {i}') for i in imageStats]
 
 print('(main) Closing all windows.')
 cv2.destroyAllWindows()
