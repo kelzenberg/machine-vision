@@ -1,18 +1,18 @@
 """
 U3 app
 """
-import os
+from os import path as ospath
 import cv2
 from glob import glob
-from GUI.Window import Window
-from Stores.ImageStore import ImageStore
+from Window import Window
+from ImageStore import ImageStore
 from detector import analyzeImage, imageStats
 
 """
 Load Images
 """
 imageCounter = 0
-globPath = os.path.join(os.path.abspath('./images'), '*.png')
+globPath = ospath.join(ospath.abspath('./images'), '*.png')
 
 for file in sorted(glob(globPath)):
     image = cv2.imread(file)

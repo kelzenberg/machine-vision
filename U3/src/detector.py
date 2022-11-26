@@ -5,7 +5,7 @@ Image Detector
 import cv2
 from numpy import uint8, zeros as nzeros, full as nfull
 from typing import Dict, List
-from Stores.ImageStore import ImageStore
+from ImageStore import ImageStore
 
 imageDepth = cv2.CV_16S
 borderType = cv2.BORDER_REFLECT_101
