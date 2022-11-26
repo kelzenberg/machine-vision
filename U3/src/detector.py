@@ -10,6 +10,11 @@ imageDepth = cv2.CV_16S
 borderType = cv2.BORDER_REFLECT_101
 
 
+def runThreshold(image):
+    _, threshold = cv2.threshold(image, 10, 512, cv2.THRESH_BINARY)
+    return threshold
+
+
 def runMedian(image):
     return cv2.medianBlur(image.copy(), 51)
 
@@ -38,11 +43,6 @@ def runEqualize(image):
     return cv2.equalizeHist(image)
 
 
-def runBinary(image):
-    _, binary = cv2.threshold(image, 10, 512, cv2.THRESH_BINARY)
-    return binary
-
-
 def runErosion(image):
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 15))
     return cv2.erode(image, kernel)
@@ -51,7 +51,7 @@ def runErosion(image):
 def analyzeImage(name, image):
     print(f'(analyzeImage) Analyzing {name} {image.shape}')
 
-    mask = ImageStore.add('mask threshold', runBinary(image))
+    mask = ImageStore.add('mask threshold', runThreshold(image))
     mask = ImageStore.add('mask erosion', runErosion(mask))
 
     grayImage = ImageStore.add('gray median', runMedian(image))
