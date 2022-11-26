@@ -39,8 +39,13 @@ def runEqualize(image):
 
 
 def runBinary(image):
-    _, binary = cv2.threshold(image, 100, 255, cv2.THRESH_BINARY)
+    _, binary = cv2.threshold(image, 10, 512, cv2.THRESH_BINARY)
     return binary
+
+
+def runErosion(image):
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 15))
+    return cv2.erode(image, kernel)
 
 
 def analyzeImage(name, image):
