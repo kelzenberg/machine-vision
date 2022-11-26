@@ -51,10 +51,11 @@ def runErosion(image):
 def analyzeImage(name, image):
     print(f'(analyzeImage) Analyzing {name} {image.shape}')
 
-    analyzedImage = ImageStore.add('median', runMedian(image))
-    analyzedImage = ImageStore.add('sobel', runSobel(analyzedImage))
-    analyzedImage = ImageStore.add('opening', runOpening(analyzedImage))
-    analyzedImage = ImageStore.add('normal', runNormal(analyzedImage))
-    analyzedImage = ImageStore.add('binary', runBinary(analyzedImage))
+    mask = ImageStore.add('mask threshold', runBinary(image))
+    mask = ImageStore.add('mask erosion', runErosion(mask))
 
-    return analyzedImage
+    grayImage = ImageStore.add('gray median', runMedian(image))
+    grayImage = ImageStore.add('gray offset', (image - grayImage) + 100)
+
+    # grayImage = ImageStore.add('opening', runOpening(grayImage))
+    # grayImage = ImageStore.add('normal', runNormal(grayImage))
