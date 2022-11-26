@@ -16,8 +16,8 @@ def runThreshold(image, min):
     return threshold
 
 
-def runClosing(image):
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (20, 20))
+def runClosing(image, size=20):
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (size, size))
     return cv2.erode(cv2.dilate(image, kernel), kernel)
 
 
@@ -70,7 +70,7 @@ def analyzeImage(name, image):
 
     mask = ImageStore.add('mask threshold', runThreshold(image, 8))
     mask = ImageStore.add('mask erosion', runErosion(mask))
-    # mask = ImageStore.add('mask closing', runClosing(mask)) # TODO: to clean inside -> needed?
+    # mask = ImageStore.add('mask closing', runClosing(mask)) # TODO: fill inside holes -> needed?
     imageStats.append(
         f'{name} Mask area: {cv2.countNonZero(mask)}px')
 
@@ -88,6 +88,9 @@ def analyzeImage(name, image):
 
     grayImage = ImageStore.add(
         'gray threshold', runThreshold(grayImage, thresholdPercentage))
+    grayImage = ImageStore.add('gray closing', runClosing(grayImage, 1))
+    # TODO: fill inside 1px errors -> runClosing correct?
+
     mask = ImageStore.add('mask fill outside', runFill(mask))
 
     # grayImage = ImageStore.add('opening', runOpening(grayImage))
