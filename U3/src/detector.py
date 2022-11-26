@@ -49,8 +49,7 @@ def runBinary(image):
     return binary
 
 
-def analyzeImage(name):
-    image = ImageStore.get(name)
+def analyzeImage(name, image):
     print(f'(analyzeImage) Analyzing {name} {image.shape}')
 
     analyzedImage = ImageStore.add('median', runMedian(image))
