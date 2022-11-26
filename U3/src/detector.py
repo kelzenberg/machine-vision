@@ -34,6 +34,14 @@ def runMedian(image):
     return cv2.medianBlur(image, 51)
 
 
+def runOffset(originalImage, substrate, offset=100):
+    return (originalImage - substrate) + offset
+
+
+def runMask(image, mask):
+    return cv2.bitwise_and(image, image, mask=mask)
+
+
 def runSobel(image):
     gradientX = cv2.convertScaleAbs(
         cv2.Sobel(image, imageDepth, 1, 0, borderType))
@@ -58,11 +66,13 @@ def analyzeImage(name, image):
 
     mask = ImageStore.add('mask threshold', runThreshold(image))
     mask = ImageStore.add('mask erosion', runErosion(mask))
-    mask = ImageStore.add('mask closing', runClosing(mask)) # TODO: to clean inside -> needed?
-    mask = ImageStore.add('mask fill outside', runFill(mask))
+    # mask = ImageStore.add('mask closing', runClosing(mask)) # TODO: to clean inside -> needed?
 
     grayImage = ImageStore.add('gray median', runMedian(image))
-    grayImage = ImageStore.add('gray offset', (image - grayImage) + 100)
+    grayImage = ImageStore.add('gray offset', runOffset(image, grayImage))
+    grayImage = ImageStore.add('gray masked', runMask(grayImage, mask))
+
+    mask = ImageStore.add('mask fill outside', runFill(mask))
 
     # grayImage = ImageStore.add('opening', runOpening(grayImage))
     # grayImage = ImageStore.add('normal', runNormal(grayImage))
