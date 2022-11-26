@@ -11,7 +11,7 @@ borderType = cv2.BORDER_REFLECT_101
 
 
 def runMedian(image):
-    return cv2.medianBlur(image.copy(), 5)
+    return cv2.medianBlur(image.copy(), 51)
 
 
 def runSobel(image):
