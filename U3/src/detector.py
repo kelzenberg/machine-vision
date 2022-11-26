@@ -71,6 +71,7 @@ def analyzeImage(name, image):
     grayImage = ImageStore.add('gray median', runMedian(image))
     grayImage = ImageStore.add('gray offset', runOffset(image, grayImage))
     grayImage = ImageStore.add('gray masked', runMask(grayImage, mask))
+    print(f'(analyzeImage) {name} gray mean: {cv2.mean(grayImage, mask=mask)[0]}')
 
     mask = ImageStore.add('mask fill outside', runFill(mask))
 

@@ -10,7 +10,7 @@ class ImageStore:
 
     @classmethod
     def add(self, name: str, image: ndarray):
-        print(f'(ImageStore.add) Add "{name}"')
+        # print(f'(ImageStore.add) Add "{name}"')
         self.images.update({name: image})
         return self.getByName(name)
 
