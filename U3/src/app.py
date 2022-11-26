@@ -72,8 +72,8 @@ print('(main) Press ESC to exit...')
 while cv2.waitKey(0) != 27:
     pass
 
-print('(main) Image Stats:')
-[print(f'       {i}') for i in imageStats]
+[print('(main) Image Stats ({0}):\n       {1}'.format(name, "\n       ".join(prints)))
+ for [name, prints] in sorted(imageStats.items())]
 
 print('(main) Closing all windows.')
 cv2.destroyAllWindows()

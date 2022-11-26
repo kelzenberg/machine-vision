@@ -4,7 +4,7 @@ Image Detector
 
 import cv2
 from numpy import uint8, zeros as nzeros, full as nfull
-from typing import List
+from typing import Dict, List
 from Stores.ImageStore import ImageStore
 
 imageDepth = cv2.CV_16S
@@ -62,7 +62,7 @@ def runNormal(image):
     return cv2.normalize(image, outputImage, alpha=0, beta=100, norm_type=cv2.NORM_MINMAX) + offset
 
 
-imageStats: List[str] = []
+imageStats: Dict[str, List[str]] = {}
 
 
 def analyzeImage(name, image):
@@ -73,19 +73,18 @@ def analyzeImage(name, image):
     # mask = ImageStore.add('mask closing', runClosing(mask)) # TODO: fill inside holes -> needed?
 
     maskArea = cv2.countNonZero(mask)
-    imageStats.append(f'{name} Mask area: {maskArea}px')
+    imageStats[name] = [f'Mask area: {maskArea}px']
 
     grayImage = ImageStore.add('gray median', runMedian(image))
     grayImage = ImageStore.add('gray offset', runOffset(image, grayImage))
     grayImage = ImageStore.add('gray masked', runMask(grayImage, mask))
 
     mean = cv2.mean(grayImage, mask=mask)[0]
-    imageStats.append(f'{name} Mask gray mean: {round(mean, 3)}')
-
     threshold = 70
     thresholdPercentage = (threshold * mean) / 100.0
-    imageStats.append(
-        f'{name} Error threshold: {round(thresholdPercentage, 3)} ({threshold}%)')
+    imageStats[name].append(f'Mask gray mean: {round(mean, 3)}')
+    imageStats[name].append(
+        f'Error threshold: {round(thresholdPercentage, 3)} ({threshold}%)')
 
     grayMask = ImageStore.add(
         'gray threshold', runThreshold(grayImage, thresholdPercentage))
@@ -94,10 +93,10 @@ def analyzeImage(name, image):
     # TODO: fill inside 1px errors -> runClosing above correct?
 
     errorArea = cv2.countNonZero(grayMask)
-    imageStats.append(f'{name} Error area: {errorArea}px')
+    imageStats[name].append(f'Error area: {errorArea}px')
     errorPercentage = (errorArea / maskArea) * 100.0
-    imageStats.append(
-        f'{name} Faulty area to mask: {round(errorPercentage,4)}%')
+    imageStats[name].append(
+        f'Faulty area to mask: {round(errorPercentage,4)}%')
 
     imageWithoutError = cv2.cvtColor(cv2.bitwise_or(
         image, image, mask=cv2.bitwise_not(grayMask)), cv2.COLOR_GRAY2BGR)
@@ -109,5 +108,3 @@ def analyzeImage(name, image):
 
     grayImage = ImageStore.add('gray with error marked',
                                redMask + imageWithoutError)
-
-    imageStats.append('')
