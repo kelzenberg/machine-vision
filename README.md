@@ -1,6 +1,7 @@
 # Machine Vision – University Course – BHT Berlin
 
-With the help of [OpenCv](https://opencv.org/).
+With the help of [OpenCv](https://opencv.org/).  
+Use Python version `3.10.4` or higher.
 
 ## U1 (Exercise 1)
 
@@ -39,3 +40,18 @@ With the help of [OpenCv](https://opencv.org/).
   - The target images for the foldings (Sobel/Scharr operator) are signed
   - The cutoff frequency of the Gaussian low-pass filters should be adjustable from 0.1 ≤ σ ≤ 6.0
 
+## U3 (Exercise 3)
+
+- The images `DOWxx.png` show rubber bales which are partly contaminated by machine oil from a press.
+- Contaminations show up as dark spots on the light-colored bale.
+- Impurities are considered to be defects if the gray value of the spots is less than than 70% of the mean gray value of the bale.
+- At the edge of the bale, an area of 15 pixels circumferentially should be excluded from the analysis.
+- Detect impurities and determine the summary area of all impurities relative to the bale area.  
+Output Example:
+  ```sh
+    Mask area: 1337px
+    Mask gray mean: x.xxx
+    Error threshold: xx.xxx (70%)
+    Error area: 42px
+    Faulty area to mask: x.xxx%
+  ```
