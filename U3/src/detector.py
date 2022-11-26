@@ -11,7 +11,7 @@ borderType = cv2.BORDER_REFLECT_101
 
 
 def runThreshold(image):
-    _, threshold = cv2.threshold(image, 10, 512, cv2.THRESH_BINARY)
+    _, threshold = cv2.threshold(image, 8, 256, cv2.THRESH_BINARY)
     return threshold
 
 
