@@ -23,13 +23,7 @@ def runSobel(image):
 
 
 def runOpening(image):
-    kernel = numpy.ones((5, 5), numpy.uint8)
-    return cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
-
-
-def runOpeningV2(image):
-    # TODO: unused
-    kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, (5, 5))
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 15))
     return cv2.dilate(cv2.erode(image, kernel), kernel)
 
 
