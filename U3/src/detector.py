@@ -15,9 +15,19 @@ def runThreshold(image):
     return threshold
 
 
+def runClosing(image):
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (20, 20))
+    return cv2.erode(cv2.dilate(image, kernel), kernel)
+
+
 def runErosion(image):
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 15))
     return cv2.erode(image, kernel)
+
+
+def runFill(image):
+    [_, image, _, _] = cv2.floodFill(image.copy(), None, (0, 0), 255)
+    return cv2.bitwise_not(image)
 
 
 def runMedian(image):
@@ -48,6 +58,8 @@ def analyzeImage(name, image):
 
     mask = ImageStore.add('mask threshold', runThreshold(image))
     mask = ImageStore.add('mask erosion', runErosion(mask))
+    mask = ImageStore.add('mask closing', runClosing(mask)) # TODO: to clean inside -> needed?
+    mask = ImageStore.add('mask fill outside', runFill(mask))
 
     grayImage = ImageStore.add('gray median', runMedian(image))
     grayImage = ImageStore.add('gray offset', (image - grayImage) + 100)
