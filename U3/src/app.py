@@ -25,40 +25,33 @@ for file in sorted(glob(globPath)):
 Trackbar functions
 """
 
-TRACKBAR = {'IMAGE': -1, 'STEP': -1}
+TRACKBAR = {'IMAGE': -1, 'STEP': 0}
 
 
 def imageOnChange(value):
-    temp = TRACKBAR['IMAGE']
-    if temp == value:
+    prev = TRACKBAR['IMAGE']
+    if prev == value:
         return
 
-    print(f'(imageOnChange) {temp} to {value}')
+    print(f'(imageOnChange) {prev} to {value}')
     TRACKBAR['IMAGE'] = value
 
     [imageName, image] = ImageStore.getByPosition(value)
-    analyzeImage(imageName, image)
 
-    window.setTrackbar('Step ', 0)
-    stepOnChange(0)
+    analyzeImage(imageName, image)
+    stepOnChange(TRACKBAR['STEP'])
 
 
 def stepOnChange(value):
-    if value == 0:
-        # show original Image
-        imageValue = TRACKBAR['IMAGE']
-        [imageName, image] = ImageStore.getByPosition(imageValue)
-        window.show(imageName, image)
-        return
+    prev = TRACKBAR['STEP']
+    if prev != value:
+        print(f'(stepOnChange) {prev} to {value}')
 
-    temp = TRACKBAR['STEP']
-    if temp == value:
-        return
-
-    print(f'(stepOnChange) {temp} to {value}')
     TRACKBAR['STEP'] = value
 
-    [imageName, image] = ImageStore.getByPosition(value + imageCounter - 1)
+    [imageName, image] = ImageStore.getByPosition(
+        TRACKBAR['IMAGE'] if value == 0  # show original Image
+        else value + imageCounter - 1)
 
     window.show(imageName, image)
 
@@ -70,7 +63,8 @@ Main function
 window = Window('Main')
 window.addTrackbar(
     'Image Select ', (0, imageCounter - 1), imageOnChange)
-window.addTrackbar('Step ', (0, 10), stepOnChange) # TODO: replace max value with max amount of steps
+# TODO: replace max value with max amount of steps
+window.addTrackbar('Step ', (0, 10), stepOnChange)
 
 imageOnChange(0)  # to trigger first image generation
 
