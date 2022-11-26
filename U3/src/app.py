@@ -28,12 +28,12 @@ Trackbar functions
 TRACKBAR = {'IMAGE': -1, 'DISPLAY': -1}
 
 
-def selectionOnChange(value):
+def imageOnChange(value):
     temp = TRACKBAR['IMAGE']
     if temp == value:
         return
 
-    print(f'(selectionOnChange) {temp} to {value}')
+    print(f'(imageOnChange) {temp} to {value}')
     TRACKBAR['IMAGE'] = value
 
     imageName = f'DOW{value + 1}'
@@ -70,10 +70,10 @@ Main function
 
 window = Window('Main')
 window.addTrackbar(
-    'Image Select ', (0, ImageStore.size() - 1), selectionOnChange)
-window.addTrackbar('Display ', (0, 11), displayOnChange)
+    'Image Select ', (0, imageCounter - 1), imageOnChange)
+window.addTrackbar('Display ', (0, 10), displayOnChange)
 
-selectionOnChange(0)  # to trigger first image
+imageOnChange(0)  # to trigger first image
 
 print('(main) Press ESC to exit...')
 while cv2.waitKey(0) != 27:
