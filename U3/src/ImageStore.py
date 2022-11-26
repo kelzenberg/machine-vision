@@ -1,6 +1,7 @@
 """
 Image Store
 """
+
 from typing import Dict
 from numpy import ndarray
 

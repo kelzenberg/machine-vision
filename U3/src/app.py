@@ -1,9 +1,10 @@
 """
 U3 app
 """
-from os import path as ospath
+
 import cv2
 from glob import glob
+from os import path as ospath
 from Window import Window
 from ImageStore import ImageStore
 from detector import analyzeImage, imageStats

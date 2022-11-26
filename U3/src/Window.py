@@ -1,8 +1,8 @@
-import cv2
-
 """
 OpenCV Window Helper
 """
+
+import cv2
 
 
 class Window:
