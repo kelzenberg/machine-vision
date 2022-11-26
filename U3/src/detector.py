@@ -71,6 +71,8 @@ def analyzeImage(name, image):
     mask = ImageStore.add('mask threshold', runThreshold(image))
     mask = ImageStore.add('mask erosion', runErosion(mask))
     # mask = ImageStore.add('mask closing', runClosing(mask)) # TODO: to clean inside -> needed?
+    imageStats.append(
+        f'{name} Mask area: {cv2.countNonZero(mask)}')
 
     grayImage = ImageStore.add('gray median', runMedian(image))
     grayImage = ImageStore.add('gray offset', runOffset(image, grayImage))
