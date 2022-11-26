@@ -88,12 +88,8 @@ def analyzeImage(name, image):
 
     grayImage = ImageStore.add(
         'gray threshold', runThreshold(grayImage, thresholdPercentage))
+    grayImage = ImageStore.add('gray detect error', runFill(grayImage))
     grayImage = ImageStore.add('gray closing', runClosing(grayImage, 1))
     # TODO: fill inside 1px errors -> runClosing correct?
-
-    mask = ImageStore.add('mask fill outside', runFill(mask))
-
-    # grayImage = ImageStore.add('opening', runOpening(grayImage))
-    # grayImage = ImageStore.add('normal', runNormal(grayImage))
 
     imageStats.append('')
