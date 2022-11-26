@@ -11,8 +11,8 @@ imageDepth = cv2.CV_16S
 borderType = cv2.BORDER_REFLECT_101
 
 
-def runThreshold(image):
-    _, threshold = cv2.threshold(image, 8, 256, cv2.THRESH_BINARY)
+def runThreshold(image, min):
+    _, threshold = cv2.threshold(image, min, 256, cv2.THRESH_BINARY)
     return threshold
 
 
@@ -68,7 +68,7 @@ imageStats: List[str] = []
 def analyzeImage(name, image):
     print(f'(analyzeImage) Analyzing {name} {image.shape}')
 
-    mask = ImageStore.add('mask threshold', runThreshold(image))
+    mask = ImageStore.add('mask threshold', runThreshold(image, 8))
     mask = ImageStore.add('mask erosion', runErosion(mask))
     # mask = ImageStore.add('mask closing', runClosing(mask)) # TODO: to clean inside -> needed?
     imageStats.append(
@@ -79,6 +79,7 @@ def analyzeImage(name, image):
     grayImage = ImageStore.add('gray masked', runMask(grayImage, mask))
     imageStats.append(
         f'{name} gray mean: {round(cv2.mean(grayImage, mask=mask)[0],3)}')
+    grayImage = ImageStore.add('gray threshold', runThreshold(grayImage, 70))
 
     mask = ImageStore.add('mask fill outside', runFill(mask))
 
