@@ -64,7 +64,7 @@ window = Window('Main')
 window.addTrackbar(
     'Image Select ', (0, imageCounter - 1), imageOnChange)
 # TODO: replace max value with max amount of steps
-window.addTrackbar('Step ', (0, 10), stepOnChange)
+window.addTrackbar('Step ', (0, 11), stepOnChange)
 
 imageOnChange(0)  # to trigger first image generation
 
