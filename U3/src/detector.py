@@ -3,7 +3,7 @@ Image Detector
 """
 
 import cv2
-import numpy
+from numpy import zeros as nzeroes
 from Stores.ImageStore import ImageStore
 
 imageDepth = cv2.CV_16S
@@ -57,7 +57,7 @@ def runOpening(image):
 
 def runNormal(image):
     offset = 100
-    outputImage = numpy.zeros(image.shape)
+    outputImage = nzeroes(image.shape)
     return cv2.normalize(image, outputImage, alpha=0, beta=100, norm_type=cv2.NORM_MINMAX) + offset
 
 
