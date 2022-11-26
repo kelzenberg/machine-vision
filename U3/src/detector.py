@@ -3,7 +3,7 @@ Image Detector
 """
 
 import cv2
-from numpy import zeros as nzeroes
+from numpy import uint8, zeros as nzeros, full as nfull
 from typing import List
 from Stores.ImageStore import ImageStore
 
@@ -58,7 +58,7 @@ def runOpening(image):
 
 def runNormal(image):
     offset = 100
-    outputImage = nzeroes(image.shape)
+    outputImage = nzeros(image.shape)
     return cv2.normalize(image, outputImage, alpha=0, beta=100, norm_type=cv2.NORM_MINMAX) + offset
 
 
@@ -87,16 +87,27 @@ def analyzeImage(name, image):
     imageStats.append(
         f'{name} Error threshold: {round(thresholdPercentage, 3)} ({threshold}%)')
 
-    grayImage = ImageStore.add(
+    grayMask = ImageStore.add(
         'gray threshold', runThreshold(grayImage, thresholdPercentage))
-    grayImage = ImageStore.add('gray detect error', runFill(grayImage))
-    grayImage = ImageStore.add('gray closing', runClosing(grayImage, 1))
+    grayMask = ImageStore.add('gray detect error', runFill(grayMask))
+    grayMask = ImageStore.add('gray closing', runClosing(grayMask, 1))
     # TODO: fill inside 1px errors -> runClosing above correct?
 
-    errorArea = cv2.countNonZero(grayImage)
+    errorArea = cv2.countNonZero(grayMask)
     imageStats.append(f'{name} Error area: {errorArea}px')
     errorPercentage = (errorArea / maskArea) * 100.0
     imageStats.append(
         f'{name} Faulty area to mask: {round(errorPercentage,4)}%')
+
+    imageWithoutError = cv2.cvtColor(cv2.bitwise_or(
+        image, image, mask=cv2.bitwise_not(grayMask)), cv2.COLOR_GRAY2BGR)
+    redImage = nfull(imageWithoutError.shape, (0, 0, 255), dtype=uint8)
+
+    redMask = ImageStore.add('gray marked red', runMask(redImage, grayMask))
+    imageWithoutError = ImageStore.add(
+        'gray with error cut', imageWithoutError)
+
+    grayImage = ImageStore.add('gray with error marked',
+                               redMask + imageWithoutError)
 
     imageStats.append('')
