@@ -48,14 +48,8 @@ def analyzeImage(name, originalImage):
     imageStats[name].append(
         f'Faulty area to mask: {round(errorPercentage,4)}%')
 
-    grayWithoutError = cv2.cvtColor(cv2.bitwise_or(
-        originalImage, originalImage, mask=cv2.bitwise_not(grayMask)), cv2.COLOR_GRAY2BGR)
-    redImage = nfull(grayWithoutError.shape, (0, 0, 255), dtype=uint8)
-
-    redMask = ImageStore.add(
-        'gray error marked', utils.runMask(redImage, grayMask))
-    grayWithoutError = ImageStore.add(
-        'gray w/o error', grayWithoutError)
-
-    grayImage = ImageStore.add('gray with error marked',
-                               redMask + grayWithoutError)
+    [imageWithoutError, coloredMask, coloredError] = utils.colorMask(
+        originalImage, grayMask)
+    ImageStore.add('gray w/o error', imageWithoutError)
+    ImageStore.add('gray error marked', coloredMask)
+    ImageStore.add('gray with error marked', coloredError)
