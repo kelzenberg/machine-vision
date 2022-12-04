@@ -2,9 +2,8 @@
 Image Detector
 """
 
-import cv2
 import utils
-from numpy import uint8, zeros as nzeros, full as nfull
+from cv2 import countNonZero, mean as cvmean
 from typing import Dict, List
 from ImageStore import ImageStore
 
@@ -14,22 +13,24 @@ imageStats: Dict[str, List[str]] = {}
 def analyzeImage(name, originalImage):
     print(f'(analyzeImage) Analyzing {name} {originalImage.shape}')
 
-    mask = ImageStore.add('mask threshold', utils.runThreshold(originalImage, 20))
+    mask = ImageStore.add(
+        'mask threshold', utils.runThreshold(originalImage, 20))
     filledInv = ImageStore.add(
         'mask filled inverted', utils.runFillInv(mask, 0))
     mask = ImageStore.add('mask threshold w/o filled',
                           utils.runOr(mask, filledInv))
     mask = ImageStore.add('mask erosion', utils.runErosion(mask, 15))
 
-    maskArea = cv2.countNonZero(mask)
+    maskArea = countNonZero(mask)
     imageStats[name] = [f'Mask area: {maskArea}px']
 
-    grayImage = ImageStore.add('gray median', utils.runMedian(originalImage, 51))
+    grayImage = ImageStore.add(
+        'gray median', utils.runMedian(originalImage, 51))
     grayImage = ImageStore.add(
         'gray minus median w/ offset', utils.runOffset(originalImage, grayImage, 100))
     grayImage = ImageStore.add('gray masked', utils.runMask(grayImage, mask))
 
-    mean = cv2.mean(grayImage, mask=mask)[0]
+    mean = cvmean(grayImage, mask=mask)[0]
     threshold = 70
     thresholdPercentage = (threshold * mean) / 100.0
     imageStats[name].append(f'Mask gray mean: {round(mean, 3)}')
@@ -42,7 +43,7 @@ def analyzeImage(name, originalImage):
         'gray error filled inverted', utils.runFillInv(grayMask))
     grayMask = ImageStore.add('gray closing', utils.runClosing(grayMask, 3))
 
-    errorArea = cv2.countNonZero(grayMask)
+    errorArea = countNonZero(grayMask)
     imageStats[name].append(f'Error area: {errorArea}px')
     errorPercentage = (errorArea / maskArea) * 100.0
     imageStats[name].append(

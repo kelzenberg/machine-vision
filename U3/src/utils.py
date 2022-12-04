@@ -3,7 +3,7 @@ Image Utils
 """
 
 import cv2
-from numpy import uint8, zeros as nzeros, full as nfull
+from numpy import uint8, full as nfull
 
 imageDepth = cv2.CV_16S
 borderType = cv2.BORDER_REFLECT_101
