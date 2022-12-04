@@ -3,6 +3,7 @@ Image Utils
 """
 
 import cv2
+from numpy import uint8, zeros as nzeros, full as nfull
 
 imageDepth = cv2.CV_16S
 borderType = cv2.BORDER_REFLECT_101
@@ -43,3 +44,12 @@ def runMask(image, mask):
 def runClosing(image, size=3):
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (size, size))
     return cv2.erode(cv2.dilate(image, kernel), kernel)
+
+
+def colorMask(image, mask, color=(0, 0, 255)):
+    imageWithoutError = cv2.cvtColor(
+        runMask(image, cv2.bitwise_not(mask)), cv2.COLOR_GRAY2BGR)
+    plainColor = nfull(imageWithoutError.shape, color, dtype=uint8)
+    coloredMask = runMask(plainColor, mask)
+    coloredError = coloredMask + imageWithoutError
+    return [imageWithoutError, coloredMask, coloredError]
