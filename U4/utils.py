@@ -19,3 +19,7 @@ def findContours(image):
 
 def drawContours(image, contours):
     return cv2.drawContours(cv2.cvtColor(image.copy(), cv2.COLOR_GRAY2BGR), contours, contourIdx=-1, color=red, thickness=2, lineType=lineType)
+
+
+def polyCurves(curve, epsilon):
+    return cv2.approxPolyDP(curve, epsilon, True)

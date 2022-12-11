@@ -8,7 +8,7 @@ from glob import glob
 from os import path as ospath
 from Window import Window
 from ImageStore import ImageStore
-from contours import drawContours, imageStats
+from contours import drawContour, approxCurves, imageStats
 
 """
 Load Images
@@ -19,7 +19,7 @@ globPath = ospath.join(ospath.abspath('./images'), '*.png')
 for file in sorted(glob(globPath)):
     image = cv2.imread(file)
     imageName = file.split('/')[-1].split('.')[0]
-    ImageStore.add(imageName, cv2.cvtColor(image, cv2.COLOR_RGB2GRAY))
+    ImageStore.updateByName(imageName, cv2.cvtColor(image, cv2.COLOR_RGB2GRAY))
     imageCounter += 1
     print(f'(main) Image loaded: {imageName}')
 
@@ -40,8 +40,11 @@ def imageOnChange(value):
 
     [imageName, image] = ImageStore.getByPosition(value)
 
-    drawContours(imageName, image)
+    drawContour(imageName, image)
+    approxCurves(imageName, image, TRACKBAR['EPSILON'])
+
     stepOnChange(TRACKBAR['STEP'])
+    epsilonOnChange(TRACKBAR['EPSILON'])
 
 
 def stepOnChange(value):
@@ -59,17 +62,19 @@ def stepOnChange(value):
 
 
 def epsilonOnChange(value):
+    if TRACKBAR['STEP'] != 2:  # skip if approxCurves is not shown
+        return
+
     prev = TRACKBAR['EPSILON']
     if prev != value:
         print(f'(epsilonOnChange) {prev} to {value}')
 
     TRACKBAR['EPSILON'] = value
 
-    [imageName, image] = ImageStore.getByPosition(
-        TRACKBAR['IMAGE'] if value == 0  # show original Image
-        else value + imageCounter - 1)
+    [imageName, image] = ImageStore.getByPosition(TRACKBAR['IMAGE'])
 
-    window.show(imageName, image)
+    approxCurves(imageName, image, TRACKBAR['EPSILON'])
+    stepOnChange(TRACKBAR['STEP'])
 
 
 """
