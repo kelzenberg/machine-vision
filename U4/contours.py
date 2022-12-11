@@ -13,21 +13,23 @@ imageStats: Dict[str, List[str]] = {}
 def drawContour(name, image):
     print(f'(drawContours) Drawing Contours for {name} {image.shape}')
 
-    contours, hierarchy = utils.findContours(image)
+    contours, _ = utils.findContours(image)
 
     ImageStore.updateByName(f'{name} shape contours',
-                            utils.drawContours(image, contours))
+                            utils.drawContours(image.copy(), contours))
 
 
 def approxCurves(name, image, epsilon):
     print(f'(approxCurves) Approximate shape for {name} {image.shape}')
 
-    contours, hierarchy = utils.findContours(image)
-    contour = contours[0]
-    curves = utils.polyCurves(contour, float(epsilon/100.0))
+    contours, _ = utils.findContours(image)
 
-    ImageStore.updateByName(f'{name} shape curves',
-                            utils.drawContours(image, curves))
+    tempImage = image.copy()
+    for contour in contours:
+        curves = utils.approxCurves(contour, float(epsilon/100.0))
+        tempImage = utils.drawContours(tempImage, curves)
+
+    ImageStore.updateByName(f'{name} approx curves', tempImage)
 
 
 def centerOfMass(contour):
