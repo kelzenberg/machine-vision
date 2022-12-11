@@ -8,6 +8,7 @@ from glob import glob
 from os import path as ospath
 from Window import Window
 from ImageStore import ImageStore
+from contours import drawContours, imageStats
 
 """
 Load Images
@@ -39,7 +40,7 @@ def imageOnChange(value):
 
     [imageName, image] = ImageStore.getByPosition(value)
 
-    # findContours(imageName, image)
+    drawContours(imageName, image)
     stepOnChange(TRACKBAR['STEP'])
 
 
@@ -86,7 +87,6 @@ print('(main) Press ESC to exit...')
 while cv2.waitKey(0) != 27:
     pass
 
-imageStats: Dict[str, List[str]] = {}
 [print('(main) Image Stats ({0}):\n       {1}'.format(name, "\n       ".join(prints)))
  for [name, prints] in sorted(imageStats.items())]
 
