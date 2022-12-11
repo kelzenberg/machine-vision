@@ -26,7 +26,7 @@ for file in sorted(glob(globPath)):
 Trackbar functions
 """
 
-TRACKBAR = {'IMAGE': -1, 'STEP': 0}
+TRACKBAR = {'IMAGE': -1, 'STEP': 0, 'EPSILON': 0}
 
 
 def imageOnChange(value):
@@ -57,6 +57,20 @@ def stepOnChange(value):
     window.show(imageName, image)
 
 
+def epsilonOnChange(value):
+    prev = TRACKBAR['EPSILON']
+    if prev != value:
+        print(f'(epsilonOnChange) {prev} to {value}')
+
+    TRACKBAR['EPSILON'] = value
+
+    [imageName, image] = ImageStore.getByPosition(
+        TRACKBAR['IMAGE'] if value == 0  # show original Image
+        else value + imageCounter - 1)
+
+    window.show(imageName, image)
+
+
 """
 Main function
 """
@@ -64,6 +78,7 @@ Main function
 window = Window('Main')
 window.addTrackbar('Image Select ', (0, imageCounter - 1), imageOnChange)
 window.addTrackbar('Step ', (0, 10), stepOnChange)
+window.addTrackbar('Epsilon ', (0, 180), epsilonOnChange)
 
 imageOnChange(0)  # to trigger first image generation
 
