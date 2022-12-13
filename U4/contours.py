@@ -15,7 +15,7 @@ def drawContour(name, image):
 
     contours, _ = utils.findContours(image)
 
-    ImageStore.updateByName(f'{name} shape contours',
+    ImageStore.updateByName('shape contours',
                             utils.drawContours(image.copy(), contours))
 
 
@@ -29,7 +29,7 @@ def approxCurves(name, image, epsilon):
         curves = utils.approxCurves(contour, float(epsilon/100.0))
         tempImage = utils.drawContours(tempImage, curves)
 
-    ImageStore.updateByName(f'{name} approx curves', tempImage)
+    ImageStore.updateByName('approx curves', tempImage)
 
 
 def centerOfMass(contour):

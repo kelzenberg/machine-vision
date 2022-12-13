@@ -55,14 +55,13 @@ def stepOnChange(value):
     TRACKBAR['STEP'] = value
 
     [imageName, image] = ImageStore.getByPosition(
-        TRACKBAR['IMAGE'] if value == 0  # show original Image
-        else value + imageCounter - 1)
+        TRACKBAR['IMAGE'] if value == 0 else value + imageCounter - 1)
 
     window.show(imageName, image)
 
 
 def epsilonOnChange(value):
-    if TRACKBAR['STEP'] != 2:  # skip if approxCurves is not shown
+    if TRACKBAR['STEP'] != 2:  # skip if approxCurves (step 2) is not shown
         return
 
     prev = TRACKBAR['EPSILON']
@@ -71,9 +70,10 @@ def epsilonOnChange(value):
 
     TRACKBAR['EPSILON'] = value
 
+    # get original image for approx curves
     [imageName, image] = ImageStore.getByPosition(TRACKBAR['IMAGE'])
+    approxCurves(imageName, image, value)
 
-    approxCurves(imageName, image, TRACKBAR['EPSILON'])
     stepOnChange(TRACKBAR['STEP'])
 
 
