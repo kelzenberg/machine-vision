@@ -1,4 +1,4 @@
-## U1 (Exercise 1)
+## U3 (Exercise 3)
 
 Execute the `app.py` file to start the application:  
 <small>The other files are only parts of _app.py_ and are not executables.</small>
