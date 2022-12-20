@@ -15,8 +15,8 @@ def drawContour(name, image):
 
     contours, _ = utils.findContours(image)
 
-    ImageStore.updateByName('shape contours',
-                            utils.drawContours(image.copy(), contours))
+    ImageStore.updateByName('shape contours', utils.drawContours(
+        image.copy(), contours, thickness=5))
 
 
 def approxCurves(name, image, epsilon):
@@ -27,9 +27,21 @@ def approxCurves(name, image, epsilon):
     tempImage = image.copy()
     for contour in contours:
         curves = utils.approxCurves(contour, float(epsilon))
-        tempImage = utils.drawContours(tempImage, curves, thickness=10)
+        tempImage = utils.drawContours(tempImage, curves, thickness=5)
 
     ImageStore.updateByName('approx curves', tempImage)
+
+
+def convexHull(name, image):
+    print(f'(convexHull) Find convex hull for {name} {image.shape}')
+    contours, _ = utils.findContours(image)
+
+    tempImage = image.copy()
+    for contour in contours:
+        hull = cv2.convexHull(contour)
+        tempImage = utils.drawContours(tempImage, hull, thickness=5)
+
+    ImageStore.updateByName('convex hull', tempImage)
 
 
 def centerOfMass(contour):

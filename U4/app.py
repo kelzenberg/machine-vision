@@ -8,7 +8,7 @@ from glob import glob
 from os import path as ospath
 from Window import Window
 from ImageStore import ImageStore
-from contours import drawContour, approxCurves, imageStats
+from contours import drawContour, approxCurves,convexHull, imageStats
 
 """
 Load Images
@@ -42,6 +42,7 @@ def imageOnChange(value):
 
     drawContour(imageName, image)
     approxCurves(imageName, image, TRACKBAR['EPSILON'])
+    convexHull(imageName, image)
 
     stepOnChange(TRACKBAR['STEP'])
     epsilonOnChange(TRACKBAR['EPSILON'])
