@@ -19,13 +19,13 @@ def findContours(image):
 
 
 def drawContours(image, contours, thickness=2):
-    tempImage = image
-    tempContours = contours
-    if (len(image.shape) < 3):
-        tempImage = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
-    if (not isinstance(contours, Tuple)):
-        # correct non-array contours --> see https://stackoverflow.com/a/41880357
-        tempContours = [contours]
+    # convert to BGR if Gray, otherwise no contour color
+    tempImage = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR) if len(
+        image.shape) < 3 else image.copy()
+
+    # correct non-array contours --> see https://stackoverflow.com/a/41880357
+    tempContours = [contours] if not isinstance(contours, Tuple) else contours
+
     return cv2.drawContours(tempImage, tempContours, contourIdx=-1, color=red, thickness=thickness, lineType=lineType)
 
 
