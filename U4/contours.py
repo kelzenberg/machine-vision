@@ -26,8 +26,8 @@ def approxCurves(name, image, epsilon):
 
     tempImage = image.copy()
     for contour in contours:
-        curves = utils.approxCurves(contour, float(epsilon/100.0))
-        tempImage = utils.drawContours(tempImage, curves)
+        curves = utils.approxCurves(contour, float(epsilon))
+        tempImage = utils.drawContours(tempImage, curves, thickness=10)
 
     ImageStore.updateByName('approx curves', tempImage)
 
