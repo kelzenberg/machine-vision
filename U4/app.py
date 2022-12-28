@@ -8,7 +8,7 @@ from glob import glob
 from os import path as ospath
 from Window import Window
 from ImageStore import ImageStore
-from contours import drawContour, drawApproxCurves, drawConvexHull, imageStats
+from contours import drawContour, drawConvexHull, drawApproxCurves, imageStats
 
 """
 Load Images
@@ -41,8 +41,8 @@ def imageOnChange(value):
     [imageName, image] = ImageStore.getByPosition(value)
 
     drawContour(imageName, image)
-    drawApproxCurves(imageName, image, TRACKBAR['EPSILON'])
     drawConvexHull(imageName, image)
+    drawApproxCurves(imageName, image, TRACKBAR['EPSILON'])
 
     stepOnChange(TRACKBAR['STEP'])
     epsilonOnChange(TRACKBAR['EPSILON'])
@@ -62,7 +62,7 @@ def stepOnChange(value):
 
 
 def epsilonOnChange(value):
-    if TRACKBAR['STEP'] != 2:  # skip if drawApproxCurves (step 2) is not shown
+    if TRACKBAR['STEP'] != 3:  # skip if drawApproxCurves (step 2) is not shown
         return
 
     prev = TRACKBAR['EPSILON']
