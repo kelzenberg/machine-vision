@@ -18,13 +18,12 @@ Draw Features of Contours
 def drawCenterOfMass(name, image, contour):
     print(
         f'(drawCenterOfMass) Drawing Center of Mass for {name} {image.shape}')
-    return cv2.circle(image, utils.centerOfMass(contour), radius=utils.lineThickness, color=utils.blue, thickness=-1)
+    return cv2.circle(image, utils.centerOfMass(contour), radius=utils.lineThickness, color=utils.blue, thickness=-1, lineType=utils.lineType)
 
 
 def drawMinCircle(name, image, contour):
     print(f'(drawMinCircle) Drawing minimal circle for {name} {image.shape}')
     center, radius = utils.minCircle(contour)
-
     return cv2.circle(image, center, radius, color=utils.yellow, thickness=utils.lineThickness, lineType=utils.lineType)
 
 
