@@ -34,7 +34,7 @@ def drawMinCircle(name, image, contour):
 
 
 def drawContour(name, image):
-    print(f'(drawContours) Drawing Contours for {name} {image.shape}')
+    print(f'(drawContour) Drawing Contours for {name} {image.shape}')
     contours, _ = utils.findContours(image)
 
     tempImage = utils.convertToColor(image)
@@ -44,8 +44,8 @@ def drawContour(name, image):
     ImageStore.updateByName('shape contours', tempImage)
 
 
-def approxCurves(name, image, epsilon):
-    print(f'(approxCurves) Approximate shape for {name} {image.shape}')
+def drawApproxCurves(name, image, epsilon):
+    print(f'(drawApproxCurves) Approximate shape for {name} {image.shape}')
     contours, _ = utils.findContours(image)
 
     tempImage = utils.convertToColor(image)
@@ -56,8 +56,8 @@ def approxCurves(name, image, epsilon):
     ImageStore.updateByName('approx curves', tempImage)
 
 
-def convexHull(name, image):
-    print(f'(convexHull) Find convex hull for {name} {image.shape}')
+def drawConvexHull(name, image):
+    print(f'(drawConvexHull) Find convex hull for {name} {image.shape}')
     contours, _ = utils.findContours(image)
 
     tempImage = utils.convertToColor(image)
