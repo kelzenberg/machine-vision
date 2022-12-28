@@ -59,8 +59,14 @@ def drawContour(name, image):
     contours, _ = utils.findContours(image)
 
     tempImage = utils.convertToColor(image)
+    contourAreas = []
     for contour in contours:
+        contourAreas.append(f'{cv2.contourArea(contour)}')
         tempImage = drawFeatures(name, tempImage, contour)
+
+    areaStrings = "px, ".join(contourAreas) if len(
+        contourAreas) > 1 else f'{contourAreas[0]}px'
+    imageStats[name] = [f'Contour area(s): {areaStrings}']
 
     ImageStore.updateByName('shape contours', tempImage)
 
@@ -70,9 +76,15 @@ def drawApproxCurves(name, image, epsilon):
     contours, _ = utils.findContours(image)
 
     tempImage = utils.convertToColor(image)
+    curvesAreas = []
     for contour in contours:
         curves = utils.approxCurves(contour, float(epsilon))
+        curvesAreas.append(f'{cv2.contourArea(curves)}')
         tempImage = drawFeatures(name, tempImage, curves)
+
+    areaStrings = "px, ".join(curvesAreas) if len(
+        curvesAreas) > 1 else f'{curvesAreas[0]}px'
+    imageStats[name].append(f'Approx Curves area(s): {areaStrings}')
 
     ImageStore.updateByName('approx curves', tempImage)
 
@@ -82,8 +94,14 @@ def drawConvexHull(name, image):
     contours, _ = utils.findContours(image)
 
     tempImage = utils.convertToColor(image)
+    hullAreas = []
     for contour in contours:
         hull = cv2.convexHull(contour)
+        hullAreas.append(f'{cv2.contourArea(hull)}')
         tempImage = drawFeatures(name, tempImage, hull)
+
+    areaStrings = "px, ".join(hullAreas) if len(
+        hullAreas) > 1 else f'{hullAreas[0]}px'
+    imageStats[name].append(f'Convex hull area(s): {areaStrings}')
 
     ImageStore.updateByName('convex hull', tempImage)
