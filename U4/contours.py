@@ -10,12 +10,9 @@ from ImageStore import ImageStore
 imageStats: Dict[str, List[str]] = {}
 
 
-def drawFeatures(name, image, contour):
-    tempImage = drawCenterOfMass(name, image, contour)
-    tempImage = drawMinCircle(name, tempImage, contour)
-    tempImage = utils.drawContours(
-        tempImage, contour, thickness=utils.lineThickness)
-    return tempImage
+"""
+Draw Features of Contours
+"""
 
 
 def drawCenterOfMass(name, image, contour):
@@ -31,6 +28,17 @@ def drawMinCircle(name, image, contour):
     return cv2.circle(image, center, radius, color=utils.yellow, thickness=utils.lineThickness, lineType=utils.lineType)
 
 
+def drawFeatures(name, image, contour):
+    tempImage = drawCenterOfMass(name, image, contour)
+    tempImage = drawMinCircle(name, tempImage, contour)
+    tempImage = utils.drawContours(
+        tempImage, contour, thickness=utils.lineThickness)
+    return tempImage
+
+
+"""
+Find & draw Contours
+"""
 
 
 def drawContour(name, image):
