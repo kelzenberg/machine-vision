@@ -47,9 +47,15 @@ def minAreaRect(contour):
 
 def boundingBox(contour):
     box = cv2.boundingRect(contour)  # returns [x, y, width, height]
-    start = box[:2]
+    start = list(box[:2])
     end = [xy+wh for xy, wh in zip(start, box[-2:])]
-    return (start, end)
+    return [start, end]
+
+
+def rectArea(start, end):
+    x = abs(start[0]-end[0])
+    y = abs(start[1]-end[1])
+    return x * y
 
 
 def drawContours(image, contours, color=red, thickness=2):

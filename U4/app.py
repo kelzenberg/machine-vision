@@ -2,7 +2,6 @@
 U4 app
 """
 
-from typing import Dict, List
 import cv2
 from glob import glob
 from os import path as ospath

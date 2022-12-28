@@ -5,6 +5,7 @@ Contour Finder
 import cv2
 import utils
 from typing import Dict, List
+from numpy import pi
 from ImageStore import ImageStore
 
 imageStats: Dict[str, List[str]] = {}
@@ -18,24 +19,34 @@ Draw Features of Contours
 def drawCenterOfMass(name, image, contour):
     print(
         f'(drawCenterOfMass) Drawing Center of Mass for {name} {image.shape}')
-    return cv2.circle(image, utils.centerOfMass(contour), radius=utils.lineThickness, color=utils.blue, thickness=-1, lineType=utils.lineType)
+    centerOfMass = utils.centerOfMass(contour)
+    imageStats[name] = [
+        f'Center of Mass: x:{centerOfMass[0]}, y:{centerOfMass[1]}']
+    return cv2.circle(image, centerOfMass, radius=utils.lineThickness, color=utils.blue, thickness=-1, lineType=utils.lineType)
 
 
 def drawMinCircle(name, image, contour):
     print(f'(drawMinCircle) Drawing minimal circle for {name} {image.shape}')
     center, radius = utils.minCircle(contour)
+    imageStats[name].append(
+        f'Minimal Circle: x:{center[0]}, y:{center[1]}, r:{radius}px')
+    imageStats[name].append(
+        f'Minimal Circle Area: {round(pi*(radius**2), 2)}px\n         (x:{center[0]}, y:{center[1]}, r:{radius}px)')
     return cv2.circle(image, center, radius, color=utils.yellow, thickness=utils.lineThickness, lineType=utils.lineType)
 
 
 def drawMinArea(name, image, contour):
     print(f'(drawMinArea) Drawing minimal area for {name} {image.shape}')
     box = utils.minAreaRect(contour)
+    imageStats[name].append(f'Minimal Rect Area: {cv2.contourArea(box)}px')
     return utils.drawContours(image, box, color=utils.purple, thickness=utils.lineThickness)
 
 
 def drawBoundingBox(name, image, contour):
     print(f'(drawBoundingBox) Drawing bounding box for {name} {image.shape}')
     start, end = utils.boundingBox(contour)
+    imageStats[name].append(
+        f'Bounding Box Area: {utils.rectArea(start, end)}px')
     return cv2.rectangle(image, start, end, color=utils.green, thickness=utils.lineThickness, lineType=utils.lineType)
 
 
@@ -66,7 +77,7 @@ def drawContour(name, image):
 
     areaStrings = "px, ".join(contourAreas) if len(
         contourAreas) > 1 else f'{contourAreas[0]}px'
-    imageStats[name] = [f'Contour area(s): {areaStrings}']
+    imageStats[name].append(f'Contour area(s): {areaStrings}')
 
     ImageStore.updateByName('shape contours', tempImage)
 
@@ -103,6 +114,6 @@ def drawApproxCurves(name, image, epsilon):
     areaStrings = "px, ".join(curvesAreas) if len(
         curvesAreas) > 1 else f'{curvesAreas[0]}px'
     imageStats[name].append(
-        f'Approx Curves area(s)\n          for Epsilon {epsilon}: {areaStrings}')
+        f'Approx Curves area(s)\n         for Epsilon {epsilon}: {areaStrings}')
 
     ImageStore.updateByName('approx curves', tempImage)
