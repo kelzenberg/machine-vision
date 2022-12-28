@@ -33,10 +33,17 @@ def drawMinArea(name, image, contour):
     return utils.drawContours(image, box, color=utils.purple, thickness=utils.lineThickness)
 
 
+def drawBoundingBox(name, image, contour):
+    print(f'(drawBoundingBox) Drawing bounding box for {name} {image.shape}')
+    start, end = utils.boundingBox(contour)
+    return cv2.rectangle(image, start, end, color=utils.green, thickness=utils.lineThickness, lineType=utils.lineType)
+
+
 def drawFeatures(name, image, contour):
     tempImage = drawCenterOfMass(name, image, contour)
     tempImage = drawMinCircle(name, tempImage, contour)
     tempImage = drawMinArea(name, image, contour)
+    tempImage = drawBoundingBox(name, image, contour)
     tempImage = utils.drawContours(
         tempImage, contour, thickness=utils.lineThickness)
     return tempImage

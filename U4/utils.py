@@ -45,6 +45,13 @@ def minAreaRect(contour):
     return intp(cv2.boxPoints(box))
 
 
+def boundingBox(contour):
+    box = cv2.boundingRect(contour)  # returns [x, y, width, height]
+    start = box[:2]
+    end = [xy+wh for xy, wh in zip(start, box[-2:])]
+    return (start, end)
+
+
 def drawContours(image, contours, color=red, thickness=2):
     # correct non-array contours --> see https://stackoverflow.com/a/41880357
     tempContours = [contours] if not isinstance(contours, Tuple) else contours
