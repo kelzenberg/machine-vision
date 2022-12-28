@@ -8,14 +8,22 @@ from typing import Dict, List
 from ImageStore import ImageStore
 
 imageStats: Dict[str, List[str]] = {}
+lineThickness = 3
 
 
 def drawCenterOfMass(name, image, contour):
     print(
         f'(drawCenterOfMass) Drawing Center of Mass for {name} {image.shape}')
 
-    return cv2.circle(image, utils.centerOfMass(
-        contour), radius=5, color=utils.blue, thickness=-1)
+    return cv2.circle(image, utils.centerOfMass(contour), radius=lineThickness, color=utils.blue, thickness=-1)
+
+
+def drawMinCircle(name, image, contour):
+    print(f'(drawMinCircle) Drawing minimal circle for {name} {image.shape}')
+
+    center, radius = cv2.minEnclosingCircle(contour)
+
+    return cv2.circle(image, tuple(int(point) for point in center), int(radius), color=utils.yellow, thickness=lineThickness, lineType=utils.lineType)
 
 
 def drawContour(name, image):
@@ -25,8 +33,10 @@ def drawContour(name, image):
 
     tempImage = cv2.cvtColor(image.copy(), cv2.COLOR_GRAY2BGR)
     for contour in contours:
-        imageCOM = drawCenterOfMass(name, tempImage, contour)
-        tempImage = utils.drawContours(imageCOM, contour, thickness=5)
+        tempImage = drawCenterOfMass(name, tempImage, contour)
+        tempImage = drawMinCircle(name, tempImage, contour)
+        tempImage = utils.drawContours(
+            tempImage, contour, thickness=lineThickness)
 
     ImageStore.updateByName('shape contours', tempImage)
 
@@ -39,8 +49,10 @@ def approxCurves(name, image, epsilon):
     tempImage = cv2.cvtColor(image.copy(), cv2.COLOR_GRAY2BGR)
     for contour in contours:
         curves = utils.approxCurves(contour, float(epsilon))
-        imageCOM = drawCenterOfMass(name, tempImage, curves)
-        tempImage = utils.drawContours(imageCOM, curves, thickness=5)
+        tempImage = drawCenterOfMass(name, tempImage, curves)
+        tempImage = drawMinCircle(name, tempImage, curves)
+        tempImage = utils.drawContours(
+            tempImage, curves, thickness=lineThickness)
 
     ImageStore.updateByName('approx curves', tempImage)
 
@@ -52,7 +64,9 @@ def convexHull(name, image):
     tempImage = cv2.cvtColor(image.copy(), cv2.COLOR_GRAY2BGR)
     for contour in contours:
         hull = cv2.convexHull(contour)
-        imageCOM = drawCenterOfMass(name, tempImage, hull)
-        tempImage = utils.drawContours(imageCOM, hull, thickness=5)
+        tempImage = drawCenterOfMass(name, tempImage, hull)
+        tempImage = drawMinCircle(name, tempImage, hull)
+        tempImage = utils.drawContours(
+            tempImage, hull, thickness=lineThickness)
 
     ImageStore.updateByName('convex hull', tempImage)
