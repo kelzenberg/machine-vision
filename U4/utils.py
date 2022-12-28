@@ -14,6 +14,7 @@ blue = (255, 0, 0)
 yellow = (0, 255, 255)
 purple = (255, 0, 255)
 
+
 def convertToColor(image):
     return cv2.cvtColor(image.copy(), cv2.COLOR_GRAY2BGR)
 
@@ -31,6 +32,11 @@ def centerOfMass(contour):
     centerOfMass = (int(moment['m10']/moment['m00']),
                     int(moment['m01']/moment['m00']))
     return centerOfMass
+
+
+def minCircle(contour):
+    center, radius = cv2.minEnclosingCircle(contour)
+    return (tuple(int(point) for point in center), int(radius))
 
 
 def drawContours(image, contours, thickness=2):

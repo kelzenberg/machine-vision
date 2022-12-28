@@ -26,11 +26,11 @@ def drawCenterOfMass(name, image, contour):
 
 def drawMinCircle(name, image, contour):
     print(f'(drawMinCircle) Drawing minimal circle for {name} {image.shape}')
-    center, radius = cv2.minEnclosingCircle(contour)
-    centerPoint = tuple(int(point) for point in center)
-    circleRadius = int(radius)
+    center, radius = utils.minCircle(contour)
 
-    return cv2.circle(image, centerPoint, circleRadius, color=utils.yellow, thickness=utils.lineThickness, lineType=utils.lineType)
+    return cv2.circle(image, center, radius, color=utils.yellow, thickness=utils.lineThickness, lineType=utils.lineType)
+
+
 
 
 def drawContour(name, image):
