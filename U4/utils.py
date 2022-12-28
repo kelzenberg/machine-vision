@@ -6,12 +6,16 @@ import cv2
 from typing import Tuple
 
 lineType = cv2.LINE_AA
+lineThickness = 3
 
 red = (0, 0, 255)
 green = (0, 255, 0)
 blue = (255, 0, 0)
 yellow = (0, 255, 255)
 purple = (255, 0, 255)
+
+def convertToColor(image):
+    return cv2.cvtColor(image.copy(), cv2.COLOR_GRAY2BGR)
 
 
 def findContours(image):
@@ -30,11 +34,7 @@ def centerOfMass(contour):
 
 
 def drawContours(image, contours, thickness=2):
-    # convert to BGR if Gray, otherwise no contour color
-    tempImage = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR) if len(
-        image.shape) < 3 else image.copy()
-
     # correct non-array contours --> see https://stackoverflow.com/a/41880357
     tempContours = [contours] if not isinstance(contours, Tuple) else contours
 
-    return cv2.drawContours(tempImage, tempContours, contourIdx=-1, color=red, thickness=thickness, lineType=lineType)
+    return cv2.drawContours(image, tempContours, contourIdx=-1, color=red, thickness=thickness, lineType=lineType)
