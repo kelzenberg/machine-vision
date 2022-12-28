@@ -22,6 +22,13 @@ def approxCurves(contour, epsilon):
     return cv2.approxPolyDP(contour, epsilon, True)
 
 
+def centerOfMass(contour):
+    moment = cv2.moments(contour, binaryImage=True)
+    centerOfMass = (int(moment['m10']/moment['m00']),
+                    int(moment['m01']/moment['m00']))
+    return centerOfMass
+
+
 def drawContours(image, contours, thickness=2):
     # convert to BGR if Gray, otherwise no contour color
     tempImage = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR) if len(
