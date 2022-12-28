@@ -27,9 +27,16 @@ def drawMinCircle(name, image, contour):
     return cv2.circle(image, center, radius, color=utils.yellow, thickness=utils.lineThickness, lineType=utils.lineType)
 
 
+def drawMinArea(name, image, contour):
+    print(f'(drawMinArea) Drawing minimal area for {name} {image.shape}')
+    box = utils.minAreaRect(contour)
+    return utils.drawContours(image, box, color=utils.purple, thickness=utils.lineThickness)
+
+
 def drawFeatures(name, image, contour):
     tempImage = drawCenterOfMass(name, image, contour)
     tempImage = drawMinCircle(name, tempImage, contour)
+    tempImage = drawMinArea(name, image, contour)
     tempImage = utils.drawContours(
         tempImage, contour, thickness=utils.lineThickness)
     return tempImage

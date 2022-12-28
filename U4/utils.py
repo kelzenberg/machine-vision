@@ -4,6 +4,7 @@ Image Utils
 
 import cv2
 from typing import Tuple
+from numpy import intp
 
 lineType = cv2.LINE_AA
 lineThickness = 3
@@ -39,8 +40,13 @@ def minCircle(contour):
     return (tuple(int(point) for point in center), int(radius))
 
 
-def drawContours(image, contours, thickness=2):
+def minAreaRect(contour):
+    box = cv2.minAreaRect(contour)
+    return intp(cv2.boxPoints(box))
+
+
+def drawContours(image, contours, color=red, thickness=2):
     # correct non-array contours --> see https://stackoverflow.com/a/41880357
     tempContours = [contours] if not isinstance(contours, Tuple) else contours
 
-    return cv2.drawContours(image, tempContours, contourIdx=-1, color=red, thickness=thickness, lineType=lineType)
+    return cv2.drawContours(image, tempContours, contourIdx=-1, color=color, thickness=thickness, lineType=lineType)
