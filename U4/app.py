@@ -8,7 +8,7 @@ from glob import glob
 from os import path as ospath
 from Window import Window
 from ImageStore import ImageStore
-from contours import drawContour, approxCurves,convexHull, imageStats
+from contours import drawContour, approxCurves, convexHull, imageStats
 
 """
 Load Images
