@@ -84,7 +84,7 @@ Main function
 
 window = Window('Main')
 window.addTrackbar('Image Select ', (0, imageCounter - 1), imageOnChange)
-window.addTrackbar('Step ', (0, 10), stepOnChange)
+window.addTrackbar('Step ', (0, 3), stepOnChange)
 window.addTrackbar('Epsilon ', (0, 180), epsilonOnChange)
 
 imageOnChange(0)  # to trigger first image generation
