@@ -1,5 +1,5 @@
 """
-U4 app
+U5 app
 """
 
 import cv2
@@ -8,6 +8,7 @@ from glob import glob
 from os import path as ospath
 from Window import Window
 from ImageStore import ImageStore
+from disparity import findDisparities
 
 imageStats: Dict[str, List[str]] = {}
 
@@ -39,9 +40,12 @@ def leftImageOnChange(value):
     # print(f'(leftImageOnChange) {prev} to {value}')
     TRACKBAR['IMAGE'] = value
 
-    [imageName, image] = ImageStore.getByPosition(value + 1)
+    [imageNameLeft, imageLeft] = ImageStore.getByPosition(0)
+    [imageNameRight, imageRight] = ImageStore.getByPosition(value + 1)
 
     # Do something with the image
+    findDisparities((imageNameLeft, imageLeft),
+                    (imageNameRight, imageRight))
 
     leftImageWindow.show(imageName, image)
     disparityWindow.show(imageName, image)
