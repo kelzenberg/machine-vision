@@ -47,7 +47,7 @@ Use Python version `3.10.4` or higher.
 - Impurities are considered to be defects if the gray value of the spots is less than than 70% of the mean gray value of the bale.
 - At the edge of the bale, an area of 15 pixels circumferentially should be excluded from the analysis.
 - Detect impurities and determine the summary area of all impurities relative to the bale area.  
-Output Example:
+  Output Example:
   ```sh
     Mask area: 1337px
     Mask gray mean: x.xxx
@@ -55,3 +55,14 @@ Output Example:
     Error area: 42px
     Faulty area to mask: x.xxx%
   ```
+
+## U4 (Exercise 4)
+
+- Read the images `Fischx.png`.
+- Find the contour, approximate it as a polygon with adjustable resolution and determine the convex hull of the object.
+- Determine the features for the different representations:
+  - Object centroid
+  - Circumscribing axis-parallel rectangle
+  - Smallest circumscribing rectangle
+  - Smallest circumscribing circle
+- Draw the features found in color in the original image and describe them on the console.
