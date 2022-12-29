@@ -28,7 +28,7 @@ for file in sorted(glob(globPath)):
 Trackbar functions
 """
 
-TRACKBAR = {'IMAGE': -1}
+TRACKBAR = {'IMAGE': -1, 'DISPARITY': 0, 'BLOCKSIZE': 0}
 
 
 def leftImageOnChange(value):
@@ -46,6 +46,24 @@ def leftImageOnChange(value):
     leftImageWindow.show(imageName, image)
 
 
+def disparityOnChange(value):
+    prev = TRACKBAR['DISPARITY']
+    if prev == value:
+        return
+
+    # print(f'(disparityOnChange) {prev} to {value}')
+    TRACKBAR['DISPARITY'] = value
+
+
+def blockSizeOnChange(value):
+    prev = TRACKBAR['BLOCKSIZE']
+    if prev == value:
+        return
+
+    # print(f'(blockSizeOnChange) {prev} to {value}')
+    TRACKBAR['BLOCKSIZE'] = value
+
+
 """
 Main function
 """
@@ -53,10 +71,12 @@ Main function
 mainWindow = Window('Main', scale=0.3)
 mainWindow.addTrackbar('Left Image Select ',
                        (0, imageCounter - 2), leftImageOnChange)
+mainWindow.addTrackbar('Disparity ', (0, 30), disparityOnChange)
+mainWindow.addTrackbar('Block Size ', (0, 20), blockSizeOnChange)
 [imageName, image] = ImageStore.getByPosition(0)
 mainWindow.show(imageName, image)
 
-leftImageWindow = Window('Left Image', scale=0.3, offset=(0, 400))
+leftImageWindow = Window('Left Image', scale=0.3, offset=(0, 450))
 
 leftImageOnChange(0)  # to trigger first image generation
 
