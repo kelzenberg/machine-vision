@@ -44,6 +44,7 @@ def leftImageOnChange(value):
     # Do something with the image
 
     leftImageWindow.show(imageName, image)
+    disparityWindow.show(imageName, image)
 
 
 def disparityOnChange(value):
@@ -69,14 +70,15 @@ Main function
 """
 
 mainWindow = Window('Main', scale=0.3)
-mainWindow.addTrackbar('Left Image Select ',
+mainWindow.addTrackbar('Left Image ',
                        (0, imageCounter - 2), leftImageOnChange)
 mainWindow.addTrackbar('Disparity ', (0, 30), disparityOnChange)
 mainWindow.addTrackbar('Block Size ', (0, 20), blockSizeOnChange)
 [imageName, image] = ImageStore.getByPosition(0)
 mainWindow.show(imageName, image)
 
-leftImageWindow = Window('Left Image', scale=0.3, offset=(0, 450))
+leftImageWindow = Window('Left Image', scale=0.3, offset=(0, 455))
+disparityWindow = Window('Disparity', offset=(420, 0))
 
 leftImageOnChange(0)  # to trigger first image generation
 
