@@ -12,6 +12,6 @@ def findDisparities(base, displaced, disparity, blockSize):
     print(
         f'(findDisparities) Find disparities between {baseName} and {dispName}')
 
-    stereoBM = cv2.StereoBM_create(64, blockSize=127)
+    stereoBM = cv2.StereoBM_create(64, blockSize=blockSize)
     disparity = stereoBM.compute(baseImage, dispImage)
     ImageStore.updateByName('disparity', disparity)
