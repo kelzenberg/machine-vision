@@ -30,6 +30,23 @@ for file in sorted(glob(globPath)):
     print(f'(main) Image loaded: {baseImageName}')
 
 """
+Utils functions
+"""
+
+
+def showDisparities():
+    right = ImageStore.getByPosition(0)
+    left = ImageStore.getByPosition(TRACKBAR['IMAGE'] + 1)
+
+    leftImageWindow.show(left[0], left[1])
+
+    findDisparities(left, right, TRACKBAR['DISPARITY'], TRACKBAR['BLOCKSIZE'])
+
+    disparityImage = ImageStore.getByName('disparity')
+    disparityWindow.show('disparity', disparityImage, withText=False)
+
+
+"""
 Trackbar functions
 """
 
@@ -44,15 +61,7 @@ def leftImageOnChange(value):
     # print(f'(leftImageOnChange) {prev} to {value}')
     TRACKBAR['IMAGE'] = value
 
-    [baseImageName, baseImage] = ImageStore.getByPosition(0)
-    [dispImageName, dispImage] = ImageStore.getByPosition(value + 1)
-    leftImageWindow.show(dispImageName, dispImage)
-
-    findDisparities((dispImageName, dispImage), (baseImageName,
-                    baseImage), TRACKBAR['DISPARITY'], TRACKBAR['BLOCKSIZE'])
-
-    disparityImage = ImageStore.getByName('disparity')
-    disparityWindow.show('disparity', disparityImage, withText=False)
+    showDisparities()
 
 
 def disparityOnChange(value):
@@ -62,18 +71,10 @@ def disparityOnChange(value):
     if prev == valueInRange:
         return
 
-    print(f'(disparityOnChange) {prev} to {valueInRange}')
+    # print(f'(disparityOnChange) {prev} to {valueInRange}')
     TRACKBAR['DISPARITY'] = valueInRange
 
-    [baseImageName, baseImage] = ImageStore.getByPosition(0)
-    [dispImageName, dispImage] = ImageStore.getByPosition(
-        TRACKBAR['IMAGE'] + 1)
-
-    findDisparities((dispImageName, dispImage), (baseImageName,
-                    baseImage), valueInRange, TRACKBAR['BLOCKSIZE'])
-
-    disparityImage = ImageStore.getByName('disparity')
-    disparityWindow.show('disparity', disparityImage, withText=False)
+    showDisparities()
 
 
 def blockSizeOnChange(value):
@@ -83,18 +84,10 @@ def blockSizeOnChange(value):
     if prev == valueInRange:
         return
 
-    print(f'(blockSizeOnChange) {prev} to {valueInRange}')
+    # print(f'(blockSizeOnChange) {prev} to {valueInRange}')
     TRACKBAR['BLOCKSIZE'] = valueInRange
 
-    [baseImageName, baseImage] = ImageStore.getByPosition(0)
-    [dispImageName, dispImage] = ImageStore.getByPosition(
-        TRACKBAR['IMAGE'] + 1)
-
-    findDisparities((dispImageName, dispImage), (baseImageName,
-                    baseImage), TRACKBAR['DISPARITY'], valueInRange)
-
-    disparityImage = ImageStore.getByName('disparity')
-    disparityWindow.show('disparity', disparityImage, withText=False)
+    showDisparities()
 
 
 """
@@ -105,24 +98,19 @@ mainWindow = Window('Main', scale=0.3)
 mainWindow.addTrackbar('Left Image ', (0, imageCounter - 2), leftImageOnChange)
 mainWindow.addTrackbar('Disparity ', disparityRange, disparityOnChange)
 mainWindow.addTrackbar('Block Size ', blockSizeRange, blockSizeOnChange)
+baseImageName, baseImage = ImageStore.getByPosition(0)
+mainWindow.show(baseImageName, baseImage)
 
 leftImageWindow = Window('Left Image', scale=0.3, offset=(0, 455))
+dispImageName, dispImage = ImageStore.getByPosition(1)
+leftImageWindow.show(dispImageName, dispImage)
+
 disparityWindow = Window('Disparity', offset=(420, 0))
+disparityWindow.addTrackbar('PreFilterSize', (2, 25), None)
+disparityWindow.addTrackbar('PreFilterCap', (5, 62), None)
+disparityWindow.addTrackbar('TextureThreshold', (10, 100), None)
+disparityWindow.addTrackbar('MinDisparity', (5, 25), None)
 
-trackbarWindow = Window('Optional Trackbars', scale=0.3, offset=(420, 455))
-trackbarWindow.addTrackbar('PreFilterType', (1, 1), None)
-trackbarWindow.addTrackbar('PreFilterSize', (2, 25), None)
-trackbarWindow.addTrackbar('PreFilterCap', (5, 62), None)
-trackbarWindow.addTrackbar('TextureThreshold', (10, 100), None)
-trackbarWindow.addTrackbar('UniquenessRatio', (15, 100), None)
-trackbarWindow.addTrackbar('SpeckleRange', (0, 100), None)
-trackbarWindow.addTrackbar('SpeckleWindowSize', (3, 25), None)
-trackbarWindow.addTrackbar('Disp12MaxDiff', (5, 25), None)
-trackbarWindow.addTrackbar('MinDisparity', (5, 25), None)
-
-[baseImageName, baseImage] = ImageStore.getByPosition(0)
-mainWindow.show(baseImageName, baseImage)
-leftImageOnChange(0)  # to trigger first image generation
 
 print('(main) Press ESC to exit...')
 while cv2.waitKey(0) != 27:
