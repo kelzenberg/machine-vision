@@ -7,33 +7,20 @@ from numpy import float32
 from ImageStore import ImageStore
 
 
-def configureSBM(sbm):
-    windowName = 'Disparity'
-
-    preFilterSize = cv2.getTrackbarPos('preFilterSize', windowName) * 2 + 5
-    print('foo', preFilterSize)
-    preFilterCap = cv2.getTrackbarPos('preFilterCap', windowName)
-    textureThreshold = cv2.getTrackbarPos('textureThreshold', windowName)
-    minDisparity = cv2.getTrackbarPos('minDisparity', windowName)
-
-    sbm.setPreFilterSize(preFilterSize)
-    sbm.setPreFilterCap(preFilterCap)
-    sbm.setTextureThreshold(textureThreshold)
-    sbm.setMinDisparity(minDisparity)
-
-    return sbm
-
-
-def findDisparities(left, right, disparity, blockSize):
+def findDisparities(left, right, disparity, blockSize, preFilterSize, preFilterCap, textureThreshold, minDisparity):
     leftName, leftImage = left
     rightName, rightImage = right
     print(
         f'(findDisparities) Find disparities between {leftName} and {rightName}')
+    print(
+        f'(findDisparities) With options:\n      disparity: {disparity}\n      blockSize: {blockSize}\n      preFilterSize: {preFilterSize}\n      preFilterCap: {preFilterCap}\n      textureThreshold: {textureThreshold}\n      minDisparity: {minDisparity}')
 
     stereoBM = cv2.StereoBM_create(disparity, blockSize=blockSize)
-    # stereoBM = configureSBM(stereoBM)
+    stereoBM.setPreFilterSize(preFilterSize)
+    stereoBM.setPreFilterCap(preFilterCap)
+    stereoBM.setTextureThreshold(textureThreshold)
+    stereoBM.setMinDisparity(minDisparity)
 
-    minDisparity = cv2.getTrackbarPos('minDisparity', 'Optional Trackbars')
     computed = stereoBM.compute(leftImage, rightImage).astype(float32)
     computed = (computed/16.0 - minDisparity) / \
         disparity  # normalize to 255 gray values

@@ -40,7 +40,16 @@ def showDisparities():
 
     leftImageWindow.show(left[0], left[1])
 
-    findDisparities(left, right, TRACKBAR['DISPARITY'], TRACKBAR['BLOCKSIZE'])
+    findDisparities(
+        left,
+        right,
+        disparity=TRACKBAR['DISPARITY'],
+        blockSize=TRACKBAR['BLOCKSIZE'],
+        preFilterSize=TRACKBAR['PREFILTERSIZE'],
+        preFilterCap=TRACKBAR['PREFILTERCAP'],
+        textureThreshold=TRACKBAR['TEXTURETHRESHOLD'],
+        minDisparity=TRACKBAR['MINDISPARITY']
+    )
 
     disparityImage = ImageStore.getByName('disparity')
     disparityWindow.show('disparity', disparityImage, withText=False)
@@ -50,7 +59,8 @@ def showDisparities():
 Trackbar functions
 """
 
-TRACKBAR = {'IMAGE': -1, 'DISPARITY': 16, 'BLOCKSIZE': 5}
+TRACKBAR = {'IMAGE': -1, 'DISPARITY': 16, 'BLOCKSIZE': 5, 'PREFILTERSIZE': 2,
+            'PREFILTERCAP': 5, 'TEXTURETHRESHOLD': 10, 'MINDISPARITY': 5}
 
 
 def leftImageOnChange(value):
@@ -90,6 +100,52 @@ def blockSizeOnChange(value):
     showDisparities()
 
 
+def filterSizeOnChange(value):
+    valueInRange = (value * 2) + 5
+
+    prev = TRACKBAR['PREFILTERSIZE']
+    if prev == valueInRange:
+        return
+
+    # print(f'(filterSizeOnChange) {prev} to {valueInRange}')
+    TRACKBAR['PREFILTERSIZE'] = valueInRange
+
+    showDisparities()
+
+
+def filterCapOnChange(value):
+    prev = TRACKBAR['PREFILTERCAP']
+    if prev == value:
+        return
+
+    # print(f'(filterCapOnChange) {prev} to {value}')
+    TRACKBAR['PREFILTERCAP'] = value
+
+    showDisparities()
+
+
+def tThresholdOnChange(value):
+    prev = TRACKBAR['TEXTURETHRESHOLD']
+    if prev == value:
+        return
+
+    # print(f'(tThresholdOnChange) {prev} to {value}')
+    TRACKBAR['TEXTURETHRESHOLD'] = value
+
+    showDisparities()
+
+
+def minDisparityOnChange(value):
+    prev = TRACKBAR['MINDISPARITY']
+    if prev == value:
+        return
+
+    # print(f'(minDisparityOnChange) {prev} to {value}')
+    TRACKBAR['MINDISPARITY'] = value
+
+    showDisparities()
+
+
 """
 Main function
 """
@@ -106,10 +162,12 @@ dispImageName, dispImage = ImageStore.getByPosition(1)
 leftImageWindow.show(dispImageName, dispImage)
 
 disparityWindow = Window('Disparity', offset=(420, 0))
-disparityWindow.addTrackbar('PreFilterSize', (2, 25), None)
-disparityWindow.addTrackbar('PreFilterCap', (5, 62), None)
-disparityWindow.addTrackbar('TextureThreshold', (10, 100), None)
-disparityWindow.addTrackbar('MinDisparity', (5, 25), None)
+disparityWindow.addTrackbar('PreFilterSize', (2, 25), filterSizeOnChange)
+disparityWindow.addTrackbar('PreFilterCap', (5, 62), filterCapOnChange)
+disparityWindow.addTrackbar('TextureThreshold', (10, 100), tThresholdOnChange)
+disparityWindow.addTrackbar('MinDisparity', (5, 25), minDisparityOnChange)
+
+leftImageOnChange(0)
 
 
 print('(main) Press ESC to exit...')
