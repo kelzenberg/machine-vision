@@ -21,7 +21,8 @@ globPath = ospath.join(ospath.abspath('./images'), '*.png')
 for file in sorted(glob(globPath)):
     baseImage = cv2.imread(file)
     baseImageName = file.split('/')[-1].split('.')[0]
-    ImageStore.updateByName(baseImageName, cv2.cvtColor(baseImage, cv2.COLOR_RGB2GRAY))
+    ImageStore.updateByName(baseImageName, cv2.cvtColor(
+        baseImage, cv2.COLOR_RGB2GRAY))
     imageCounter += 1
     print(f'(main) Image loaded: {baseImageName}')
 
@@ -44,11 +45,13 @@ def leftImageOnChange(value):
     [dispImageName, dispImage] = ImageStore.getByPosition(value + 1)
 
     # Do something with the image
-    findDisparities((baseImageName, baseImage),
-                    (dispImageName, dispImage))
+    findDisparities((baseImageName, baseImage), (dispImageName,
+                    dispImage), TRACKBAR['DISPARITY'], TRACKBAR['BLOCKSIZE'])
 
     leftImageWindow.show(dispImageName, dispImage)
-    disparityWindow.show(baseImageName, baseImage)
+
+    disparityImage = ImageStore.getByName('disparity')
+    disparityWindow.show('disparity', disparityImage, withText=False)
 
 
 def disparityOnChange(value):
@@ -59,6 +62,16 @@ def disparityOnChange(value):
     # print(f'(disparityOnChange) {prev} to {value}')
     TRACKBAR['DISPARITY'] = value
 
+    [baseImageName, baseImage] = ImageStore.getByPosition(0)
+    [dispImageName, dispImage] = ImageStore.getByPosition(
+        TRACKBAR['IMAGE'] + 1)
+
+    findDisparities((baseImageName, baseImage), (dispImageName,
+                    dispImage), value, TRACKBAR['BLOCKSIZE'])
+
+    disparityImage = ImageStore.getByName('disparity')
+    disparityWindow.show('disparity', disparityImage, withText=False)
+
 
 def blockSizeOnChange(value):
     prev = TRACKBAR['BLOCKSIZE']
@@ -67,6 +80,16 @@ def blockSizeOnChange(value):
 
     # print(f'(blockSizeOnChange) {prev} to {value}')
     TRACKBAR['BLOCKSIZE'] = value
+
+    [baseImageName, baseImage] = ImageStore.getByPosition(0)
+    [dispImageName, dispImage] = ImageStore.getByPosition(
+        TRACKBAR['IMAGE'] + 1)
+
+    findDisparities((baseImageName, baseImage), (dispImageName,
+                    dispImage), TRACKBAR['DISPARITY'], value)
+
+    disparityImage = ImageStore.getByName('disparity')
+    disparityWindow.show('disparity', disparityImage, withText=False)
 
 
 """
