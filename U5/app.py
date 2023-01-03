@@ -7,7 +7,6 @@ from typing import Dict, List
 from glob import glob
 from os import path as ospath
 
-import utils
 from Window import Window
 from ImageStore import ImageStore
 from disparity import findDisparities
@@ -79,23 +78,21 @@ def disparityOnChange(value):
 
 
 def blockSizeOnChange(value):
-    valueInRange = utils.mapValueToRange(
-        value, fromRange=blockSizeRange, toRange=(5, 257), step=2)
-    blockSize = utils.findNearestOddInt(valueInRange)
+    valueInRange = (value * 2) + 5
 
     prev = TRACKBAR['BLOCKSIZE']
-    if prev == blockSize:
+    if prev == valueInRange:
         return
 
-    print(f'(blockSizeOnChange) {prev} to {blockSize}')
-    TRACKBAR['BLOCKSIZE'] = blockSize
+    print(f'(blockSizeOnChange) {prev} to {valueInRange}')
+    TRACKBAR['BLOCKSIZE'] = valueInRange
 
     [baseImageName, baseImage] = ImageStore.getByPosition(0)
     [dispImageName, dispImage] = ImageStore.getByPosition(
         TRACKBAR['IMAGE'] + 1)
 
     findDisparities((dispImageName, dispImage), (baseImageName,
-                    baseImage), TRACKBAR['DISPARITY'], blockSize)
+                    baseImage), TRACKBAR['DISPARITY'], valueInRange)
 
     disparityImage = ImageStore.getByName('disparity')
     disparityWindow.show('disparity', disparityImage, withText=False)
