@@ -6,11 +6,15 @@ import cv2
 from typing import Dict, List
 from glob import glob
 from os import path as ospath
+
+import utils
 from Window import Window
 from ImageStore import ImageStore
 from disparity import findDisparities
 
 imageStats: Dict[str, List[str]] = {}
+disparityRange = (0, 30)
+blockSizeRange = (0, 20)
 
 """
 Load Images
@@ -30,7 +34,7 @@ for file in sorted(glob(globPath)):
 Trackbar functions
 """
 
-TRACKBAR = {'IMAGE': -1, 'DISPARITY': 0, 'BLOCKSIZE': 0}
+TRACKBAR = {'IMAGE': -1, 'DISPARITY': 16, 'BLOCKSIZE': 5}
 
 
 def leftImageOnChange(value):
@@ -74,19 +78,23 @@ def disparityOnChange(value):
 
 
 def blockSizeOnChange(value):
+    valueInRange = utils.mapValueToRange(
+        value, fromRange=blockSizeRange, toRange=(5, 257), step=2)
+    blockSize = utils.findNearestOddInt(valueInRange)
+
     prev = TRACKBAR['BLOCKSIZE']
-    if prev == value:
+    if prev == blockSize:
         return
 
-    # print(f'(blockSizeOnChange) {prev} to {value}')
-    TRACKBAR['BLOCKSIZE'] = value
+    print(f'(blockSizeOnChange) {prev} to {blockSize}')
+    TRACKBAR['BLOCKSIZE'] = blockSize
 
     [baseImageName, baseImage] = ImageStore.getByPosition(0)
     [dispImageName, dispImage] = ImageStore.getByPosition(
         TRACKBAR['IMAGE'] + 1)
 
     findDisparities((baseImageName, baseImage), (dispImageName,
-                    dispImage), TRACKBAR['DISPARITY'], value)
+                    dispImage), TRACKBAR['DISPARITY'], blockSize)
 
     disparityImage = ImageStore.getByName('disparity')
     disparityWindow.show('disparity', disparityImage, withText=False)
@@ -99,8 +107,8 @@ Main function
 mainWindow = Window('Main', scale=0.3)
 mainWindow.addTrackbar('Left Image ',
                        (0, imageCounter - 2), leftImageOnChange)
-mainWindow.addTrackbar('Disparity ', (0, 30), disparityOnChange)
-mainWindow.addTrackbar('Block Size ', (0, 20), blockSizeOnChange)
+mainWindow.addTrackbar('Disparity ', disparityRange, disparityOnChange)
+mainWindow.addTrackbar('Block Size ', blockSizeRange, blockSizeOnChange)
 [baseImageName, baseImage] = ImageStore.getByPosition(0)
 mainWindow.show(baseImageName, baseImage)
 
