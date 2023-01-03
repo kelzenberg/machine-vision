@@ -48,9 +48,8 @@ def leftImageOnChange(value):
     [baseImageName, baseImage] = ImageStore.getByPosition(0)
     [dispImageName, dispImage] = ImageStore.getByPosition(value + 1)
 
-    # Do something with the image
-    findDisparities((baseImageName, baseImage), (dispImageName,
-                    dispImage), TRACKBAR['DISPARITY'], TRACKBAR['BLOCKSIZE'])
+    findDisparities((dispImageName, dispImage), (baseImageName,
+                    baseImage), TRACKBAR['DISPARITY'], TRACKBAR['BLOCKSIZE'])
 
     leftImageWindow.show(dispImageName, dispImage)
 
@@ -72,8 +71,8 @@ def disparityOnChange(value):
     [dispImageName, dispImage] = ImageStore.getByPosition(
         TRACKBAR['IMAGE'] + 1)
 
-    findDisparities((baseImageName, baseImage), (dispImageName,
-                    dispImage), value, TRACKBAR['BLOCKSIZE'])
+    findDisparities((dispImageName, dispImage), (baseImageName,
+                    baseImage), valueInRange, TRACKBAR['BLOCKSIZE'])
 
     disparityImage = ImageStore.getByName('disparity')
     disparityWindow.show('disparity', disparityImage, withText=False)
@@ -95,8 +94,8 @@ def blockSizeOnChange(value):
     [dispImageName, dispImage] = ImageStore.getByPosition(
         TRACKBAR['IMAGE'] + 1)
 
-    findDisparities((baseImageName, baseImage), (dispImageName,
-                    dispImage), TRACKBAR['DISPARITY'], blockSize)
+    findDisparities((dispImageName, dispImage), (baseImageName,
+                    baseImage), TRACKBAR['DISPARITY'], blockSize)
 
     disparityImage = ImageStore.getByName('disparity')
     disparityWindow.show('disparity', disparityImage, withText=False)
