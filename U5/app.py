@@ -59,12 +59,14 @@ def leftImageOnChange(value):
 
 
 def disparityOnChange(value):
+    valueInRange = (value + 1) * 16
+
     prev = TRACKBAR['DISPARITY']
-    if prev == value:
+    if prev == valueInRange:
         return
 
-    # print(f'(disparityOnChange) {prev} to {value}')
-    TRACKBAR['DISPARITY'] = value
+    print(f'(disparityOnChange) {prev} to {valueInRange}')
+    TRACKBAR['DISPARITY'] = valueInRange
 
     [baseImageName, baseImage] = ImageStore.getByPosition(0)
     [dispImageName, dispImage] = ImageStore.getByPosition(
