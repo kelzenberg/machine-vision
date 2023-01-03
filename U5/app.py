@@ -19,11 +19,11 @@ imageCounter = 0
 globPath = ospath.join(ospath.abspath('./images'), '*.png')
 
 for file in sorted(glob(globPath)):
-    image = cv2.imread(file)
-    imageName = file.split('/')[-1].split('.')[0]
-    ImageStore.updateByName(imageName, cv2.cvtColor(image, cv2.COLOR_RGB2GRAY))
+    baseImage = cv2.imread(file)
+    baseImageName = file.split('/')[-1].split('.')[0]
+    ImageStore.updateByName(baseImageName, cv2.cvtColor(baseImage, cv2.COLOR_RGB2GRAY))
     imageCounter += 1
-    print(f'(main) Image loaded: {imageName}')
+    print(f'(main) Image loaded: {baseImageName}')
 
 """
 Trackbar functions
@@ -40,15 +40,15 @@ def leftImageOnChange(value):
     # print(f'(leftImageOnChange) {prev} to {value}')
     TRACKBAR['IMAGE'] = value
 
-    [imageNameLeft, imageLeft] = ImageStore.getByPosition(0)
-    [imageNameRight, imageRight] = ImageStore.getByPosition(value + 1)
+    [baseImageName, baseImage] = ImageStore.getByPosition(0)
+    [dispImageName, dispImage] = ImageStore.getByPosition(value + 1)
 
     # Do something with the image
-    findDisparities((imageNameLeft, imageLeft),
-                    (imageNameRight, imageRight))
+    findDisparities((baseImageName, baseImage),
+                    (dispImageName, dispImage))
 
-    leftImageWindow.show(imageName, image)
-    disparityWindow.show(imageName, image)
+    leftImageWindow.show(dispImageName, dispImage)
+    disparityWindow.show(baseImageName, baseImage)
 
 
 def disparityOnChange(value):
@@ -78,8 +78,8 @@ mainWindow.addTrackbar('Left Image ',
                        (0, imageCounter - 2), leftImageOnChange)
 mainWindow.addTrackbar('Disparity ', (0, 30), disparityOnChange)
 mainWindow.addTrackbar('Block Size ', (0, 20), blockSizeOnChange)
-[imageName, image] = ImageStore.getByPosition(0)
-mainWindow.show(imageName, image)
+[baseImageName, baseImage] = ImageStore.getByPosition(0)
+mainWindow.show(baseImageName, baseImage)
 
 leftImageWindow = Window('Left Image', scale=0.3, offset=(0, 455))
 disparityWindow = Window('Disparity', offset=(420, 0))
