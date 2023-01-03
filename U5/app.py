@@ -12,8 +12,6 @@ from ImageStore import ImageStore
 from disparity import findDisparities
 
 imageStats: Dict[str, List[str]] = {}
-disparityRange = (0, 30)
-blockSizeRange = (0, 20)
 
 """
 Load Images
@@ -29,6 +27,7 @@ for file in sorted(glob(globPath)):
     imageCounter += 1
     print(f'(main) Image loaded: {baseImageName}')
 
+
 """
 Utils functions
 """
@@ -37,8 +36,6 @@ Utils functions
 def showDisparities():
     right = ImageStore.getByPosition(0)
     left = ImageStore.getByPosition(TRACKBAR['IMAGE'] + 1)
-
-    leftImageWindow.show(left[0], left[1])
 
     findDisparities(
         left,
@@ -70,6 +67,9 @@ def leftImageOnChange(value):
 
     # print(f'(leftImageOnChange) {prev} to {value}')
     TRACKBAR['IMAGE'] = value
+
+    leftImageName, leftImage = ImageStore.getByPosition(value + 1)
+    leftImageWindow.show(leftImageName, leftImage)
 
     showDisparities()
 
@@ -152,8 +152,8 @@ Main function
 
 mainWindow = Window('Main', scale=0.3)
 mainWindow.addTrackbar('Left Image ', (0, imageCounter - 2), leftImageOnChange)
-mainWindow.addTrackbar('Disparity ', disparityRange, disparityOnChange)
-mainWindow.addTrackbar('Block Size ', blockSizeRange, blockSizeOnChange)
+mainWindow.addTrackbar('Disparity ', (0, 30), disparityOnChange)
+mainWindow.addTrackbar('Block Size ', (0, 20), blockSizeOnChange)
 baseImageName, baseImage = ImageStore.getByPosition(0)
 mainWindow.show(baseImageName, baseImage)
 

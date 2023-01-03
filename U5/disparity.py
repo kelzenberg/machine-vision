@@ -10,6 +10,7 @@ from ImageStore import ImageStore
 def findDisparities(left, right, disparity, blockSize, preFilterSize, preFilterCap, textureThreshold, minDisparity):
     leftName, leftImage = left
     rightName, rightImage = right
+
     print(
         f'(findDisparities) Find disparities between {leftName} and {rightName}')
     print(
@@ -21,7 +22,8 @@ def findDisparities(left, right, disparity, blockSize, preFilterSize, preFilterC
     stereoBM.setTextureThreshold(textureThreshold)
     stereoBM.setMinDisparity(minDisparity)
 
-    computed = stereoBM.compute(leftImage, rightImage).astype(float32)
-    computed = (computed/16.0 - minDisparity) / \
-        disparity  # normalize to 255 gray values
+    computed = stereoBM.compute(leftImage, rightImage)
+    # normalize to 255 gray values
+    computed = (computed.astype(float32)/16.0 - minDisparity) / disparity
+
     ImageStore.updateByName('disparity', computed)
