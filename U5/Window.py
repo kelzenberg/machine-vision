@@ -21,7 +21,7 @@ class Window:
 
     def addTrackbar(self, name, range, onChange):
         if onChange == None:
-            def onChange():
+            def onChange(_):
                 pass
         cv2.createTrackbar(name, self.name, range[0], range[1], onChange)
 
