@@ -20,6 +20,9 @@ class Window:
             f'(Window.init) Init new Window "{name}": Scale {scale}, Offset {offset}')
 
     def addTrackbar(self, name, range, onChange):
+        if onChange == None:
+            def onChange():
+                pass
         cv2.createTrackbar(name, self.name, range[0], range[1], onChange)
 
     def setTrackbar(self, name, value):
