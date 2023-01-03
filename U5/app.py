@@ -59,7 +59,7 @@ def showDisparities():
 Trackbar functions
 """
 
-TRACKBAR = {'IMAGE': -1, 'DISPARITY': 16, 'BLOCKSIZE': 5, 'PREFILTERSIZE': 2,
+TRACKBAR = {'IMAGE': -1, 'DISPARITY': 16, 'BLOCKSIZE': 5, 'PREFILTERSIZE': 5,
             'PREFILTERCAP': 5, 'TEXTURETHRESHOLD': 10, 'MINDISPARITY': 5}
 
 
