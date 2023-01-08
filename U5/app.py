@@ -34,12 +34,12 @@ Utils functions
 
 
 def showDisparities():
-    right = ImageStore.getByPosition(0)
-    left = ImageStore.getByPosition(TRACKBAR['IMAGE'] + 1)
+    left = ImageStore.getByPosition(0)
+    right = ImageStore.getByPosition(TRACKBAR['IMAGE'] + 1)
 
     findDisparities(
-        left,
-        right,
+        left=left,
+        right=right,
         matcher=TRACKBAR['MATCHER'],
         numDisparities=TRACKBAR['NUMDISPARITIES'],
         blockSize=TRACKBAR['BLOCKSIZE'],
@@ -73,16 +73,16 @@ def blockMatcherOnChange(value):
     showDisparities()
 
 
-def leftImageOnChange(value):
+def rightImageOnChange(value):
     prev = TRACKBAR['IMAGE']
     if prev == value:
         return
 
-    # print(f'(leftImageOnChange) {prev} to {value}')
+    # print(f'(rightImageOnChange) {prev} to {value}')
     TRACKBAR['IMAGE'] = value
 
-    leftImageName, leftImage = ImageStore.getByPosition(value + 1)
-    leftImageWindow.show(leftImageName, leftImage)
+    rightImageName, rightImage = ImageStore.getByPosition(value + 1)
+    rightImageWindow.show(rightImageName, rightImage)
 
     showDisparities()
 
@@ -163,17 +163,18 @@ def minDisparityOnChange(value):
 Main function
 """
 
-mainWindow = Window('Main', scale=0.3)
-mainWindow.addTrackbar('Block Matcher ', (0, 1), blockMatcherOnChange)
-mainWindow.addTrackbar('Left Image ', (0, imageCounter - 2), leftImageOnChange)
-mainWindow.addTrackbar('#Disparities ', (0, 30), disparityOnChange)
-mainWindow.addTrackbar('Block Size ', (0, 20), blockSizeOnChange)
+leftImageWindow = Window('Left Image', scale=0.3)
+leftImageWindow.addTrackbar('Block Matcher ', (0, 1), blockMatcherOnChange)
+leftImageWindow.addTrackbar(
+    'Right Image ', (0, imageCounter - 2), rightImageOnChange)
+leftImageWindow.addTrackbar('#Disparities ', (0, 30), disparityOnChange)
+leftImageWindow.addTrackbar('Block Size ', (0, 20), blockSizeOnChange)
 baseImageName, baseImage = ImageStore.getByPosition(0)
-mainWindow.show(baseImageName, baseImage)
+leftImageWindow.show(baseImageName, baseImage)
 
-leftImageWindow = Window('Left Image', scale=0.3, offset=(0, 485))
-dispImageName, dispImage = ImageStore.getByPosition(1)
-leftImageWindow.show(dispImageName, dispImage)
+rightImageWindow = Window('Right Image', scale=0.3, offset=(0, 485))
+rightImageName, rightImage = ImageStore.getByPosition(1)
+rightImageWindow.show(rightImageName, rightImage)
 
 disparityWindow = Window('Disparity', offset=(420, 0))
 disparityWindow.addTrackbar('PreFilterSize', (2, 25), filterSizeOnChange)
@@ -181,7 +182,7 @@ disparityWindow.addTrackbar('PreFilterCap', (5, 62), filterCapOnChange)
 disparityWindow.addTrackbar('TextureThreshold', (10, 100), tThresholdOnChange)
 disparityWindow.addTrackbar('MinDisparity', (5, 25), minDisparityOnChange)
 
-leftImageOnChange(0)
+rightImageOnChange(0)
 
 
 print('(main) Press ESC to exit...')
