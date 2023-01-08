@@ -40,7 +40,7 @@ def showDisparities():
     findDisparities(
         left,
         right,
-        disparity=TRACKBAR['DISPARITY'],
+        numDisparities=TRACKBAR['NUMDISPARITIES'],
         blockSize=TRACKBAR['BLOCKSIZE'],
         preFilterSize=TRACKBAR['PREFILTERSIZE'],
         preFilterCap=TRACKBAR['PREFILTERCAP'],
@@ -56,7 +56,7 @@ def showDisparities():
 Trackbar functions
 """
 
-TRACKBAR = {'IMAGE': -1, 'DISPARITY': 16, 'BLOCKSIZE': 5, 'PREFILTERSIZE': 5,
+TRACKBAR = {'IMAGE': -1, 'NUMDISPARITIES': 16, 'BLOCKSIZE': 5, 'PREFILTERSIZE': 5,
             'PREFILTERCAP': 5, 'TEXTURETHRESHOLD': 10, 'MINDISPARITY': 5}
 
 
@@ -77,12 +77,12 @@ def leftImageOnChange(value):
 def disparityOnChange(value):
     valueInRange = (value + 1) * 16
 
-    prev = TRACKBAR['DISPARITY']
+    prev = TRACKBAR['NUMDISPARITIES']
     if prev == valueInRange:
         return
 
     # print(f'(disparityOnChange) {prev} to {valueInRange}')
-    TRACKBAR['DISPARITY'] = valueInRange
+    TRACKBAR['NUMDISPARITIES'] = valueInRange
 
     showDisparities()
 
@@ -152,7 +152,7 @@ Main function
 
 mainWindow = Window('Main', scale=0.3)
 mainWindow.addTrackbar('Left Image ', (0, imageCounter - 2), leftImageOnChange)
-mainWindow.addTrackbar('Disparity ', (0, 30), disparityOnChange)
+mainWindow.addTrackbar('#Disparities ', (0, 30), disparityOnChange)
 mainWindow.addTrackbar('Block Size ', (0, 20), blockSizeOnChange)
 baseImageName, baseImage = ImageStore.getByPosition(0)
 mainWindow.show(baseImageName, baseImage)
