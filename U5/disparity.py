@@ -12,9 +12,10 @@ def findDisparities(left, right, matcher, numDisparities, blockSize, preFilterSi
     rightName, rightImage = right
 
     print(
-        f'(findDisparities) Find disparities ({leftName} -> {rightName}) with Matcher {"SGBM" if matcher == 1 else "BM"}')
-    # print(
-    #     f'(findDisparities) With options:\n      disparity: {numDisparities}\n      blockSize: {blockSize}\n      preFilterSize: {preFilterSize}\n      preFilterCap: {preFilterCap}\n      textureThreshold: {textureThreshold}\n      minDisparity: {minDisparity}')
+        f'(findDisparities) Find Disparities ({leftName} -> {rightName}):\n\
+                  [Matcher: {"SGBM" if matcher == 1 else "BM"}] [Disparity: {numDisparities}] [BlockSize: {blockSize}]\n\
+                  [PreFilterSize: {preFilterSize}] [PreFilterCap: {preFilterCap}]\n\
+                  [TextureThreshold: {textureThreshold}] [MinDisparity: {minDisparity}]')
 
     blockMatcher = None
 

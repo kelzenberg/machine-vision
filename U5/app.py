@@ -207,8 +207,8 @@ disparityWindow.addTrackbar('MinDisparity', (5, 25), minDisparityOnChange)
 rightImageOnChange(0)
 
 
-print("\n\n(main) Press 'ESC' to exit or 'P' to save current trackbar config.")
-print('(main) Awaiting input...\n')
+print("\n\n---> Press 'ESC' to exit or 'P' to save current trackbar config.")
+print('---> Awaiting input...\n\n')
 
 while True:
     key = cv2.waitKey(0)
@@ -217,7 +217,7 @@ while True:
     if key == 27:  # key "ESC"
         break
 
-[print('(main) Saved Configs ({0}):\n       {1}'.format(name, prints))
+[print("(main) Saved trackbar config for right image '{0}':\n       {1}".format(name, prints))
  for [name, prints] in sorted(SAVED_CONFIGS.items())]
 
 print('(main) Closing all windows.')
