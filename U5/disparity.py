@@ -12,13 +12,13 @@ def findDisparities(left, right, matcher, numDisparities, blockSize, preFilterSi
     rightName, rightImage = right
 
     print(
-        f'(findDisparities) Find disparities between {leftName} and {rightName} with matcher {"SGBM" if matcher == 1 else "BM"}')
-    print(
-        f'(findDisparities) With options:\n      disparity: {numDisparities}\n      blockSize: {blockSize}\n      preFilterSize: {preFilterSize}\n      preFilterCap: {preFilterCap}\n      textureThreshold: {textureThreshold}\n      minDisparity: {minDisparity}')
+        f'(findDisparities) Find disparities ({leftName} -> {rightName}) with Matcher {"SGBM" if matcher == 1 else "BM"}')
+    # print(
+    #     f'(findDisparities) With options:\n      disparity: {numDisparities}\n      blockSize: {blockSize}\n      preFilterSize: {preFilterSize}\n      preFilterCap: {preFilterCap}\n      textureThreshold: {textureThreshold}\n      minDisparity: {minDisparity}')
 
     blockMatcher = None
 
-    if (matcher == 1):  # use SGBM
+    if matcher == 1:  # use SGBM
         blockMatcher = cv2.StereoSGBM_create(
             minDisparity=minDisparity, numDisparities=numDisparities, blockSize=blockSize, preFilterCap=preFilterCap)
     else:  # use default BM
