@@ -11,7 +11,6 @@ from Window import Window
 from ImageStore import ImageStore
 from disparity import findDisparities
 
-imageStats: Dict[str, List[str]] = {}
 
 """
 Load Images
@@ -26,31 +25,6 @@ for file in sorted(glob(globPath)):
         baseImage, cv2.COLOR_RGB2GRAY))
     imageCounter += 1
     print(f'(main) Image loaded: {baseImageName}')
-
-
-"""
-Utils functions
-"""
-
-
-def showDisparities():
-    left = ImageStore.getByPosition(0)
-    right = ImageStore.getByPosition(TRACKBAR['IMAGE'] + 1)
-
-    findDisparities(
-        left=left,
-        right=right,
-        matcher=TRACKBAR['MATCHER'],
-        numDisparities=TRACKBAR['NUMDISPARITIES'],
-        blockSize=TRACKBAR['BLOCKSIZE'],
-        preFilterSize=TRACKBAR['PREFILTERSIZE'],
-        preFilterCap=TRACKBAR['PREFILTERCAP'],
-        textureThreshold=TRACKBAR['TEXTURETHRESHOLD'],
-        minDisparity=TRACKBAR['MINDISPARITY']
-    )
-
-    disparityImage = ImageStore.getByName('disparity')
-    disparityWindow.show('disparity', disparityImage, withText=False)
 
 
 """
@@ -159,7 +133,54 @@ def minDisparityOnChange(value):
     showDisparities()
 
 
+"""
+Utils functions
+"""
+
 SAVED_CONFIGS: Dict[str, str] = {}
+
+
+def saveConfig():
+    rightImageName, _ = ImageStore.getByPosition(TRACKBAR['IMAGE'] + 1)
+    matcher = TRACKBAR['MATCHER']
+    numDisparities = TRACKBAR['NUMDISPARITIES']
+    blockSize = TRACKBAR['BLOCKSIZE']
+    preFilterSize = TRACKBAR['PREFILTERSIZE']
+    preFilterCap = TRACKBAR['PREFILTERCAP']
+    textureThreshold = TRACKBAR['TEXTURETHRESHOLD']
+    minDisparity = TRACKBAR['MINDISPARITY']
+
+    SAVED_CONFIGS[rightImageName] = f'Matcher: {"SGBM" if matcher == 1 else "BM"} \n\
+       Disparity: {numDisparities}\n\
+       BlockSize: {blockSize}\n\
+       PreFilterSize: {preFilterSize}\n\
+       PreFilterCap: {preFilterCap}\n\
+       TextureThreshold: {textureThreshold}\n\
+       MinDisparity: {minDisparity}'
+
+    print(f'(saveConfig) Saved current trackbar config for {rightImageName}')
+
+
+def showDisparities():
+    left = ImageStore.getByPosition(0)
+    right = ImageStore.getByPosition(TRACKBAR['IMAGE'] + 1)
+
+    findDisparities(
+        left=left,
+        right=right,
+        matcher=TRACKBAR['MATCHER'],
+        numDisparities=TRACKBAR['NUMDISPARITIES'],
+        blockSize=TRACKBAR['BLOCKSIZE'],
+        preFilterSize=TRACKBAR['PREFILTERSIZE'],
+        preFilterCap=TRACKBAR['PREFILTERCAP'],
+        textureThreshold=TRACKBAR['TEXTURETHRESHOLD'],
+        minDisparity=TRACKBAR['MINDISPARITY']
+    )
+
+    disparityImage = ImageStore.getByName('disparity')
+    disparityWindow.show('disparity', disparityImage, withText=False)
+
+
 """
 Main function
 """
