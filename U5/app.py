@@ -159,6 +159,7 @@ def minDisparityOnChange(value):
     showDisparities()
 
 
+SAVED_CONFIGS: Dict[str, str] = {}
 """
 Main function
 """
@@ -185,12 +186,18 @@ disparityWindow.addTrackbar('MinDisparity', (5, 25), minDisparityOnChange)
 rightImageOnChange(0)
 
 
-print('(main) Press ESC to exit...')
-while cv2.waitKey(0) != 27:
-    pass
+print("\n\n(main) Press 'ESC' to exit or 'P' to save current trackbar config.")
+print('(main) Awaiting input...\n')
 
-[print('(main) Image Stats ({0}):\n       {1}'.format(name, "\n       ".join(prints)))
- for [name, prints] in sorted(imageStats.items())]
+while True:
+    key = cv2.waitKey(0)
+    if key == 112:  # key "P"
+        saveConfig()
+    if key == 27:  # key "ESC"
+        break
+
+[print('(main) Saved Configs ({0}):\n       {1}'.format(name, prints))
+ for [name, prints] in sorted(SAVED_CONFIGS.items())]
 
 print('(main) Closing all windows.')
 cv2.destroyAllWindows()
