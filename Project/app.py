@@ -11,12 +11,40 @@ from ImageStore import ImageStore
 
 
 """
-Load Video Feed
+Utils
+"""
+
+
+def exitProgram():
+    global feed
+    if feed:
+        print('(main) Stopping video feed.')
+        feed.release()
+
+    print('(main) Closing all windows.')
+    cv2.destroyAllWindows()
+    exit()
+
+
+"""
+Video Feed
 """
 
 
 def loadVideoFeed():
-    pass
+    feed = cv2.VideoCapture(0)
+    if not feed.isOpened():
+        print("Cannot access camera feed.")
+        exitProgram()
+    return feed
+
+
+def retrieveFrame(feed):
+    retrieved, frame = feed.read()
+    if not retrieved:
+        print("Cannot receive next frame.")
+        exitProgram()
+    return frame
 
 
 """
@@ -41,16 +69,20 @@ def defaultOnChange(value):
 Main function
 """
 
-mainWindow = Window('Live Feed', scale=0.3)
+
+feed = loadVideoFeed()
+mainWindow = Window('Live Feed', scale=0.5)
 mainWindow.addTrackbar('Foo ', (0, 1), defaultOnChange)
 
 print("\n\n---> Press 'ESC' to exit.")
 print('---> Awaiting input...\n\n')
 
 while True:
-    key = cv2.waitKey(0)
+    frame = retrieveFrame(feed)
+    mainWindow.show('Live Feed', frame)
+
+    key = cv2.waitKey(1)
     if key == 27:  # key "ESC"
         break
 
-print('(main) Closing all windows.')
-cv2.destroyAllWindows()
+exitProgram()
