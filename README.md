@@ -66,3 +66,18 @@ Use Python version `3.10.4` or higher.
   - Smallest circumscribing rectangle
   - Smallest circumscribing circle
 - Draw the features found in color in the original image and describe them on the console.
+
+## U5 (Exercise 5)
+
+- Read images `view0.png` as left image and `viewn.png` with 0 < n < 7 as right image
+- Find the disparities between the pixels of the images
+- Display the resulting depth image as a gray scale image
+- Test the 3-D reconstruction of the scene with different base widths
+- Use and evaluate different methods to detect correspondences in the two images
+  - Block Matching
+  - Semi Global Matching
+- Consider pattern matching in different sized environments (block size)
+- Vary other parameters of the StereoMatcher as well
+- Hints
+  - These are stereo images with different base widths
+  - The left/right images are rectified
