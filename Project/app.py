@@ -3,59 +3,10 @@ Project App
 """
 
 import cv2
+from VideoThreader import VideoThreader
 from detector import detectUpperBody
 from Window import Window
 from ImageStore import ImageStore
-
-
-"""
-Utils
-"""
-
-
-def exitProgram():
-    global feed
-    if feed:
-        print('(main) Stopping video feed.')
-        feed.release()
-
-    print('(main) Closing all windows.')
-    cv2.destroyAllWindows()
-    exit()
-
-
-"""
-Video Feed
-"""
-
-
-def loadVideoFeed():
-    feed = cv2.VideoCapture(0)
-    # feed = cv2.VideoCapture("./video/front.png")
-
-    if not feed.isOpened():
-        print("(main) Cannot access camera feed.")
-        exitProgram()
-
-    width = int(feed.get(cv2.CAP_PROP_FRAME_WIDTH))
-    height = int(feed.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = int(feed.get(cv2.CAP_PROP_FPS))
-    fourcc = int(feed.get(cv2.CAP_PROP_FOURCC))
-    codec = bytes([v & 255 for v in (fourcc, fourcc >> 8,
-                  fourcc >> 16, fourcc >> 24)]).decode()  # Source: https://stackoverflow.com/a/71838016
-    backendAPI = feed.getBackendName()
-    print(
-        f'(main) Video Feed loaded: {width}x{height} @ {fps}fps ({codec}) - via {backendAPI}')
-
-    return feed
-
-
-def retrieveFrame(feed):
-    retrieved, frame = feed.read()
-    if not retrieved:
-        print("(main) Cannot receive next frame.")
-        exitProgram()
-    return frame
 
 
 """
@@ -63,7 +14,7 @@ Trackbar functions
 """
 
 TRACKBAR = {'SCALEFACTOR': 1.05, 'MINNEIGHBORS': 5,
-            'MINSIZEX': 150, 'MINSIZEY': 300}
+            'MINSIZEX': 40, 'MINSIZEY': 80}
 
 
 def onChange(value, slot):
@@ -93,24 +44,30 @@ Main function
 """
 
 
-feed = loadVideoFeed()
+def exitProgram():
+    print('(main) Closing all windows.')
+    Threader.stop()
+    cv2.destroyAllWindows()
+    exit()
+
+
+Threader = VideoThreader(src=0).start()
 mainWindow = Window('Live Detection Feed', scale=0.75)
 mainWindow.addTrackbar('Scale Factor ', (0, 49), onChange, 'SCALEFACTOR')
 mainWindow.setTrackbar('Scale Factor ', 5)
 mainWindow.addTrackbar('Min Neighbors ', (0, 9), onChange, 'MINNEIGHBORS')
 mainWindow.setTrackbar('Min Neighbors ', 5)
 mainWindow.addTrackbar('Min Size X ', (0, 499), onChange, 'MINSIZEX')
-mainWindow.setTrackbar('Min Size X ', 150)
+mainWindow.setTrackbar('Min Size X ', 40)
 mainWindow.addTrackbar('Min Size Y ', (0, 499), onChange, 'MINSIZEY')
-mainWindow.setTrackbar('Min Size Y ', 300)
+mainWindow.setTrackbar('Min Size Y ', 80)
 
 print("\n\n---> Press 'ESC' to exit.")
 print('---> Awaiting input...\n\n')
 
 while True:
-    frame = retrieveFrame(feed)
     detected = detectUpperBody(
-        frame,
+        Threader.frame,
         scaleFactor=TRACKBAR['SCALEFACTOR'],
         minNeighbors=TRACKBAR['MINNEIGHBORS'],
         minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
@@ -119,6 +76,8 @@ while True:
 
     key = cv2.waitKey(1)
     if key == 27:  # key "ESC"
+        break
+    if Threader.stop:  # if Video feed stopped
         break
 
 exitProgram()
