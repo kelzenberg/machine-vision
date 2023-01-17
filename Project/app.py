@@ -3,9 +3,7 @@ Project App
 """
 
 import cv2
-from glob import glob
-from os import path as ospath
-
+from detector import detectUpperBody
 from Window import Window
 from ImageStore import ImageStore
 
@@ -33,16 +31,23 @@ Video Feed
 
 def loadVideoFeed():
     feed = cv2.VideoCapture(0)
+
     if not feed.isOpened():
-        print("Cannot access camera feed.")
+        print("(main) Cannot access camera feed.")
         exitProgram()
+
+    width = int(feed.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(feed.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fps = int(feed.get(cv2.CAP_PROP_FPS))
+    print(f'(main) Video Feed loaded: {width}x{height} @ {fps}fps')
+
     return feed
 
 
 def retrieveFrame(feed):
     retrieved, frame = feed.read()
     if not retrieved:
-        print("Cannot receive next frame.")
+        print("(main) Cannot receive next frame.")
         exitProgram()
     return frame
 
@@ -71,7 +76,7 @@ Main function
 
 
 feed = loadVideoFeed()
-mainWindow = Window('Live Feed', scale=0.5)
+mainWindow = Window('Live Detection Feed', scale=0.5)
 mainWindow.addTrackbar('Foo ', (0, 1), defaultOnChange)
 
 print("\n\n---> Press 'ESC' to exit.")
