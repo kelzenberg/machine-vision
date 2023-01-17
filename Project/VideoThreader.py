@@ -11,7 +11,7 @@ class VideoThreader:
         self.src = src
         self.feed = cv2.VideoCapture(src)
         self.retrieved, self.frame = self.feed.read()
-        self.stop = False
+        self.stopped = False
 
         if not self.feed.isOpened():
             print("(VideoThreader) Cannot access camera feed.")
@@ -34,12 +34,12 @@ class VideoThreader:
         return self
 
     def stop(self):
-        self.stop = True
         print('(VideoThreader) Stopping video feed.')
+        self.stopped = True
         self.feed.release()
 
     def read(self):
-        while not self.stop:
+        while not self.stopped:
             self.retrieved, self.frame = self.feed.read()
             if not self.retrieved:
                 print("(VideoThreader) Cannot receive next frame.")

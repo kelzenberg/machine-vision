@@ -77,7 +77,7 @@ while True:
     key = cv2.waitKey(1)
     if key == 27:  # key "ESC"
         break
-    if Threader.stop:  # if Video feed stopped
+    if Threader.stopped:  # if Video feed stopped
         break
 
 exitProgram()
