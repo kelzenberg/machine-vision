@@ -106,8 +106,13 @@ print('---> Awaiting input...\n\n')
 
 while True:
     frame = retrieveFrame(feed)
-    # detected = detectUpperBody(frame)
-    mainWindow.show('Live Detection Feed', frame)
+    detected = detectUpperBody(
+        frame,
+        scaleFactor=TRACKBAR['SCALEFACTOR'],
+        minNeighbors=TRACKBAR['MINNEIGHBORS'],
+        minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
+    )
+    mainWindow.show('Live Detection Feed', detected)
 
     key = cv2.waitKey(1)
     if key == 27:  # key "ESC"
