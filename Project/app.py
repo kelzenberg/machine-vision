@@ -43,7 +43,8 @@ def loadVideoFeed():
     fourcc = int(feed.get(cv2.CAP_PROP_FOURCC))
     codec = bytes([v & 255 for v in (fourcc, fourcc >> 8,
                   fourcc >> 16, fourcc >> 24)]).decode() # Source: https://stackoverflow.com/a/71838016
-    print(f'(main) Video Feed loaded: {width}x{height} @ {fps}fps ({codec})')
+    backendAPI = feed.getBackendName()
+    print(f'(main) Video Feed loaded: {width}x{height} @ {fps}fps ({codec}) - via {backendAPI}')
 
     return feed
 
