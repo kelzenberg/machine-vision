@@ -19,12 +19,13 @@ class Window:
         print(
             f'(Window.init) Init new Window "{name}": Scale {scale}, Offset {offset}')
 
-    def addTrackbar(self, name, range, onChange):
+    def addTrackbar(self, name, range, onChange, userData=None):
         if onChange == None:
             # allow no-op trackbars
             def onChange(_):
                 pass
-        cv2.createTrackbar(name, self.name, range[0], range[1], onChange)
+        cv2.createTrackbar(
+            name, self.name, range[0], range[1], lambda value: onChange(value, userData))
 
     def setTrackbar(self, name, value):
         print(f'(Window.setTrackbar) Set trackbar "{name}" to {value}')
