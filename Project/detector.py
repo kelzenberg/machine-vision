@@ -33,7 +33,7 @@ def detectUpperBody(image, scaleFactor: float, minNeighbors: int, minSize: Tuple
     )
     for (x, y, w, h) in bodies:
         cv2.rectangle(preview, (x, y), (x + w, y + h),
-                      (0, 255, 0), 1, lineType=cv2.LINE_AA)
-        cv2.putText(preview, "Upper Body Detected", (x + 5, y + 15),
-                    cv2.FONT_HERSHEY_COMPLEX, 0.5, (0, 255, 0), 2)
+                      (255, 255, 0), 3, lineType=cv2.LINE_AA)
+        cv2.putText(preview, "Upper Body\nDetected", (x + 12, y + 27),
+                    cv2.FONT_HERSHEY_COMPLEX, 0.75, (255, 255, 0), 2)
     return preview
