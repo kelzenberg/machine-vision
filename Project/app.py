@@ -61,18 +61,28 @@ def retrieveFrame(feed):
 Trackbar functions
 """
 
-TRACKBAR = {'FOO': -1}
+TRACKBAR = {'SCALEFACTOR': 1.05, 'MINNEIGHBORS': 5,
+            'MINSIZEX': 50, 'MINSIZEY': 100}
 
 
-def defaultOnChange(value):
-    prev = TRACKBAR['FOO']
-    if prev == value:
+def onChange(value, slot):
+    tempValue = value
+    match slot:
+        case 'SCALEFACTOR':
+            tempValue = float(f'1.0{value}' if value < 10 else f'1.{value}')
+        case 'MINNEIGHBORS':
+            tempValue = value + 1
+        case 'MINSIZEX':
+            tempValue = value + 1
+        case 'MINSIZEY':
+            tempValue = value + 1
+
+    prev = TRACKBAR[slot]
+    if prev == tempValue:
         return
 
-    print(f'(defaultOnChange) changed from {prev} to {value}')
-    TRACKBAR['FOO'] = value
-
-    pass
+    print(f"(trackbarOnChange) '{slot}' changed from {prev} to {tempValue}")
+    TRACKBAR[slot] = tempValue
 
 
 """
@@ -82,7 +92,14 @@ Main function
 
 feed = loadVideoFeed()
 mainWindow = Window('Live Detection Feed', scale=0.5)
-mainWindow.addTrackbar('Foo ', (0, 1), defaultOnChange)
+mainWindow.addTrackbar('Scale Factor ', (0, 50), onChange, 'SCALEFACTOR')
+mainWindow.setTrackbar('Scale Factor ', 5)
+mainWindow.addTrackbar('Min Neighbors ', (0, 9), onChange, 'MINNEIGHBORS')
+mainWindow.setTrackbar('Min Neighbors ', 5)
+mainWindow.addTrackbar('Min Size X ', (0, 199), onChange, 'MINSIZEX')
+mainWindow.setTrackbar('Min Size X ', 50)
+mainWindow.addTrackbar('Min Size Y ', (0, 199), onChange, 'MINSIZEY')
+mainWindow.setTrackbar('Min Size Y ', 100)
 
 print("\n\n---> Press 'ESC' to exit.")
 print('---> Awaiting input...\n\n')
