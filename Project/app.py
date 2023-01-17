@@ -30,8 +30,8 @@ Video Feed
 
 
 def loadVideoFeed():
-    # feed = cv2.VideoCapture(0)
-    feed = cv2.VideoCapture("./video/test.mp4")
+    feed = cv2.VideoCapture(0)
+    # feed = cv2.VideoCapture("./video/front.png")
 
     if not feed.isOpened():
         print("(main) Cannot access camera feed.")
@@ -42,9 +42,10 @@ def loadVideoFeed():
     fps = int(feed.get(cv2.CAP_PROP_FPS))
     fourcc = int(feed.get(cv2.CAP_PROP_FOURCC))
     codec = bytes([v & 255 for v in (fourcc, fourcc >> 8,
-                  fourcc >> 16, fourcc >> 24)]).decode() # Source: https://stackoverflow.com/a/71838016
+                  fourcc >> 16, fourcc >> 24)]).decode()  # Source: https://stackoverflow.com/a/71838016
     backendAPI = feed.getBackendName()
-    print(f'(main) Video Feed loaded: {width}x{height} @ {fps}fps ({codec}) - via {backendAPI}')
+    print(
+        f'(main) Video Feed loaded: {width}x{height} @ {fps}fps ({codec}) - via {backendAPI}')
 
     return feed
 
