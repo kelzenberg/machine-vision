@@ -6,7 +6,6 @@ import cv2
 from VideoThreader import VideoThreader
 from detector import detectUpperBody, detectFace
 from Window import Window
-from ImageStore import ImageStore
 
 
 """
