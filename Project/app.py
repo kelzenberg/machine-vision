@@ -46,12 +46,12 @@ Main function
 
 def exitProgram():
     print('(main) Closing all windows.')
-    Threader.stop()
+    VideoThread.stop()
     cv2.destroyAllWindows()
     exit()
 
 
-Threader = VideoThreader(src=0).start()
+VideoThread = VideoThreader(src=0).start()
 mainWindow = Window('Live Detection Feed', scale=0.75)
 mainWindow.addTrackbar('Scale Factor ', (0, 49), onChange, 'SCALEFACTOR')
 mainWindow.setTrackbar('Scale Factor ', 5)
@@ -67,7 +67,7 @@ print('---> Awaiting input...\n\n')
 
 while True:
     detected = detectUpperBody(
-        Threader.getLatestFrame(),
+        VideoThread.getLatestFrame(),
         scaleFactor=TRACKBAR['SCALEFACTOR'],
         minNeighbors=TRACKBAR['MINNEIGHBORS'],
         minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
@@ -77,7 +77,7 @@ while True:
     key = cv2.waitKey(1)
     if key == 27:  # key "ESC"
         break
-    if Threader.stopped:  # if Video feed stopped
+    if VideoThread.stopped:  # if Video feed stopped
         break
 
 exitProgram()
