@@ -4,7 +4,7 @@ Project App
 
 import cv2
 from VideoThreader import VideoThreader
-from detector import detectUpperBody
+from detector import detectUpperBody, detectFace
 from Window import Window
 from ImageStore import ImageStore
 
@@ -66,7 +66,13 @@ print("\n\n---> Press 'ESC' to exit.")
 print('---> Awaiting input...\n\n')
 
 while True:
-    detected = detectUpperBody(
+    # detected = detectUpperBody(
+    #     VideoThread.getLatestFrame(),
+    #     scaleFactor=TRACKBAR['SCALEFACTOR'],
+    #     minNeighbors=TRACKBAR['MINNEIGHBORS'],
+    #     minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
+    # )
+    detected = detectFace(
         VideoThread.getLatestFrame(),
         scaleFactor=TRACKBAR['SCALEFACTOR'],
         minNeighbors=TRACKBAR['MINNEIGHBORS'],
