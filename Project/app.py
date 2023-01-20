@@ -4,8 +4,7 @@ Project App
 
 import cv2
 from VideoThreader import VideoThreader
-from DetectorThreader import DetectorThreader
-from detector import detectUpperBody, upperBodyClassifier
+from detector import detectUpperBody
 from Window import Window
 from ImageStore import ImageStore
 
@@ -48,11 +47,11 @@ Main function
 def exitProgram():
     print('(main) Closing all windows.')
     VideoThread.stop()
-    DetectorThread.stop()
     cv2.destroyAllWindows()
     exit()
 
 
+VideoThread = VideoThreader(src=0).start()
 mainWindow = Window('Live Detection Feed', scale=0.75)
 mainWindow.addTrackbar('Scale Factor ', (0, 49), onChange, 'SCALEFACTOR')
 mainWindow.setTrackbar('Scale Factor ', 5)
@@ -63,36 +62,22 @@ mainWindow.setTrackbar('Min Size X ', 40)
 mainWindow.addTrackbar('Min Size Y ', (0, 499), onChange, 'MINSIZEY')
 mainWindow.setTrackbar('Min Size Y ', 80)
 
-
-VideoThread = VideoThreader(src=0).start()
-DetectorThread = DetectorThreader(
-    classifier=upperBodyClassifier,
-    classifierConfig={
-        'scaleFactor': TRACKBAR['SCALEFACTOR'],
-        'minNeighbors': TRACKBAR['MINNEIGHBORS'],
-        'minSize': (TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
-    },
-    image=VideoThread.getLatestFrame()).start()
-
 print("\n\n---> Press 'ESC' to exit.")
 print('---> Awaiting input...\n\n')
 
 while True:
-    DetectorThread.setImage(VideoThread.getLatestFrame())
-
-    preview = DetectorThread.getPreview()
-    if preview is None:
-        # loop until Detector finished first preview image generation
-        continue
-
-    mainWindow.show('Live Detection Feed', preview)
+    detected = detectUpperBody(
+        VideoThread.getLatestFrame(),
+        scaleFactor=TRACKBAR['SCALEFACTOR'],
+        minNeighbors=TRACKBAR['MINNEIGHBORS'],
+        minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
+    )
+    mainWindow.show('Live Detection Feed', detected)
 
     key = cv2.waitKey(1)
     if key == 27:  # key "ESC"
         break
     if VideoThread.stopped:  # if Video feed stopped
-        break
-    if DetectorThread.stopped:  # if Detector stopped
         break
 
 exitProgram()
