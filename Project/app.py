@@ -67,7 +67,7 @@ print('---> Awaiting input...\n\n')
 
 while True:
     detected = detectUpperBody(
-        Threader.frame,
+        Threader.getLatestFrame(),
         scaleFactor=TRACKBAR['SCALEFACTOR'],
         minNeighbors=TRACKBAR['MINNEIGHBORS'],
         minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])

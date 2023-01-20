@@ -1,5 +1,5 @@
 """
-Multi-Threaded Video Capturing
+Multi-Threaded Video Feed Reader
 """
 
 import cv2
@@ -44,3 +44,7 @@ class VideoThreader:
             if not self.retrieved:
                 print("(VideoThreader) Cannot receive next frame.")
                 self.stop()
+
+    def getLatestFrame(self):
+        if self.frame:
+            return self.frame
