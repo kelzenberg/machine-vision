@@ -46,4 +46,5 @@ class VideoThreader:
                 self.stop()
 
     def getLatestFrame(self):
-        return self.frame
+        if self.frame:
+            return self.frame

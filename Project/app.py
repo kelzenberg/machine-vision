@@ -5,7 +5,7 @@ Project App
 import cv2
 from VideoThreader import VideoThreader
 from detector import detectUpperBody
-from WindowThreader import WindowThreader
+from Window import Window
 from ImageStore import ImageStore
 
 
@@ -46,42 +46,38 @@ Main function
 
 def exitProgram():
     print('(main) Closing all windows.')
-    VideoThread.stop()
-    WindowThread.stop()
+    Threader.stop()
     cv2.destroyAllWindows()
     exit()
 
 
-VideoThread = VideoThreader(src=0).start()
-
-WindowThread = WindowThreader('Live Detection Feed', scale=0.75, image=VideoThread.getLatestFrame()).start()
-WindowThread.addTrackbar('Scale Factor ', (0, 49), onChange, 'SCALEFACTOR')
-WindowThread.setTrackbar('Scale Factor ', 5)
-WindowThread.addTrackbar('Min Neighbors ', (0, 9), onChange, 'MINNEIGHBORS')
-WindowThread.setTrackbar('Min Neighbors ', 5)
-WindowThread.addTrackbar('Min Size X ', (0, 499), onChange, 'MINSIZEX')
-WindowThread.setTrackbar('Min Size X ', 40)
-WindowThread.addTrackbar('Min Size Y ', (0, 499), onChange, 'MINSIZEY')
-WindowThread.setTrackbar('Min Size Y ', 80)
+Threader = VideoThreader(src=0).start()
+mainWindow = Window('Live Detection Feed', scale=0.75)
+mainWindow.addTrackbar('Scale Factor ', (0, 49), onChange, 'SCALEFACTOR')
+mainWindow.setTrackbar('Scale Factor ', 5)
+mainWindow.addTrackbar('Min Neighbors ', (0, 9), onChange, 'MINNEIGHBORS')
+mainWindow.setTrackbar('Min Neighbors ', 5)
+mainWindow.addTrackbar('Min Size X ', (0, 499), onChange, 'MINSIZEX')
+mainWindow.setTrackbar('Min Size X ', 40)
+mainWindow.addTrackbar('Min Size Y ', (0, 499), onChange, 'MINSIZEY')
+mainWindow.setTrackbar('Min Size Y ', 80)
 
 print("\n\n---> Press 'ESC' to exit.")
 print('---> Awaiting input...\n\n')
 
 while True:
     detected = detectUpperBody(
-        VideoThread.getLatestFrame(),
+        Threader.getLatestFrame(),
         scaleFactor=TRACKBAR['SCALEFACTOR'],
         minNeighbors=TRACKBAR['MINNEIGHBORS'],
         minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
     )
-    WindowThread.setImage(detected)
+    mainWindow.show('Live Detection Feed', detected)
 
     key = cv2.waitKey(1)
     if key == 27:  # key "ESC"
         break
-    if VideoThread.stopped:  # if Video feed stopped
-        break
-    if WindowThread.stopped:  # if Window showing stopped
+    if Threader.stopped:  # if Video feed stopped
         break
 
 exitProgram()
