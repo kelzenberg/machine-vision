@@ -4,7 +4,7 @@ Project App
 
 import cv2
 from VideoThreader import VideoThreader
-from detector import detectUpperBody, detectFace
+from detector import prepareForClassifier, drawResults, detectUpperBody, detectFace
 from Window import Window
 
 
@@ -65,20 +65,25 @@ print("\n\n---> Press 'ESC' to exit.")
 print('---> Awaiting input...\n\n')
 
 while True:
-    latestFrame = VideoThread.getLatestFrame()
-    detected = detectUpperBody(
-        latestFrame,
+    gray, preview = prepareForClassifier(VideoThread.getLatestFrame())
+
+    detectedBodies = detectUpperBody(
+        gray,
         scaleFactor=TRACKBAR['SCALEFACTOR'],
         minNeighbors=TRACKBAR['MINNEIGHBORS'],
         minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
     )
-    detected = detectFace(
-        latestFrame,
+    preview = drawResults(preview, detectedBodies, 'upper body')
+
+    detectedFaces = detectFace(
+        gray,
         scaleFactor=TRACKBAR['SCALEFACTOR'],
         minNeighbors=TRACKBAR['MINNEIGHBORS'],
         minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
     )
-    mainWindow.show('Live Detection Feed', detected)
+    preview = drawResults(preview, detectedFaces, 'face')
+
+    mainWindow.show('Live Detection Feed', preview)
 
     key = cv2.waitKey(1)
     if key == 27:  # key "ESC"

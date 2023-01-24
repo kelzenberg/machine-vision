@@ -38,9 +38,8 @@ def drawResults(image, objects, type: str):
 
 
 def detectUpperBody(image, scaleFactor: float, minNeighbors: int, minSize: Tuple[int, int]):
-    gray, preview = prepareForClassifier(image)
-    bodies = upperBodyClassifier.detectMultiScale(
-        gray,
+    return upperBodyClassifier.detectMultiScale(
+        image,
         # scaleFactor: How much the image size is reduced at each image scaling for detection
         scaleFactor=scaleFactor,  # equals 5% resizing per step
         # minNeighbors: Affects the quality of the detected objects.
@@ -49,14 +48,11 @@ def detectUpperBody(image, scaleFactor: float, minNeighbors: int, minSize: Tuple
         # minSize: Minimum possible object size. Objects smaller than that are ignored.
         minSize=minSize
     )
-
-    return drawResults(preview, bodies, 'upper body')
 
 
 def detectFace(image, scaleFactor: float, minNeighbors: int, minSize: Tuple[int, int]):
-    gray, preview = prepareForClassifier(image)
-    faces = frontalFaceClassifier.detectMultiScale(
-        gray,
+    return frontalFaceClassifier.detectMultiScale(
+        image,
         # scaleFactor: How much the image size is reduced at each image scaling for detection
         scaleFactor=scaleFactor,  # equals 5% resizing per step
         # minNeighbors: Affects the quality of the detected objects.
@@ -65,5 +61,3 @@ def detectFace(image, scaleFactor: float, minNeighbors: int, minSize: Tuple[int,
         # minSize: Minimum possible object size. Objects smaller than that are ignored.
         minSize=minSize
     )
-
-    return drawResults(preview, faces, 'face')
