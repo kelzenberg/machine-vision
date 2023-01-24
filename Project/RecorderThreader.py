@@ -25,10 +25,10 @@ class RecorderThreader:
             f"(RecorderThreader) Video recording to file started: {self.size[0]}x{self.size[1]} @ {self.fps}fps to '{self.filePath}' ({fourcc})")
 
     def start(self):
+        self.stopped = False
         self.thread = Thread(target=self.write, args=())
         self.thread.daemon = True  # keep thread runnning in the background
         self.thread.start()
-        self.stopped = False
         print('(RecorderThreader) Starting recording to file.')
         return self
 

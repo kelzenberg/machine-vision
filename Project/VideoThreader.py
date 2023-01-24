@@ -30,10 +30,10 @@ class VideoThreader:
             f'(VideoThreader) Video Feed loaded: {width}x{height} @ {fps}fps ({codec}) - via {backendAPI}')
 
     def start(self):
+        self.stopped = False
         self.thread = Thread(target=self.read, args=())
         self.thread.daemon = True  # keep thread runnning in the background
         self.thread.start()
-        self.stopped = False
         print('(VideoThreader) Starting video feed.')
         return self
 
