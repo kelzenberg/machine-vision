@@ -4,6 +4,7 @@ Project App
 
 import cv2
 from VideoThreader import VideoThreader
+from RecorderThreader import RecorderThreader
 from detector import prepareForClassifier, drawResults, detectUpperBody, detectFace
 from Window import Window
 
@@ -46,11 +47,13 @@ Main function
 def exitProgram():
     print('(main) Closing all windows.')
     VideoThread.stop(reason='app-shutdown')
+    RecorderThread.stop(reason='app-shutdown')
     cv2.destroyAllWindows()
     exit()
 
 
 VideoThread = VideoThreader(src=0).start()
+RecorderThread = RecorderThreader(inputSize=VideoThread.getFrameSize())
 mainWindow = Window('Live Detection Feed', scale=0.75)
 mainWindow.addTrackbar('Scale Factor ', (0, 49), onChange, 'SCALEFACTOR')
 mainWindow.setTrackbar('Scale Factor ', 5)
@@ -82,6 +85,14 @@ while True:
         minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
     )
     preview = drawResults(preview, detectedFaces, 'face')
+
+    if len(detectedBodies) > 0 or len(detectedFaces) > 0:
+        print(
+            f'(main) Detected {len(detectedBodies) + len(detectedFaces)} object(s).')
+        RecorderThread.updateImage(preview)
+
+        if RecorderThread.hasStopped():
+            RecorderThread = RecorderThread.start()
 
     mainWindow.show('Live Detection Feed', preview)
 
