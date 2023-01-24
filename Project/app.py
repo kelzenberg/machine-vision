@@ -45,7 +45,7 @@ Main function
 
 def exitProgram():
     print('(main) Closing all windows.')
-    VideoThread.stop()
+    VideoThread.stop(reason='app-shutdown')
     cv2.destroyAllWindows()
     exit()
 
@@ -88,7 +88,7 @@ while True:
     key = cv2.waitKey(1)
     if key == 27:  # key "ESC"
         break
-    if VideoThread.stopped:  # if Video feed stopped
+    if VideoThread.hasStopped():  # if Video feed stopped
         break
 
 exitProgram()

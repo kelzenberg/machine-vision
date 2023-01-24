@@ -3,19 +3,20 @@ Multi-Threaded Video Feed Reader
 """
 
 import cv2
-from threading import Thread
+from threading import Thread, Event
 
 
 class VideoThreader:
     def __init__(self, src=0):
+        self.thread = None
+        self.stopEvent = None
+
         self.src = src
         self.feed = cv2.VideoCapture(src)
-        self.stopped = True
 
-        self.retrieved, self.frame = self.feed.read()
         if not self.feed.isOpened():
             print("(VideoThreader) Cannot access camera feed.")
-            self.stop()
+            self.stop(reason='no-camera-feed')
 
         width = int(self.feed.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(self.feed.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -27,31 +28,41 @@ class VideoThreader:
                       fourcc >> 16, fourcc >> 24)]).decode()  # Source: https://stackoverflow.com/a/71838016
         backendAPI = self.feed.getBackendName()
         print(
-            f'(VideoThreader) Video Feed loaded: {width}x{height} @ {fps}fps ({codec}) - via {backendAPI}')
+            f'(VideoThreader) Video Feed initialized: {width}x{height} @ {fps}fps ({codec}) - via {backendAPI}')
 
     def start(self):
-        self.stopped = False
-        self.thread = Thread(target=self.read, args=())
-        self.thread.daemon = True  # keep thread runnning in the background
+        print('(VideoThreader) Starting video feed...')
+        self.stopEvent = Event()
+        self.thread = Thread(target=self.readFeed, args=())
+        self.thread.daemon = True  # keep thread runnning in the background until main app exits
         self.thread.start()
-        print('(VideoThreader) Starting video feed.')
+        print('(VideoThreader) ...video feed started.')
         return self
 
-    def stop(self):
-        self.stopped = True
+    def stop(self, reason):
+        print(f'(VideoThreader) Stopping video feed...(reason: {reason})')
+        if self.stopEvent is not None:
+            self.stopEvent.set()
+        if self.thread is not None:
+            self.thread.join()
         self.feed.release()
-        self.feed = None
-        print('(VideoThreader) Stopping video feed.')
+        print('(VideoThreader) ...video feed stopped.')
 
-    def read(self):
-        while not self.stopped:
+    def readFeed(self):
+        while not self.stopEvent.is_set():
             self.retrieved, self.frame = self.feed.read()
             if not self.retrieved:
                 print("(VideoThreader) Cannot receive next frame.")
-                self.stop()
+                self.stop(reason='no-next-frame')
+
+    def hasStopped(self):
+        stopped = self.stopEvent is not None and self.stopEvent.is_set()
+        if stopped:
+            print('(VideoThreader) Video feed has stopped.')
+        return stopped
 
     def getLatestFrame(self):
         return self.frame
 
-    def getFeedSize(self):
+    def getFrameSize(self):
         return self.size
