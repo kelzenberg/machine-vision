@@ -10,7 +10,7 @@ python3 ./app.py
 ### TODO
 
 - [x] continuous video analysis (e.g. of a built-in/connected webcam)
-- [ ] during the analysis the program tries to recognize bodies of people
+- [x] during the analysis the program tries to recognize bodies of people
 - [ ] if a body is recognized, a recording of the video starts, which is saved on the hard disk as a video file after "loss of recognition" of the body
 - [ ] furthermore, after a successful recognition of a body, the face recognition is started
 - [ ] if the person looks into the camera and a face is recognized, a recording of the face is stored as JPG on the hard disk
