@@ -65,14 +65,15 @@ print("\n\n---> Press 'ESC' to exit.")
 print('---> Awaiting input...\n\n')
 
 while True:
-    # detected = detectUpperBody(
-    #     VideoThread.getLatestFrame(),
-    #     scaleFactor=TRACKBAR['SCALEFACTOR'],
-    #     minNeighbors=TRACKBAR['MINNEIGHBORS'],
-    #     minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
-    # )
+    latestFrame = VideoThread.getLatestFrame()
+    detected = detectUpperBody(
+        latestFrame,
+        scaleFactor=TRACKBAR['SCALEFACTOR'],
+        minNeighbors=TRACKBAR['MINNEIGHBORS'],
+        minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
+    )
     detected = detectFace(
-        VideoThread.getLatestFrame(),
+        latestFrame,
         scaleFactor=TRACKBAR['SCALEFACTOR'],
         minNeighbors=TRACKBAR['MINNEIGHBORS'],
         minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])

@@ -3,9 +3,9 @@ Body Feature Detector
 """
 
 import cv2
-from typing import Dict, Tuple
-from glob import glob
 from os import path as ospath
+from glob import glob
+from typing import Dict, Tuple
 
 classifiers: Dict[str, cv2.CascadeClassifier] = {}
 globPath = ospath.join(ospath.abspath('./data'), '*.xml')
@@ -25,6 +25,18 @@ def prepareForClassifier(image):
     return gray, preview
 
 
+def drawResults(image, objects, type: str):
+    color = (0, 255, 255) if type == 'face' else (255, 255, 0)
+
+    for (x, y, w, h) in objects:
+        cv2.rectangle(image, (x, y), (x + w, y + h),
+                      color, 2, lineType=cv2.LINE_AA)
+        cv2.putText(image, f'{type.capitalize()} detected',
+                    (x + 7, y + 17), cv2.FONT_HERSHEY_COMPLEX, 0.5, color, 2)
+
+    return image
+
+
 def detectUpperBody(image, scaleFactor: float, minNeighbors: int, minSize: Tuple[int, int]):
     gray, preview = prepareForClassifier(image)
     bodies = upperBodyClassifier.detectMultiScale(
@@ -38,12 +50,7 @@ def detectUpperBody(image, scaleFactor: float, minNeighbors: int, minSize: Tuple
         minSize=minSize
     )
 
-    for (x, y, w, h) in bodies:
-        cv2.rectangle(preview, (x, y), (x + w, y + h),
-                      (255, 255, 0), 2, lineType=cv2.LINE_AA)
-        cv2.putText(preview, "Upper Body\nDetected", (x + 7, y + 17),
-                    cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 0), 2)
-    return preview
+    return drawResults(preview, bodies, 'upper body')
 
 
 def detectFace(image, scaleFactor: float, minNeighbors: int, minSize: Tuple[int, int]):
@@ -59,9 +66,4 @@ def detectFace(image, scaleFactor: float, minNeighbors: int, minSize: Tuple[int,
         minSize=minSize
     )
 
-    for (x, y, w, h) in faces:
-        cv2.rectangle(preview, (x, y), (x + w, y + h),
-                      (255, 255, 0), 2, lineType=cv2.LINE_AA)
-        cv2.putText(preview, "Face Detected", (x + 7, y + 17),
-                    cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 0), 2)
-    return preview
+    return drawResults(preview, faces, 'face')
