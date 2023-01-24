@@ -10,15 +10,17 @@ class VideoThreader:
     def __init__(self, src=0):
         self.src = src
         self.feed = cv2.VideoCapture(src)
-        self.retrieved, self.frame = self.feed.read()
-        self.stopped = False
+        self.stopped = True
 
+        self.retrieved, self.frame = self.feed.read()
         if not self.feed.isOpened():
             print("(VideoThreader) Cannot access camera feed.")
             self.stop()
 
         width = int(self.feed.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(self.feed.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        self.size = (width, height)
+
         fps = int(self.feed.get(cv2.CAP_PROP_FPS))
         fourcc = int(self.feed.get(cv2.CAP_PROP_FOURCC))
         codec = bytes([v & 255 for v in (fourcc, fourcc >> 8,
@@ -31,12 +33,15 @@ class VideoThreader:
         self.thread = Thread(target=self.read, args=())
         self.thread.daemon = True  # keep thread runnning in the background
         self.thread.start()
+        self.stopped = False
+        print('(VideoThreader) Starting video feed.')
         return self
 
     def stop(self):
-        print('(VideoThreader) Stopping video feed.')
         self.stopped = True
         self.feed.release()
+        self.feed = None
+        print('(VideoThreader) Stopping video feed.')
 
     def read(self):
         while not self.stopped:
@@ -47,3 +52,6 @@ class VideoThreader:
 
     def getLatestFrame(self):
         return self.frame
+
+    def getFeedSize(self):
+        return self.size
