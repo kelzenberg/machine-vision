@@ -94,8 +94,11 @@ while True:
         if not isRecordingFeed:
             RecorderThread = RecorderThread.start()
 
-    previewMessage = 'Live Detection Feed' if not isRecordingFeed else 'Live Detection Feed - RECORDING'
-    mainWindow.show(previewMessage, preview)
+    if isRecordingFeed:
+        mainWindow.show('Live Detection Feed - RECORDING',
+                        preview, textColor=(64, 64, 255))
+    else:
+        mainWindow.show('Live Detection Feed', preview)
 
     key = cv2.waitKey(1)
     if key == 27:  # key "ESC"

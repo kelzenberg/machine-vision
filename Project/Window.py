@@ -35,8 +35,8 @@ class Window:
         print(f'(Window.destroy) Destroy "{self.name}" window')
         cv2.destroyWindow(self.name)
 
-    def show(self, imageName, image, withName=True):
-        log = f'(Window.show) Show in "{self.name}" window: {imageName}'
+    def show(self, imageName, image, withName=True, textColor=(0, 255, 255)):
+        log = f'(Window.show) Show in "{self.name}" window'
         if log != self.prevShowLog:
             self.prevShowLog = log
             print(log)
@@ -49,6 +49,6 @@ class Window:
                 preview = cv2.cvtColor(preview, cv2.COLOR_GRAY2BGR)
 
             preview = cv2.putText(preview, imageName.capitalize(),
-                                  (10, 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1, cv2.LINE_AA)
+                                  (10, 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, textColor, 1, cv2.LINE_AA)
 
         cv2.imshow(self.name, preview)
