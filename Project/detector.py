@@ -20,21 +20,16 @@ frontalFaceClassifier = classifiers['haarcascade_frontalface']
 
 
 def prepareForClassifier(image):
-    gray = cv2.equalizeHist(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
-    preview = cv2.cvtColor(gray.copy(), cv2.COLOR_GRAY2BGR)
-    return gray, preview
+    return cv2.equalizeHist(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
 
 
-def drawResults(image, objects, type: str):
-    color = (0, 255, 255) if type == 'face' else (255, 255, 0)
-
+def drawResults(grayPreview, objects, type: str, color=(255, 255, 0)):
     for (x, y, w, h) in objects:
-        cv2.rectangle(image, (x, y), (x + w, y + h),
+        cv2.rectangle(grayPreview, (x, y), (x + w, y + h),
                       color, 2, lineType=cv2.LINE_AA)
-        cv2.putText(image, f'{type.capitalize()} detected',
+        cv2.putText(grayPreview, f'{type.capitalize()} detected',
                     (x + 7, y + 17), cv2.FONT_HERSHEY_COMPLEX, 0.5, color, 2)
-
-    return image
+    return grayPreview
 
 
 def detectUpperBody(image, scaleFactor: float, minNeighbors: int, minSize: Tuple[int, int]):

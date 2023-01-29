@@ -70,7 +70,7 @@ class RecorderThreader:
                     or self.image is None:
                 break
 
-            print("write")
+            print("write video")
             preview = cv2.resize(self.image, None, fx=self.scale,
                                  fy=self.scale, interpolation=cv2.INTER_AREA)
             # self.writer.write(cv2.cvtColor(preview, cv2.COLOR_BGR2HSV)) # TODO: video file writing crashes
