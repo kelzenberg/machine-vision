@@ -8,10 +8,10 @@ from os import path as ospath
 
 
 class RecorderThreader:
-    def __init__(self, inputSize):
+    def __init__(self, inputSize, recordingLimitSec=10):
         self.stopEvent = Event()
         self.thread = None
-        self.timerLimit = 5  # seconds
+        self.timerLimit = recordingLimitSec  # seconds
         self.timer = None
         self.image = None
 

@@ -14,7 +14,7 @@ from Window import Window
 Trackbar functions
 """
 
-TRACKBAR = {'SCALEFACTOR': 1.05, 'MINNEIGHBORS': 5,
+TRACKBAR = {'SCALEFACTOR': 1.05, 'MINNEIGHBORS': 8,
             'MINSIZEX': 40, 'MINSIZEY': 80}
 
 
@@ -55,13 +55,14 @@ def exitProgram():
 
 
 VideoThread = VideoThreader(src=0).start()
-RecorderThread = RecorderThreader(inputSize=VideoThread.getFrameSize())
-FaceImageWriter = ImageWriteTimer(imageName='Face', interval=15)
+RecorderThread = RecorderThreader(
+    inputSize=VideoThread.getFrameSize(), recordingLimitSec=10)
+FaceImageWriter = ImageWriteTimer(imageName='Face', interval=10)
 mainWindow = Window('Live Detection Feed', scale=0.75)
 mainWindow.addTrackbar('Scale Factor ', (0, 49), onChange, 'SCALEFACTOR')
 mainWindow.setTrackbar('Scale Factor ', 5)
 mainWindow.addTrackbar('Min Neighbors ', (0, 9), onChange, 'MINNEIGHBORS')
-mainWindow.setTrackbar('Min Neighbors ', 5)
+mainWindow.setTrackbar('Min Neighbors ', 8)
 mainWindow.addTrackbar('Min Size X ', (0, 499), onChange, 'MINSIZEX')
 mainWindow.setTrackbar('Min Size X ', 40)
 mainWindow.addTrackbar('Min Size Y ', (0, 499), onChange, 'MINSIZEY')

@@ -8,7 +8,7 @@ from threading import Timer
 
 
 class ImageWriteTimer:
-    def __init__(self, imageName: str, interval=15):
+    def __init__(self, imageName: str, interval=10):
         self.filePath = ospath.abspath('./records')
         self.imageName = imageName
         self.interval = interval  # in seconds
