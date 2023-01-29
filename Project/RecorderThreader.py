@@ -9,11 +9,10 @@ from os import path as ospath
 
 class RecorderThreader:
     def __init__(self, inputSize):
-        self.thread = None
         self.stopEvent = Event()
+        self.thread = None
         self.timerLimit = 5  # seconds
-        self.timer = Timer(self.timerLimit, self.stop,
-                           kwargs={'reason': 'on-timer'})
+        self.timer = None
         self.image = None
 
         self.filePath = ospath.join(ospath.abspath('./records'), 'output.mp4')
@@ -46,6 +45,8 @@ class RecorderThreader:
             print("(RecorderThreader) Cannot initialize video writer.")
             self.stop(reason='no-video-writer')
 
+        self.timer = Timer(self.timerLimit, self.stop,
+                           kwargs={'reason': 'on-timer'})
         self.timer.start()
         print(
             f'(RecorderThreader) ...video recording started for {self.timerLimit} seconds.')
@@ -56,6 +57,8 @@ class RecorderThreader:
             f'(RecorderThreader) Stopping video recording...(reason: {reason})')
         self.stopEvent.set()
         self.writer.release()
+        if self.timer is not None:
+            self.timer.cancel()
         if self.thread is not None:
             self.thread.join()
         print('(RecorderThreader) ...video recording stopped.')
@@ -70,10 +73,10 @@ class RecorderThreader:
             print("write")
             preview = cv2.resize(self.image, None, fx=self.scale,
                                  fy=self.scale, interpolation=cv2.INTER_AREA)
-            self.writer.write(cv2.cvtColor(preview, cv2.COLOR_BGR2HSV))
+            # self.writer.write(cv2.cvtColor(preview, cv2.COLOR_BGR2HSV)) # TODO: video file writing crashes
 
-    def isNotRunning(self):
-        return self.thread is None or self.stopEvent.is_set()
+    def isRecording(self):
+        return self.timer is not None and not self.timer.finished.is_set()
 
     def updateImage(self, image):
         self.image = image

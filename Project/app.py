@@ -86,15 +86,16 @@ while True:
     )
     preview = drawResults(preview, detectedFaces, 'face')
 
-    if len(detectedBodies) > 0 or len(detectedFaces) > 0:
-        print(
-            f'(main) Detected {len(detectedBodies) + len(detectedFaces)} object(s).')
-        RecorderThread.updateImage(preview)
+    isRecordingFeed = RecorderThread.isRecording()
+    hasDetectedObjects = len(detectedBodies) > 0 or len(detectedFaces) > 0
 
-        if RecorderThread.isNotRunning():
+    if hasDetectedObjects:
+        RecorderThread.updateImage(preview)
+        if not isRecordingFeed:
             RecorderThread = RecorderThread.start()
 
-    mainWindow.show('Live Detection Feed', preview)
+    previewMessage = 'Live Detection Feed' if not isRecordingFeed else 'Live Detection Feed - RECORDING'
+    mainWindow.show(previewMessage, preview)
 
     key = cv2.waitKey(1)
     if key == 27:  # key "ESC"
