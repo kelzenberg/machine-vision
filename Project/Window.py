@@ -35,7 +35,7 @@ class Window:
         print(f'(Window.destroy) Destroy "{self.name}" window')
         cv2.destroyWindow(self.name)
 
-    def show(self, imageName, image, withName=True, textColor=(0, 255, 255)):
+    def show(self, imageName, image, withName=True, textColor=(64, 192, 0)):
         log = f'(Window.show) Show in "{self.name}" window'
         if log != self.prevShowLog:
             self.prevShowLog = log
