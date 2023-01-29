@@ -46,8 +46,8 @@ Main function
 
 def exitProgram():
     print('(main) Closing all windows.')
-    VideoThread.stop(reason='app-shutdown')
     RecorderThread.stop(reason='app-shutdown')
+    VideoThread.stop(reason='app-shutdown')
     cv2.destroyAllWindows()
     exit()
 
@@ -91,7 +91,7 @@ while True:
             f'(main) Detected {len(detectedBodies) + len(detectedFaces)} object(s).')
         RecorderThread.updateImage(preview)
 
-        if RecorderThread.hasStopped():
+        if RecorderThread.isNotRunning():
             RecorderThread = RecorderThread.start()
 
     mainWindow.show('Live Detection Feed', preview)
