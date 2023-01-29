@@ -17,18 +17,19 @@ class ImageWriteTimer:
         self.imageCounter = 0
 
         print(
-            f"(ImageWriteTimer) Timer for image writes initialized: {self.imageName} every {self.interval}s to '{self.filePath}/{self.imageName}_XXX.jpg'")
+            f"(ImageWriteTimer) Timer for image writes initialized: Type '{self.imageName}' every {self.interval}s to '{self.filePath}/{self.imageName}_XXX.jpg'")
 
     def unblock(self):
-        print(f'(ImageWriteTimer) ...image writes unblocked again.')
+        print(f'(ImageWriteTimer) ...image writes are unblocked again.')
         self.isBlocked = False
 
     def stop(self, reason):
         if self.timer is not None:
             print(
-                f'(VideoThreader) Stopping image writer timer...(reason: {reason})')
+                f'(ImageWriteTimer) Stopping image writer timer...(reason: {reason})')
             self.timer.cancel()
             self.timer = None
+            print('(ImageWriteTimer) ...image writer timer stopped.')
 
     def write(self, image, objects):
         if self.isBlocked:
@@ -39,7 +40,8 @@ class ImageWriteTimer:
         self.isBlocked = True
         self.timer = Timer(self.interval, self.unblock)
         self.timer.start()
-        print(f'(ImageWriteTimer) Starting new timer to block image writes...')
+        print(
+            f'(ImageWriteTimer) Blocking further image writes for {self.interval} seconds...')
 
     def writeImage(self, image, objects):
         for (x, y, w, h) in objects:
@@ -50,3 +52,5 @@ class ImageWriteTimer:
                 params=[cv2.IMWRITE_JPEG_QUALITY, 75]
             )
             self.imageCounter += 1
+            print(
+                f"(ImageWriteTimer) Saved image '{self.imageName}_{self.imageCounter}.jpg'")

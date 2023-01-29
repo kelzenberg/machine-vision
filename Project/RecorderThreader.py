@@ -34,7 +34,8 @@ class RecorderThreader:
             f"(RecorderThreader) Video recording to file initialized: {self.size[0]}x{self.size[1]} @ {self.fps}fps to '{self.filePath}' ({fourcc})")
 
     def start(self):
-        print('(RecorderThreader) Starting video recording...')
+        print(
+            f'(RecorderThreader) Starting video recording for {self.timerLimit} seconds....')
         self.stopEvent = Event()
         self.thread = Thread(target=self.writeImage, args=())
         self.thread.daemon = True  # keep thread runnning in the background until main app exits
@@ -46,10 +47,9 @@ class RecorderThreader:
             self.stop(reason='no-video-writer')
 
         self.timer = Timer(self.timerLimit, self.stop,
-                           kwargs={'reason': 'on-timer'})
+                           kwargs={'reason': f'time-is-up-({self.timerLimit}s)'})
         self.timer.start()
-        print(
-            f'(RecorderThreader) ...video recording started for {self.timerLimit} seconds.')
+
         return self
 
     def stop(self, reason):
@@ -64,13 +64,18 @@ class RecorderThreader:
         print('(RecorderThreader) ...video recording stopped.')
 
     def writeImage(self):
+        log = ''
+
         while True:
             if not self.writer.isOpened() \
                     or self.stopEvent.is_set() \
                     or self.image is None:
                 break
 
-            print("write video")
+            if log != '(RecorderThreader) Writing video...':
+                log = '(RecorderThreader) Writing video...'
+                print(log)
+
             preview = cv2.resize(self.image, None, fx=self.scale,
                                  fy=self.scale, interpolation=cv2.INTER_AREA)
             # self.writer.write(cv2.cvtColor(preview, cv2.COLOR_BGR2HSV)) # TODO: video file writing crashes

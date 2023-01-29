@@ -69,7 +69,7 @@ mainWindow.addTrackbar('Min Size Y ', (0, 499), onChange, 'MINSIZEY')
 mainWindow.setTrackbar('Min Size Y ', 80)
 
 print("\n\n---> Press 'ESC' to exit.")
-print('---> Awaiting input...\n\n')
+print('---> DETECTING HUMANS...\n\n')
 
 while True:
     latestFrame = VideoThread.getLatestFrame()
