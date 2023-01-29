@@ -82,8 +82,7 @@ while True:
         minNeighbors=TRACKBAR['MINNEIGHBORS'],
         minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
     )
-    gray3C = drawResults(gray3C, detectedBodies,
-                         type='upper body', color=(255, 255, 0))
+    hasDetectedBodies = len(detectedBodies) > 0
 
     detectedFaces = detectFace(
         gray,
@@ -91,16 +90,21 @@ while True:
         minNeighbors=TRACKBAR['MINNEIGHBORS'],
         minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
     )
-    gray3C = drawResults(gray3C, detectedFaces,
-                         type='face', color=(0, 255, 255))
+    hasDetectedFaces = len(detectedFaces) > 0
 
-    # if any object was detected (upper body OR face)
-    if len(detectedBodies) > 0 or len(detectedFaces) > 0:
-        RecorderThread.updateImage(gray3C)
-        if not RecorderThread.isRecording():
-            RecorderThread = RecorderThread.start()
+    if hasDetectedBodies:
+        gray3C = drawResults(gray3C, detectedBodies,
+                             type='upper body', color=(255, 255, 0))
 
+    if hasDetectedFaces:
+        gray3C = drawResults(gray3C, detectedFaces,
+                             type='face', color=(0, 255, 255))
         FaceImageWriter.write(latestFrame, detectedFaces)
+
+    RecorderThread.updateImage(gray3C)
+
+    if (hasDetectedBodies or hasDetectedFaces) and not RecorderThread.isRecording():
+        RecorderThread = RecorderThread.start()
 
     showArgs = ['Live Detection Feed', gray3C, True] if not RecorderThread.isRecording()\
         else ['Live Detection Feed - RECORDING', gray3C, True, (64, 64, 255)]
