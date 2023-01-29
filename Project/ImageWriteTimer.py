@@ -5,6 +5,7 @@ Timer-based image writer
 import cv2
 from os import path as ospath
 from threading import Timer
+from utils import putTimestamp
 
 
 class ImageWriteTimer:
@@ -44,13 +45,19 @@ class ImageWriteTimer:
             f'(ImageWriteTimer) Blocking further image writes for {self.interval} seconds...')
 
     def writeImage(self, image, objects):
+        buffer = 10  # px
         for (x, y, w, h) in objects:
+            preview = image.copy()[y-buffer:y+h+buffer, x-buffer:x+w+buffer]
+            preview = putTimestamp(preview)
+
             cv2.imwrite(
                 ospath.join(self.filePath,
                             f'{self.imageName}_{self.imageCounter}.jpg'),
-                image.copy()[y:y+h, x:x+w],
+                preview,
                 params=[cv2.IMWRITE_JPEG_QUALITY, 75]
             )
+
             self.imageCounter += 1
+
             print(
                 f"(ImageWriteTimer) Saved image '{self.imageName}_{self.imageCounter}.jpg'")
