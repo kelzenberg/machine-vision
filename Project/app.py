@@ -47,9 +47,9 @@ Main function
 
 def exitProgram():
     print('(main) Closing all windows.')
+    FaceImageWriter.stop(reason='app-shutdown')
     RecorderThread.stop(reason='app-shutdown')
     VideoThread.stop(reason='app-shutdown')
-    FaceImageWriter.stop(reason='app-shutdown')
     cv2.destroyAllWindows()
     exit()
 
@@ -106,8 +106,8 @@ while True:
     if (hasDetectedBodies or hasDetectedFaces) and not RecorderThread.isRecording():
         RecorderThread = RecorderThread.start()
 
-    showArgs = ['Live Detection Feed', gray3C, True] if not RecorderThread.isRecording()\
-        else ['Live Detection Feed - RECORDING', gray3C, True, (64, 64, 255)]
+    showArgs = ['Live Detection Feed', gray3C] if not RecorderThread.isRecording()\
+        else ['Live Detection Feed - RECORDING', gray3C, (64, 64, 255)]
     mainWindow.show(*showArgs)
 
     key = cv2.waitKey(1)
