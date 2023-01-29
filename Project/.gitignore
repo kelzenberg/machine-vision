@@ -1,2 +1,5 @@
-**/video
-**/records
+**/tmp
+**/records/*
+
+# Keep .gitkeep last
+!**/.gitkeep
