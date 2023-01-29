@@ -5,6 +5,7 @@ Multi-Threaded Video Recorder (& Writer)
 import cv2
 from threading import Thread, Event, Timer
 from os import path as ospath
+from utils import putTimestamp
 
 
 class RecorderThreader:
@@ -76,9 +77,16 @@ class RecorderThreader:
                 log = '(RecorderThreader) Writing video...'
                 print(log)
 
-            preview = cv2.resize(self.image, None, fx=self.scale,
+            preview = putTimestamp(self.image)
+            preview = cv2.resize(preview, None, fx=self.scale,
                                  fy=self.scale, interpolation=cv2.INTER_AREA)
-            # self.writer.write(cv2.cvtColor(preview, cv2.COLOR_BGR2HSV)) # TODO: video file writing crashes
+
+            # TODO: fix video file writing crash
+            cv2.imwrite(ospath.join(ospath.abspath('./records'), 'output.jpg'),
+                        preview,
+                        params=[cv2.IMWRITE_JPEG_QUALITY, 75]
+                        )
+            # self.writer.write(cv2.cvtColor(preview, cv2.COLOR_BGR2HSV))
 
     def isRecording(self):
         return self.timer is not None and not self.timer.finished.is_set()

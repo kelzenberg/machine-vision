@@ -3,6 +3,7 @@ OpenCV Window Helper
 """
 
 import cv2
+from utils import putTimestamp
 
 
 class Window:
@@ -49,5 +50,6 @@ class Window:
 
         preview = cv2.putText(preview, imageName.capitalize(),
                               (10, 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, textColor, 1, cv2.LINE_AA)
+        preview = putTimestamp(preview)
 
         cv2.imshow(self.name, preview)
