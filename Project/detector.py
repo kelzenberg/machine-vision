@@ -23,18 +23,9 @@ def prepareForClassifier(image):
     return cv2.equalizeHist(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
 
 
-def drawResults(grayPreview, objects, type: str, color=(255, 255, 0)):
-    for idx, (x, y, w, h) in enumerate(objects):
-        cv2.rectangle(grayPreview, (x, y), (x + w, y + h),
-                      color, 2, lineType=cv2.LINE_AA)
-        cv2.putText(grayPreview, f'{type.capitalize()} detected ({idx + 1})',
-                    (x + 7, y + 17), cv2.FONT_HERSHEY_COMPLEX, 0.5, color, 2)
-    return grayPreview
-
-
 def detectUpperBody(image, scaleFactor: float, minNeighbors: int, minSize: Tuple[int, int]):
     return upperBodyClassifier.detectMultiScale(
-        image,
+        prepareForClassifier(image),
         # scaleFactor: How much the image size is reduced at each image scaling for detection
         scaleFactor=scaleFactor,  # equals 5% resizing per step
         # minNeighbors: Affects the quality of the detected objects.
@@ -47,7 +38,7 @@ def detectUpperBody(image, scaleFactor: float, minNeighbors: int, minSize: Tuple
 
 def detectFace(image, scaleFactor: float, minNeighbors: int, minSize: Tuple[int, int]):
     return frontalFaceClassifier.detectMultiScale(
-        image,
+        prepareForClassifier(image),
         # scaleFactor: How much the image size is reduced at each image scaling for detection
         scaleFactor=scaleFactor,  # equals 5% resizing per step
         # minNeighbors: Affects the quality of the detected objects.

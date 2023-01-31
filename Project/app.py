@@ -6,7 +6,8 @@ import cv2
 from VideoThreader import VideoThreader
 from RecorderThreader import RecorderThreader
 from ImageWriteTimer import ImageWriteTimer
-from detector import prepareForClassifier, drawResults, detectUpperBody, detectFace
+from detector import detectUpperBody, detectFace
+from utils import drawObjectRegions
 from Window import Window
 
 
@@ -75,11 +76,9 @@ print('---> START DETECTING HUMANS...\n\n')
 
 while True:
     latestFrame = VideoThread.getLatestFrame()
-    gray = prepareForClassifier(latestFrame)
-    gray3C = cv2.cvtColor(gray.copy(), cv2.COLOR_GRAY2BGR)
 
     detectedBodies = detectUpperBody(
-        gray,
+        latestFrame,
         scaleFactor=TRACKBAR['SCALEFACTOR'],
         minNeighbors=TRACKBAR['MINNEIGHBORS'],
         minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
@@ -87,29 +86,39 @@ while True:
     hasDetectedBodies = len(detectedBodies) > 0
 
     detectedFaces = detectFace(
-        gray,
+        latestFrame,
         scaleFactor=TRACKBAR['SCALEFACTOR'],
         minNeighbors=TRACKBAR['MINNEIGHBORS'],
         minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
     )
     hasDetectedFaces = len(detectedFaces) > 0
 
-    if hasDetectedBodies:
-        gray3C = drawResults(gray3C, detectedBodies,
-                             type='upper body', color=(255, 255, 0))
+    colorImage, grayImage = drawObjectRegions(
+        image=latestFrame,
+        detected=[
+            {
+                'type': 'upper body',
+                'objects': detectedBodies,
+                'color': (255, 255, 0)
+            },
+            {
+                'type': 'face',
+                'objects': detectedFaces,
+                'color': (0, 255, 255)
+            }
+        ]
+    )
+
+    RecorderThread.updateImage(colorImage)
 
     if hasDetectedFaces:
-        gray3C = drawResults(gray3C, detectedFaces,
-                             type='face', color=(0, 255, 255))
         FaceImageWriter.write(latestFrame, detectedFaces)
-
-    RecorderThread.updateImage(gray3C)
 
     if (hasDetectedBodies or hasDetectedFaces) and not RecorderThread.isRecording():
         RecorderThread = RecorderThread.start()
 
-    showArgs = ['Live Detection Feed', gray3C] if not RecorderThread.isRecording()\
-        else ['Live Detection Feed - RECORDING', gray3C, (64, 64, 255)]
+    showArgs = ['Live Detection Feed', grayImage] if not RecorderThread.isRecording() \
+        else ['Live Detection Feed - RECORDING', grayImage, (64, 64, 255)]
     mainWindow.show(*showArgs)
 
     key = cv2.waitKey(1)
