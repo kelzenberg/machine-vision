@@ -5,20 +5,21 @@ Timer-based image writer
 import cv2
 from os import path as ospath
 from threading import Timer
-from utils import putTimestamp
+from utils import putTimestamp, getCurrentISOTime
 
 
 class ImageWriteTimer:
-    def __init__(self, imageName: str, interval=10):
+    def __init__(self, type: str, interval=10):
+        self.type = type
         self.filePath = ospath.abspath('./records')
-        self.imageName = imageName
+        self.fileName = '{0}_{1}-{2}.jpg'
         self.interval = interval  # in seconds
         self.timer = None
         self.isBlocked = False
-        self.imageCounter = 0
 
         print(
-            f"(ImageWriteTimer) Timer for image writes initialized: Type '{self.imageName}' every {self.interval}s to '{self.filePath}/{self.imageName}_XXX.jpg'")
+            f"(ImageWriteTimer) Timer for image writes initialized:\
+                \n                  Type '{self.type}' saved every {self.interval}s to '{self.filePath}/{self.fileName.format('{DATE}', self.type, '{#}')}'")
 
     def unblock(self):
         print(f'(ImageWriteTimer) ...image writes are unblocked again.')
@@ -45,19 +46,18 @@ class ImageWriteTimer:
             f'(ImageWriteTimer) Blocking further image writes for {self.interval} seconds...')
 
     def writeImage(self, image, objects):
-        buffer = 10  # px
-        for (x, y, w, h) in objects:
+        buffer = 10  # pixel
+        for idx, (x, y, w, h) in enumerate(objects):
             preview = image.copy()[y-buffer:y+h+buffer, x-buffer:x+w+buffer]
             preview = putTimestamp(preview)
+            fileName = self.fileName.format(
+                getCurrentISOTime(), self.type, idx
+            )
 
             cv2.imwrite(
-                ospath.join(self.filePath,
-                            f'{self.imageName}_{self.imageCounter}.jpg'),
+                ospath.join(self.filePath, fileName),
                 preview,
                 params=[cv2.IMWRITE_JPEG_QUALITY, 75]
             )
 
-            self.imageCounter += 1
-
-            print(
-                f"(ImageWriteTimer) Saved image '{self.imageName}_{self.imageCounter}.jpg'")
+            print(f"(ImageWriteTimer) Saved image '{fileName}'")

@@ -5,7 +5,7 @@ Multi-Threaded Video Recorder (& Writer)
 import cv2
 from threading import Thread, Event, Timer
 from os import path as ospath
-from utils import putTimestamp
+from utils import putTimestamp, getCurrentISOTime
 
 
 class RecorderThreader:
@@ -18,7 +18,7 @@ class RecorderThreader:
 
         self.writer = None
         self.filePath = ospath.abspath('./records')
-        self.videoCounter = 0
+        self.fileName = '{0}_recording.mp4'
         self.fps = 24
         self.codec = 'avc1'
         self.fourcc = cv2.VideoWriter_fourcc(*self.codec)
@@ -28,14 +28,17 @@ class RecorderThreader:
         self.image = None
 
         print(
-            f"(RecorderThreader) Video recording to file initialized: {self.size[0]}x{self.size[1]} @ {self.fps}fps, saved to '{self.filePath}/recording_XXX.mp4' ({self.codec} codec).")
+            f"(RecorderThreader) Video recording to file initialized:\
+                \n                   {self.size[0]}x{self.size[1]} @ {self.fps}fps ({self.codec} codec), saved to '{self.filePath}/{self.fileName.format('{DATE}')}'.")
 
     def start(self):
         print(
             f'(RecorderThreader) Starting video recording for {self.timerLimit} seconds....')
 
         self.writer = cv2.VideoWriter(
-            ospath.join(self.filePath, f'recording_{self.videoCounter}.mp4'),
+            ospath.join(self.filePath, self.fileName.format(
+                getCurrentISOTime()
+            )),
             self.fourcc,
             self.fps,
             self.size
@@ -48,8 +51,6 @@ class RecorderThreader:
         # print('foo', self.writer.isOpened(), [cv2.videoio_registry.getBackendName(
         #     b) for b in cv2.videoio_registry.getBackends()])
         # print('foo2', self.writer.getBackendName())
-
-        self.videoCounter += 1
 
         self.stopEvent = Event()
         self.thread = Thread(target=self.writeImage, args=())

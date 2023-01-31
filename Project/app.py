@@ -54,10 +54,12 @@ def exitProgram():
     exit()
 
 
-VideoThread = VideoThreader(src=0).start()
+VideoThread = VideoThreader(src=0)
 RecorderThread = RecorderThreader(
     inputSize=VideoThread.getFrameSize(), recordingLimitSec=10)
-FaceImageWriter = ImageWriteTimer(imageName='face', interval=10)
+FaceImageWriter = ImageWriteTimer(type='face', interval=10)
+VideoThread = VideoThread.start()
+
 mainWindow = Window('Live Detection Feed', scale=0.75)
 mainWindow.addTrackbar('Scale Factor ', (0, 49), onChange, 'SCALEFACTOR')
 mainWindow.setTrackbar('Scale Factor ', 5)
