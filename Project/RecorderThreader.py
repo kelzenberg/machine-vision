@@ -5,7 +5,7 @@ Multi-Threaded Video Recorder (& Writer)
 import cv2
 from threading import Thread, Event, Timer
 from os import path as ospath
-from utils import putTimestamp, getCurrentISOTime
+from utils import putTimestamp, getCurrentISOTime, isEqualImage
 
 
 class RecorderThreader:
@@ -27,6 +27,7 @@ class RecorderThreader:
         self.size = (int(inputSize[0] * self.scale),
                      int(inputSize[1] * self.scale))
         self.image = None
+        self.prevImage = None
 
         print(
             f"(RecorderThreader) Video recording to file initialized:\
@@ -45,7 +46,7 @@ class RecorderThreader:
         )
 
         if not self.writer.isOpened():
-            print("(RecorderThreader) Video writer is not initialized.")
+            print('(RecorderThreader) Video writer is not initialized.')
             self.stop(reason='no-video-writer-on-start')
 
         # print('foo', self.writer.isOpened(), [cv2.videoio_registry.getBackendName(
@@ -86,9 +87,13 @@ class RecorderThreader:
                 break
 
             if not self.writer.isOpened():
-                print("(RecorderThreader) Video writer is not initialized.")
+                print('(RecorderThreader) Video writer is not initialized.')
                 self.stop(reason='no-video-writer-on-write')
                 break
+
+            if self.prevImage is not None and isEqualImage(self.prevImage, self.image):
+                print('(RecorderThreader) Skipping the writing of equal images.')
+                continue
 
             log = '(RecorderThreader) -- Writing video.'
             if prevLog != log:
@@ -109,4 +114,6 @@ class RecorderThreader:
         return self.timer is not None and not self.timer.finished.is_set()
 
     def updateImage(self, image):
+        if self.image is not None:
+            self.prevImage = self.image.copy()
         self.image = image
