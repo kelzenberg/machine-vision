@@ -16,6 +16,8 @@ python3 ./app.py
 - [x] if the person looks into the camera and a face is recognized, a recording of the face is stored as JPG on the hard disk
 - [x] in the video feed as well as on the recordings (video & JPG) there is a continuous timestamp to track when the recordings were taken
 - [x] (optional) there is additionally a live view in an OpenCV window
+- [ ] (optional) use timestamps in output file names (jpg & mp4)
+- [ ] (optional) streamline logs to include function names
 
 ### Keyboard Shortcuts
 
