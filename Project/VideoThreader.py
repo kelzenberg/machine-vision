@@ -28,7 +28,8 @@ class VideoThreader:
                       fourcc >> 16, fourcc >> 24)]).decode()  # Source: https://stackoverflow.com/a/71838016
         backendAPI = self.feed.getBackendName()
         print(
-            f'(VideoThreader) Video Feed initialized: {width}x{height} @ {fps}fps ({codec}) - via {backendAPI}')
+            f'(VideoThreader) Video Feed initialized:\
+                \n                {width}x{height} @ {fps}fps ({codec}) - via {backendAPI}')
 
     def start(self):
         print('(VideoThreader) Starting video feed...')

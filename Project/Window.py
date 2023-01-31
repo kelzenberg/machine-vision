@@ -18,7 +18,7 @@ class Window:
         cv2.moveWindow(name, offset[0], offset[1])
         cv2.setWindowProperty(name, cv2.WND_PROP_TOPMOST, 1)
         print(
-            f'(Window.init) Init new Window "{name}": Scale {scale}, Offset {offset}')
+            f'(Window) Init new Window "{name}": Scale {scale}, Offset {offset}')
 
     def addTrackbar(self, name, range, onChange, userData=None):
         if onChange == None:
@@ -29,15 +29,15 @@ class Window:
             name, self.name, range[0], range[1], lambda value: onChange(value, userData))
 
     def setTrackbar(self, name, value):
-        print(f'(Window.setTrackbar) Set trackbar "{name}" to {value}')
+        print(f'(Window) Set trackbar "{name}" to {value}')
         cv2.setTrackbarPos(name, self.name, value)
 
     def destroy(self):
-        print(f'(Window.destroy) Destroy "{self.name}" window')
+        print(f'(Window) Destroy "{self.name}" window')
         cv2.destroyWindow(self.name)
 
     def show(self, imageName, image, textColor=(64, 192, 0)):
-        log = f'(Window.show) Show in "{self.name}" window'
+        log = f'(Window) Show in "{self.name}" window'
         if log != self.prevShowLog:
             self.prevShowLog = log
             print(log)
