@@ -6,6 +6,10 @@ import cv2
 from datetime import datetime
 
 
+def getCurrentISOTime():
+    return datetime.now().isoformat(timespec='seconds')
+
+
 def putTimestamp(image):
     height = image.shape[0]
     width = image.shape[1]
