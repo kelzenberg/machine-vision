@@ -18,7 +18,8 @@ class RecorderThreader:
 
         self.writer = None
         self.filePath = ospath.abspath('./records')
-        self.fileName = '{0}_recording.mp4'
+        self.fileNameTemplate = '{0}_recording.mp4'
+        self.lastFileName = ''
         self.fps = 24
         self.codec = 'avc1'
         self.fourcc = cv2.VideoWriter_fourcc(*self.codec)
@@ -29,16 +30,15 @@ class RecorderThreader:
 
         print(
             f"(RecorderThreader) Video recording to file initialized:\
-                \n                   {self.size[0]}x{self.size[1]} @ {self.fps}fps ({self.codec} codec), saved to '{self.filePath}/{self.fileName.format('{DATE}')}'.")
+                \n                   {self.size[0]}x{self.size[1]} @ {self.fps}fps ({self.codec} codec), saved to '{self.filePath}/{self.fileNameTemplate.format('{DATE}')}'.")
 
     def start(self):
         print(
             f'(RecorderThreader) Starting video recording for {self.timerLimit} seconds....')
 
+        self.lastFileName = self.fileNameTemplate.format(getCurrentISOTime())
         self.writer = cv2.VideoWriter(
-            ospath.join(self.filePath, self.fileName.format(
-                getCurrentISOTime()
-            )),
+            ospath.join(self.filePath, self.lastFileName),
             self.fourcc,
             self.fps,
             self.size
@@ -70,6 +70,7 @@ class RecorderThreader:
         self.stopEvent.set()
         if self.writer is not None:
             self.writer.release()
+            print(f"(RecorderThreader) Saved video '{self.lastFileName}'")
         if self.timer is not None:
             self.timer.cancel()
         if self.thread is not None:
