@@ -12,52 +12,63 @@ class RecorderThreader:
     def __init__(self, inputSize, recordingLimitSec=10):
         self.stopEvent = Event()
         self.thread = None
-        self.timerLimit = recordingLimitSec  # seconds
-        self.timer = None
-        self.image = None
 
-        self.filePath = ospath.join(ospath.abspath('./records'), 'output.mp4')
-        self.codec = cv2.VideoWriter_fourcc(*'avc1')
-        self.fps = 12
+        self.timer = None
+        self.timerLimit = recordingLimitSec  # seconds
+
+        self.writer = None
+        self.filePath = ospath.abspath('./records')
+        self.videoNumber = 0
+        self.fps = 24
+        self.codec = 'avc1'
+        self.fourcc = cv2.VideoWriter_fourcc(*self.codec)
         self.scale = 0.5
         self.size = (int(inputSize[0] * self.scale),
                      int(inputSize[1] * self.scale))
-        self.writer = cv2.VideoWriter(
-            self.filePath, self.codec, self.fps, self.size)
+        self.image = None
 
-        if not self.writer.isOpened():
-            print("(RecorderThreader) Cannot initialize video writer.")
-            self.stop(reason='no-video-writer')
-
-        fourcc = bytes([v & 255 for v in (self.codec, self.codec >> 8, self.codec >> 16,
-                       self.codec >> 24)]).decode()  # Source: https://stackoverflow.com/a/71838016
         print(
-            f"(RecorderThreader) Video recording to file initialized: {self.size[0]}x{self.size[1]} @ {self.fps}fps to '{self.filePath}' ({fourcc})")
+            f"(RecorderThreader) Video recording to file initialized: {self.size[0]}x{self.size[1]} @ {self.fps}fps, saved to '{self.filePath}/recording_XXX.mp4' ({self.codec} codec).")
 
     def start(self):
         print(
             f'(RecorderThreader) Starting video recording for {self.timerLimit} seconds....')
+
+        self.writer = cv2.VideoWriter(
+            ospath.join(self.filePath, f'recording_{self.videoNumber}.mp4'),
+            self.fourcc,
+            self.fps,
+            self.size
+        )
+
+        if not self.writer.isOpened():
+            print("(RecorderThreader) Video writer is not initialized.")
+            self.stop(reason='no-video-writer-on-start')
+
+        # print('foo', self.writer.isOpened(), [cv2.videoio_registry.getBackendName(
+        #     b) for b in cv2.videoio_registry.getBackends()])
+        # print('foo2', self.writer.getBackendName())
+
+        self.videoNumber += 1
+
         self.stopEvent = Event()
         self.thread = Thread(target=self.writeImage, args=())
         self.thread.daemon = True  # keep thread runnning in the background until main app exits
         self.thread.start()
 
-        self.writer.open(self.filePath, self.codec, self.fps, self.size)
-        if not self.writer.isOpened():
-            print("(RecorderThreader) Cannot initialize video writer.")
-            self.stop(reason='no-video-writer')
-
-        self.timer = Timer(self.timerLimit, self.stop,
-                           kwargs={'reason': f'time-is-up-({self.timerLimit}s)'})
+        self.timer = Timer(self.timerLimit, self.stop, kwargs={
+                           'reason': f'time-is-up-({self.timerLimit}s)'})
         self.timer.start()
 
+        print('(RecorderThreader) ...video recording started.')
         return self
 
     def stop(self, reason):
         print(
             f'(RecorderThreader) Stopping video recording...(reason: {reason})')
         self.stopEvent.set()
-        self.writer.release()
+        if self.writer is not None:
+            self.writer.release()
         if self.timer is not None:
             self.timer.cancel()
         if self.thread is not None:
@@ -65,28 +76,32 @@ class RecorderThreader:
         print('(RecorderThreader) ...video recording stopped.')
 
     def writeImage(self):
-        log = ''
+        prevLog = ''
 
         while True:
-            if not self.writer.isOpened() \
-                    or self.stopEvent.is_set() \
-                    or self.image is None:
+            if self.stopEvent.is_set():
+                log = '(RecorderThreader) -- Stopping video.'
                 break
 
-            if log != '(RecorderThreader) Writing video...':
-                log = '(RecorderThreader) Writing video...'
+            if not self.writer.isOpened():
+                print("(RecorderThreader) Video writer is not initialized.")
+                self.stop(reason='no-video-writer-on-write')
+                break
+
+            log = '(RecorderThreader) -- Writing video.'
+            if prevLog != log:
+                prevLog = log
                 print(log)
 
             preview = putTimestamp(self.image)
             preview = cv2.resize(preview, None, fx=self.scale,
                                  fy=self.scale, interpolation=cv2.INTER_AREA)
 
-            # TODO: fix video file writing crash
-            cv2.imwrite(ospath.join(ospath.abspath('./records'), 'output.jpg'),
-                        preview,
-                        params=[cv2.IMWRITE_JPEG_QUALITY, 75]
-                        )
-            # self.writer.write(cv2.cvtColor(preview, cv2.COLOR_BGR2HSV))
+            # cv2.imwrite(ospath.join(ospath.abspath('./records'), 'output.jpg'),
+            #             preview,
+            #             params=[cv2.IMWRITE_JPEG_QUALITY, 75]
+            #             )
+            self.writer.write(preview)
 
     def isRecording(self):
         return self.timer is not None and not self.timer.finished.is_set()
