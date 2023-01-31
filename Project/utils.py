@@ -34,8 +34,12 @@ def drawObjectRegions(image, detected: List[Dict[str, Any]]):
     return color3C, gray3C
 
 
-def getCurrentISOTime():
-    return datetime.now().isoformat(timespec='seconds')
+def getTimeSinceEpoch():
+    return round((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() * 1000)
+
+
+def getCurrentISOTime(timespec='seconds'):
+    return datetime.now().isoformat(timespec=timespec)
 
 
 def putTimestamp(image):

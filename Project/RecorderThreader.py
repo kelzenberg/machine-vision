@@ -5,11 +5,11 @@ Multi-Threaded Video Recorder (& Writer)
 import cv2
 from threading import Thread, Event, Timer
 from os import path as ospath
-from utils import putTimestamp, getCurrentISOTime, isEqualImage
+from utils import putTimestamp, getCurrentISOTime
 
 
 class RecorderThreader:
-    def __init__(self, inputSize, recordingLimitSec=10):
+    def __init__(self, inputSize, fps=6, recordingLimitSec=10):
         self.stopEvent = Event()
         self.thread = None
 
@@ -20,14 +20,15 @@ class RecorderThreader:
         self.filePath = ospath.abspath('./records')
         self.fileNameTemplate = '{0}_recording.mp4'
         self.lastFileName = ''
-        self.fps = 24
+        self.fps = fps
         self.codec = 'avc1'
         self.fourcc = cv2.VideoWriter_fourcc(*self.codec)
         self.scale = 0.5
         self.size = (int(inputSize[0] * self.scale),
                      int(inputSize[1] * self.scale))
         self.image = None
-        self.prevImage = None
+        self.imageTimestamp = 0
+        self.processedImageTimestamp = 0
 
         print(
             f"(RecorderThreader) Video recording to file initialized:\
@@ -49,9 +50,8 @@ class RecorderThreader:
             print('(RecorderThreader) Video writer is not initialized.')
             self.stop(reason='no-video-writer-on-start')
 
-        # print('foo', self.writer.isOpened(), [cv2.videoio_registry.getBackendName(
-        #     b) for b in cv2.videoio_registry.getBackends()])
-        # print('foo2', self.writer.getBackendName())
+        print(
+            f"(RecorderThreader) Used video writer backend API: '{self.writer.getBackendName()}'.")
 
         self.stopEvent = Event()
         self.thread = Thread(target=self.writeImage, args=())
@@ -91,11 +91,11 @@ class RecorderThreader:
                 self.stop(reason='no-video-writer-on-write')
                 break
 
-            if self.prevImage is not None and isEqualImage(self.prevImage, self.image):
-                print('(RecorderThreader) Skipping the writing of equal images.')
+            if self.imageTimestamp == self.processedImageTimestamp:
+                # To-be-written image did not update. Skipping writing of image to video.
                 continue
 
-            log = '(RecorderThreader) -- Writing video.'
+            log = f'(RecorderThreader) -- Writing video frame ({self.imageTimestamp})'
             if prevLog != log:
                 prevLog = log
                 print(log)
@@ -109,11 +109,11 @@ class RecorderThreader:
             #             params=[cv2.IMWRITE_JPEG_QUALITY, 75]
             #             )
             self.writer.write(preview)
+            self.processedImageTimestamp = self.imageTimestamp
 
     def isRecording(self):
         return self.timer is not None and not self.timer.finished.is_set()
 
-    def updateImage(self, image):
-        if self.image is not None:
-            self.prevImage = self.image.copy()
+    def updateImage(self, image, timestamp):
+        self.imageTimestamp = timestamp
         self.image = image

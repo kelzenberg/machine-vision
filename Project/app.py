@@ -6,9 +6,9 @@ import cv2
 from VideoThreader import VideoThreader
 from RecorderThreader import RecorderThreader
 from ImageWriteTimer import ImageWriteTimer
-from detector import detectUpperBody, detectFace
-from utils import drawObjectRegions
 from Window import Window
+from detector import detectUpperBody, detectFace
+from utils import drawObjectRegions, getTimeSinceEpoch
 
 
 """
@@ -57,7 +57,10 @@ def exitProgram():
 
 VideoThread = VideoThreader(src=0)
 RecorderThread = RecorderThreader(
-    inputSize=VideoThread.getFrameSize(), recordingLimitSec=10)
+    inputSize=VideoThread.getFrameSize(),
+    fps=6,
+    recordingLimitSec=10
+)
 FaceImageWriter = ImageWriteTimer(type='face', interval=10)
 VideoThread = VideoThread.start()
 
@@ -109,7 +112,7 @@ while True:
         ]
     )
 
-    RecorderThread.updateImage(colorImage)
+    RecorderThread.updateImage(colorImage, getTimeSinceEpoch())
 
     if hasDetectedFaces:
         FaceImageWriter.update(latestFrame, detectedFaces)
