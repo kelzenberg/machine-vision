@@ -112,7 +112,7 @@ while True:
     RecorderThread.updateImage(colorImage)
 
     if hasDetectedFaces:
-        FaceImageWriter.write(latestFrame, detectedFaces)
+        FaceImageWriter.update(latestFrame, detectedFaces)
 
     if (hasDetectedBodies or hasDetectedFaces) and not RecorderThread.isRecording():
         RecorderThread = RecorderThread.start()

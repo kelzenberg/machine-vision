@@ -12,14 +12,14 @@ class ImageWriteTimer:
     def __init__(self, type: str, interval=10):
         self.type = type
         self.filePath = ospath.abspath('./records')
-        self.fileName = '{0}_{1}-{2}.jpg'
+        self.fileNameTemplate = '{0}_{1}-{2}.jpg'
         self.interval = interval  # in seconds
         self.timer = None
         self.isBlocked = False
 
         print(
             f"(ImageWriteTimer) Timer for image writes initialized:\
-                \n                  Type '{self.type}' saved every {self.interval}s to '{self.filePath}/{self.fileName.format('{DATE}', self.type, '{#}')}'")
+                \n                  Type '{self.type}' saved every {self.interval}s to '{self.filePath}/{self.fileNameTemplate.format('{DATE}', self.type, '{#}')}'")
 
     def unblock(self):
         print(f'(ImageWriteTimer) ...image writes are unblocked again.')
@@ -33,11 +33,11 @@ class ImageWriteTimer:
             self.timer = None
             print('(ImageWriteTimer) ...image writer timer stopped.')
 
-    def write(self, image, objects):
+    def update(self, image, objects):
         if self.isBlocked:
             return
 
-        self.writeImage(image, objects)
+        self.writeImages(image, objects)
 
         self.isBlocked = True
         self.timer = Timer(self.interval, self.unblock)
@@ -45,12 +45,12 @@ class ImageWriteTimer:
         print(
             f'(ImageWriteTimer) Blocking further image writes for {self.interval} seconds...')
 
-    def writeImage(self, image, objects):
+    def writeImages(self, image, objects):
         buffer = 10  # pixel
         for idx, (x, y, w, h) in enumerate(objects):
             preview = image.copy()[y-buffer:y+h+buffer, x-buffer:x+w+buffer]
             preview = putTimestamp(preview)
-            fileName = self.fileName.format(
+            fileName = self.fileNameTemplate.format(
                 getCurrentISOTime(), self.type, idx
             )
 
