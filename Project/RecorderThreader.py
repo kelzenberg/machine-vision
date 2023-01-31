@@ -18,7 +18,7 @@ class RecorderThreader:
 
         self.writer = None
         self.filePath = ospath.abspath('./records')
-        self.videoNumber = 0
+        self.videoCounter = 0
         self.fps = 24
         self.codec = 'avc1'
         self.fourcc = cv2.VideoWriter_fourcc(*self.codec)
@@ -35,7 +35,7 @@ class RecorderThreader:
             f'(RecorderThreader) Starting video recording for {self.timerLimit} seconds....')
 
         self.writer = cv2.VideoWriter(
-            ospath.join(self.filePath, f'recording_{self.videoNumber}.mp4'),
+            ospath.join(self.filePath, f'recording_{self.videoCounter}.mp4'),
             self.fourcc,
             self.fps,
             self.size
@@ -49,7 +49,7 @@ class RecorderThreader:
         #     b) for b in cv2.videoio_registry.getBackends()])
         # print('foo2', self.writer.getBackendName())
 
-        self.videoNumber += 1
+        self.videoCounter += 1
 
         self.stopEvent = Event()
         self.thread = Thread(target=self.writeImage, args=())
