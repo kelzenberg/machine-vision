@@ -4,6 +4,28 @@ OpenCV Utils
 
 import cv2
 from datetime import datetime
+from typing import Any, Dict, List
+
+
+def drawObjectRegions(image, detected: List[Dict[str, Any]]):
+    color3C = image.copy()
+    gray3C = cv2.cvtColor(
+        cv2.cvtColor(image.copy(), cv2.COLOR_BGR2GRAY),
+        cv2.COLOR_GRAY2BGR
+    )
+
+    for items in detected:
+        type = items['type']
+        objects = items['objects']
+        color = items['color']
+        for idx, (x, y, w, h) in enumerate(objects):
+            for img in [color3C, gray3C]:
+                cv2.rectangle(img, (x, y), (x + w, y + h),
+                              color, 2, lineType=cv2.LINE_AA)
+                cv2.putText(img, f'{type.capitalize()} detected ({idx + 1})',
+                            (x + 7, y + 17), cv2.FONT_HERSHEY_COMPLEX, 0.5, color, 2)
+
+    return color3C, gray3C
 
 
 def getCurrentISOTime():
