@@ -6,7 +6,7 @@ import cv2
 from threading import Thread, Event
 
 
-class VideoThreader:
+class CameraThreader:
     def __init__(self, src=0):
         self.thread = None
         self.stopEvent = None

@@ -3,7 +3,7 @@ Project App
 """
 
 import cv2
-from VideoThreader import VideoThreader
+from CameraThreader import CameraThreader
 from RecorderThreader import RecorderThreader
 from ImageWriteTimer import ImageWriteTimer
 from Window import Window
@@ -50,19 +50,19 @@ def exitProgram():
     print('(main) Closing all windows.')
     FaceImageWriter.stop(reason='app-shutdown')
     RecorderThread.stop(reason='app-shutdown')
-    VideoThread.stop(reason='app-shutdown')
+    CameraThread.stop(reason='app-shutdown')
     cv2.destroyAllWindows()
     exit()
 
 
-VideoThread = VideoThreader(src=0)
+CameraThread = CameraThreader(src=0)
 RecorderThread = RecorderThreader(
-    inputSize=VideoThread.getFrameSize(),
+    inputSize=CameraThread.getFrameSize(),
     fps=6,
     recordingLimitSec=10
 )
 FaceImageWriter = ImageWriteTimer(type='face', interval=10)
-VideoThread = VideoThread.start()
+CameraThread = CameraThread.start()
 
 mainWindow = Window('Live Detection Feed', scale=0.75)
 mainWindow.addTrackbar('Scale Factor ', (0, 49), onChange, 'SCALEFACTOR')
@@ -78,7 +78,7 @@ print("\n\n---> Press 'ESC' to exit.")
 print('---> START DETECTING HUMANS...\n\n')
 
 while True:
-    latestFrame = VideoThread.getLatestFrame()
+    latestFrame = CameraThread.getLatestFrame()
 
     detectedBodies = detectUpperBody(
         latestFrame,
@@ -127,7 +127,7 @@ while True:
     key = cv2.waitKey(1)
     if key == 27:  # key "ESC"
         break
-    if VideoThread.hasStopped():  # if Video feed stopped
+    if CameraThread.hasStopped():  # if Video feed stopped
         break
 
 exitProgram()
