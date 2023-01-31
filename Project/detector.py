@@ -24,10 +24,10 @@ def prepareForClassifier(image):
 
 
 def drawResults(grayPreview, objects, type: str, color=(255, 255, 0)):
-    for (x, y, w, h) in objects:
+    for idx, (x, y, w, h) in enumerate(objects):
         cv2.rectangle(grayPreview, (x, y), (x + w, y + h),
                       color, 2, lineType=cv2.LINE_AA)
-        cv2.putText(grayPreview, f'{type.capitalize()} detected',
+        cv2.putText(grayPreview, f'{type.capitalize()} detected ({idx + 1})',
                     (x + 7, y + 17), cv2.FONT_HERSHEY_COMPLEX, 0.5, color, 2)
     return grayPreview
 
