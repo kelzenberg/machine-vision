@@ -44,8 +44,6 @@ class CameraThreader:
         print(f'(VideoThreader) Stopping video feed...(reason: {reason})')
         if self.stopEvent is not None:
             self.stopEvent.set()
-        if self.thread is not None:
-            self.thread.join()
         self.feed.release()
         print('(VideoThreader) ...video feed stopped.')
 

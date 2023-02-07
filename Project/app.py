@@ -47,10 +47,10 @@ Main function
 
 
 def exitProgram():
-    print('(main) Closing all windows.')
     FaceImageWriter.stop(reason='app-shutdown')
     RecorderThread.stop(reason='app-shutdown')
     CameraThread.stop(reason='app-shutdown')
+    print('(main) Closing all windows.')
     cv2.destroyAllWindows()
     exit()
 

@@ -74,8 +74,6 @@ class RecorderThreader:
             print(f"(RecorderThreader) Saved video '{self.lastFileName}'")
         if self.timer is not None:
             self.timer.cancel()
-        if self.thread is not None:
-            self.thread.join()
         print('(RecorderThreader) ...video recording stopped.')
 
     def writeImage(self):
@@ -95,7 +93,7 @@ class RecorderThreader:
                 # To-be-written image did not update. Skipping writing of image to video.
                 continue
 
-            log = f'(RecorderThreader) -- Writing video frame ({self.imageTimestamp})'
+            log = f'(RecorderThreader) -- Writing video frame (@{self.imageTimestamp}ms)'
             if prevLog != log:
                 prevLog = log
                 print(log)
@@ -104,10 +102,6 @@ class RecorderThreader:
             preview = cv2.resize(preview, None, fx=self.scale,
                                  fy=self.scale, interpolation=cv2.INTER_AREA)
 
-            # cv2.imwrite(ospath.join(ospath.abspath('./records'), 'output.jpg'),
-            #             preview,
-            #             params=[cv2.IMWRITE_JPEG_QUALITY, 75]
-            #             )
             self.writer.write(preview)
             self.processedImageTimestamp = self.imageTimestamp
 
