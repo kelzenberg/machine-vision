@@ -54,6 +54,9 @@ class ImageWriteTimer:
                 getCurrentISOTime(), self.type, idx
             )
 
+            if preview is None or preview.shape[0] <= 0 or preview.shape[1] <= 0:
+                return
+
             cv2.imwrite(
                 ospath.join(self.filePath, fileName),
                 preview,
