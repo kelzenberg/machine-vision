@@ -46,35 +46,15 @@ Main function
 """
 
 
-def timings():
-    for (tX, tList) in times.items():
-        try:
-            nextTX = int(tX)+1
-            nextList = times[f'{nextTX}']
-        except:
-            print('Failed. No next list.')
-            break
-        timesToNext = []
-
-        for idx, time in enumerate(tList):
-            if idx + 1 <= len(nextList):
-                nextTime = nextList[idx]
-                timesToNext.append(int(nextTime)-int(time))
-
-        print(f'{tX} to {nextTX}: {(sum(timesToNext)/len(timesToNext))/1000}s')
-
-
 def exitProgram():
     print('(main) Closing all windows.')
     FaceImageWriter.stop(reason='app-shutdown')
     RecorderThread.stop(reason='app-shutdown')
     CameraThread.stop(reason='app-shutdown')
     cv2.destroyAllWindows()
-    timings()
     exit()
 
 
-times = {'0': [], '1': [], '2': [], '3': [], '4': [], '5': []}
 CameraThread = CameraThreader(src=0)
 RecorderThread = RecorderThreader(
     inputSize=CameraThread.getFrameSize(),
@@ -100,8 +80,6 @@ print('---> START DETECTING HUMANS...\n\n')
 while True:
     latestFrame = CameraThread.getLatestFrame()
 
-    times['0'].append(f'{getTimeSinceEpoch()}')
-
     detectedBodies = detectUpperBody(
         latestFrame,
         scaleFactor=TRACKBAR['SCALEFACTOR'],
@@ -110,8 +88,6 @@ while True:
     )
     hasDetectedBodies = len(detectedBodies) > 0
 
-    times['1'].append(f'{getTimeSinceEpoch()}')
-
     detectedFaces = detectFace(
         latestFrame,
         scaleFactor=TRACKBAR['SCALEFACTOR'],
@@ -119,8 +95,6 @@ while True:
         minSize=(TRACKBAR['MINSIZEX'], TRACKBAR['MINSIZEY'])
     )
     hasDetectedFaces = len(detectedFaces) > 0
-
-    times['2'].append(f'{getTimeSinceEpoch()}')
 
     colorImage, grayImage = drawObjectRegions(
         image=latestFrame,
@@ -138,8 +112,6 @@ while True:
         ]
     )
 
-    times['3'].append(f'{getTimeSinceEpoch()}')
-
     RecorderThread.updateImage(colorImage, getTimeSinceEpoch())
 
     if hasDetectedFaces:
@@ -148,13 +120,9 @@ while True:
     if (hasDetectedBodies or hasDetectedFaces) and not RecorderThread.isRecording():
         RecorderThread = RecorderThread.start()
 
-    times['4'].append(f'{getTimeSinceEpoch()}')
-
     showArgs = ['Live Detection Feed', grayImage] if not RecorderThread.isRecording() \
         else ['Live Detection Feed - RECORDING', grayImage, (64, 64, 255)]
     mainWindow.show(*showArgs)
-
-    times['5'].append(f'{getTimeSinceEpoch()}')
 
     key = cv2.waitKey(1)
     if key == 27:  # key "ESC"
