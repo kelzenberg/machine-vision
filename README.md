@@ -81,3 +81,7 @@ Use Python version `3.10.4` or higher.
 - Hints
   - These are stereo images with different base widths
   - The left/right images are rectified
+
+## Project (Exam Submission)
+
+See Readme in [Project folder](./Project).
